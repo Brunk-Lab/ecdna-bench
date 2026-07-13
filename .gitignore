@@ -89,4 +89,3 @@ release/manifests/gt_reconstruction_diagnostics/
 repo_inventory/
 
 scripts/audit_metadata_inputs.py
-scripts/build_full_counts_resource.py
