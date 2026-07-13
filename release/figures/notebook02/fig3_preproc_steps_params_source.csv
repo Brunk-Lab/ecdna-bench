@@ -1,0 +1,5 @@
+operator,display_name,parameters
+apply_bilateral_filter,Bilateral filter,"{""d"": 6.0, ""sigmaColor"": 97.44427686266667, ""sigmaSpace"": 98.28160165372796}"
+remove_background,Background removal,"{""kernel_size"": 15.0}"
+apply_gamma,Gamma transform,"{""gamma_val"": 1.1023068845866852}"
+apply_sharpening,Sharpening,"{""kernel_weight"": 3.3906884560255355}"

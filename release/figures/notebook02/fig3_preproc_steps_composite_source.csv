@@ -1,0 +1,6 @@
+panel_index,label,anchor_uid,inset_x0,inset_y0,inset_x1,inset_y1
+0,ROI-masked grayscale,ncih2170_facs_fish_0723_low_her2_52,1247,1225,1458,1353
+1,Bilateral filter,ncih2170_facs_fish_0723_low_her2_52,1247,1225,1458,1353
+2,Background removal,ncih2170_facs_fish_0723_low_her2_52,1247,1225,1458,1353
+3,Gamma transform,ncih2170_facs_fish_0723_low_her2_52,1247,1225,1458,1353
+4,Sharpening,ncih2170_facs_fish_0723_low_her2_52,1247,1225,1458,1353

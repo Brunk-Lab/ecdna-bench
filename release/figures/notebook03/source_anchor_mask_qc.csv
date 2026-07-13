@@ -1,0 +1,7 @@
+model,shape_ok,foreground_pixels,pred_components_min3
+Classic (after opt),True,11272,95
+Label Engine,True,3867,102
+ecSeg,True,3201,88
+MIA,True,5620,112
+ecCount (threshold mask),True,4960,112
+ecCount (peaks),True,1508,116

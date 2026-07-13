@@ -1,0 +1,29 @@
+{
+  "__global__": {
+    "default_before_opt": {
+      "preprocess_mode": "default_chain",
+      "default_chain_params": {
+        "kernel_size": 10.83,
+        "chrom_kernel_size": 168.9,
+        "strength": 4.666,
+        "clip_limit": 3.95,
+        "tile_grid_size": 21.71,
+        "cutoff": 68.44,
+        "gain": 23.14
+      },
+      "fixed_hsv_params": {
+        "white_value_threshold": 179.5,
+        "white_saturation_threshold": 63.32
+      },
+      "best_theta": {
+        "threshold_factor": 1.0,
+        "morph_close_kernel": 5,
+        "min_area": 4.133,
+        "max_area": 619.6,
+        "merge_distance": 8.013
+      },
+      "best_test_f1": null,
+      "note": "Fixed pre-optimization classical baseline; not optimized per cell line."
+    }
+  }
+}

@@ -1,0 +1,16 @@
+FILE AUDIT SUMMARY
+================================================================================
+
+rgb_exists          : 1145 / 1145
+dapi_exists         : 1145 / 1145
+roi_exists          : 1145 / 1145
+gt_exists           : 1145 / 1145
+rgb_read_ok         : 1145 / 1145
+dapi_read_ok        : 1145 / 1145
+roi_read_ok         : 1145 / 1145
+gt_read_ok          : 1145 / 1145
+shapes_match_all    : 1145 / 1145
+masked_rgb_ok       : 1145 / 1145
+roi_nonempty        : 1145 / 1145
+gt_nonempty         : 1145 / 1145
+file_audit_pass     : 1145 / 1145

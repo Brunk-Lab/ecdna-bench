@@ -1,0 +1,13 @@
+subset,model,pixel_dice_raw,n_images,pixel_dice_reported_3dp
+all_images,ecCount (peaks),0.3205379595900654,1145,0.321
+all_images,ecCount (threshold mask),0.3108647149999226,1145,0.311
+all_images,Label Engine,0.2474742464042048,1145,0.247
+all_images,MIA,0.2062596498452182,1145,0.206
+all_images,Classic (after opt),0.1260718687164623,1145,0.126
+all_images,ecSeg,0.1460119539643478,1145,0.146
+test_only,ecCount (peaks),0.3099936440364803,175,0.310
+test_only,ecCount (threshold mask),0.3018244923392286,175,0.302
+test_only,Label Engine,0.2474142531952353,175,0.247
+test_only,MIA,0.2171941001111349,175,0.217
+test_only,Classic (after opt),0.116732336370874,175,0.117
+test_only,ecSeg,0.1647402619727025,175,0.165

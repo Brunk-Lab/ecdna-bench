@@ -1,0 +1,92 @@
+# ==============================================================================
+# .gitignore for ecdna-bench
+# Anything matching a pattern here is invisible to git — the file can sit in
+# your folder but will never be added to the repository. This is how the large
+# imaging data and model weights stay OUT of GitHub while still living on disk.
+# To force-track one specific ignored file, add a line like:  !path/to/file
+# ==============================================================================
+
+# ── Python build / cache cruft (regenerated automatically) ──────────────────
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.ipynb_checkpoints/
+
+# ── Tooling caches ──────────────────────────────────────────────────────────
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.cache/
+
+# ── Large training / inference outputs (kept local, not in Git) ─────────────
+outputs/
+*.log
+
+# ── Model checkpoints  → BioImage Archive / Zenodo, never Git ───────────────
+*.pt
+*.pth
+*.ckpt
+
+# ── Raw imaging data & masks  → BioImage Archive, never Git ─────────────────
+# Ignored by extension so they are excluded no matter which folder they sit in.
+# (Your real data lives under /work/... outside the repo; these lines are a
+#  safety net in case any copies end up inside the repo folder.)
+*.tif
+*.tiff
+*.npy
+
+# Common data / mask directory names, ignored wherever they appear:
+data_root/
+**/rgb/
+**/dapi/
+**/gt_image/
+**/gt_masks/
+**/gt_coords/
+**/roi_masks/
+**/mia_masks/
+**/pred_roi/
+**/pred_masks/
+
+# ── Per-user local path config (each person writes their own) ───────────────
+configs/paths.local.yaml
+configs/paths_local.yaml
+
+# ── OS cruft ────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ------------------------------------------------------------------------------
+# NOTE: figure SVGs and their source CSVs are intentionally NOT ignored — they
+# are small and belong in the repo. Figure PNG panels are also kept by default.
+# If you later decide to drop the large PNG previews to slim the repo, add:
+#   release/figures/**/*preview*.png
+# (do NOT blanket-ignore *.png — Figure 1's microscopy panels are PNGs you keep).
+# ------------------------------------------------------------------------------
+*.png
+
+# Run logs (SLURM writes .err/.out, which *.log above does not catch)
+logs/
+*.err
+*.out
+
+# Large per-image sensitivity sweep — shipped zipped, not raw
+release/frozen_results/sensitivity/sensitivity_sweep_per_image.csv
+
+# ── Out-of-scope: drug-treatment analysis (separate project) ────────────────
+*drug_treatment*
+
+# ── One-off GT-verification / QC tooling + bulky outputs ───────────────────
+# (QC conclusion — GT consistency r ≥ 0.994 — is already in the manuscript;
+#  the raw per-image diagnostic dumps do not ship)
+*verify_gt_*
+release/manifests/gt_annotation_triplet_verification/
+release/manifests/gt_reconstruction_diagnostics/
+
+# ── Repo self-inventory output (not release content) ───────────────────────
+repo_inventory/
+
+scripts/audit_metadata_inputs.py
+scripts/build_full_counts_resource.py

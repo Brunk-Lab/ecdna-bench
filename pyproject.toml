@@ -1,0 +1,187 @@
+# ==============================================================================
+# ecdna-bench — Python package manifest
+# ==============================================================================
+# Install for development:
+#     pip install -e .
+# Install with optional extras (training ecCount, running classical BO, etc.):
+#     pip install -e ".[all]"
+# Install a minimal evaluation-only environment (no PyTorch):
+#     pip install -e ".[eval]"
+# ==============================================================================
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ecdna-bench"
+version = "1.0.0"
+description = "A reference FISH imaging resource and benchmarking framework for ecDNA localisation, segmentation and counting"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+# FILL IN: add the real authors below (the lab entry can stay as a fallback).
+authors = [
+    { name = "<<FILL: First Last>>", email = "<<FILL: email>>" },
+    { name = "Brunk Lab", email = "brunk@unc.edu" },
+]
+keywords = [
+    "extrachromosomal DNA",
+    "ecDNA",
+    "FISH microscopy",
+    "benchmark",
+    "cancer genomics",
+    "deep learning",
+    "image analysis",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Topic :: Scientific/Engineering :: Image Processing",
+]
+
+# ------------------------------------------------------------------------------
+# Core runtime dependencies — needed for *any* workflow in this repo:
+#   - running the unified evaluation framework (matching, metrics)
+#   - running the classical pipeline inference
+#   - harmonising externally-produced baseline prediction masks
+#   - reading the released dataset
+# Deliberately EXCLUDES torch and bayesian-optimization so that reviewers who
+# only want to re-evaluate cached outputs do not need to install a CUDA stack.
+#
+# Version bounds reflect the actual versions used to produce results:
+#   numpy 2.2.5 / pandas 2.2.3 / scipy 1.15.3 / scikit-image 0.25.2
+#   opencv-python-headless 4.10.0 / pillow 11.1.0
+# ------------------------------------------------------------------------------
+dependencies = [
+    "numpy>=2.2,<3.0",
+    "pandas>=2.2,<3.0",
+    "scipy>=1.15,<2.0",
+    "scikit-image>=0.25,<0.26",
+    "opencv-python-headless>=4.10,<5.0",
+    "pyyaml>=6.0,<7.0",
+    "pillow>=11.0,<12.0",
+    "tqdm>=4.65,<5.0",
+]
+
+[project.optional-dependencies]
+
+# ecCount training, inference, and the post-processing tuning stages
+train = [
+    "torch>=2.8,<3.0",
+    "torchvision>=0.23,<1.0",
+]
+
+# Classical three-stage Bayesian optimisation
+opt = [
+    "bayesian-optimization>=3.1,<4.0",
+]
+
+# Paper figure reproduction (used by notebooks/01..05)
+figures = [
+    "matplotlib>=3.10,<4.0",
+    "seaborn>=0.13,<0.14",
+    "statsmodels>=0.14,<1.0",
+    "scikit-posthocs>=0.11,<1.0",
+    "statannotations>=0.7,<1.0",
+    "jupyterlab>=4.0,<5.0",
+]
+
+# Developer tools — used by `make test` and `make lint`
+dev = [
+    "pytest>=7.4,<9.0",
+    "pytest-cov>=4.1,<6.0",
+    "ruff>=0.3,<1.0",
+    "black>=23.0,<25.0",
+    "mypy>=1.8,<2.0",
+]
+
+# Convenience — everything at once
+all = [
+    "ecdna-bench[train,opt,figures,dev]",
+]
+
+# Evaluation-only minimal install (explicit alias for clarity)
+eval = [
+    "ecdna-bench[figures]",
+]
+
+[project.urls]
+Homepage = "https://github.com/brunklab/ecdna-bench"
+Repository = "https://github.com/brunklab/ecdna-bench"
+Issues = "https://github.com/brunklab/ecdna-bench/issues"
+# Dataset = "https://www.ebi.ac.uk/biostudies/studies/<<FILL: S-BIAD#####>>"
+
+# ==============================================================================
+# Setuptools configuration — src-layout, package discovery
+# ==============================================================================
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["ecdna_bench*"]
+
+[tool.setuptools.package-data]
+# Ship the frozen classical-pipeline parameter JSON inside the installed package
+# so users can import + run the post-opt classical pipeline without checking
+# out the source tree.
+"ecdna_bench" = [
+    "../configs/classical/stage3_frozen_params.json",
+]
+
+# ==============================================================================
+# Linting / formatting configuration
+# ==============================================================================
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "B",    # flake8-bugbear
+    "C4",   # flake8-comprehensions
+    "UP",   # pyupgrade
+    "SIM",  # flake8-simplify
+]
+ignore = [
+    "E501",  # line-too-long handled by the formatter, not the linter
+    "B008",  # function calls in argument defaults (matplotlib idiom)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["B018"]    # useless-expression false positives in assertion-style tests
+
+[tool.black]
+line-length = 100
+target-version = ["py310", "py311", "py312"]
+
+# ==============================================================================
+# Pytest configuration
+# ==============================================================================
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+testpaths = ["tests"]
+addopts = [
+    "-ra",
+    "--strict-markers",
+    "--strict-config",
+    "--tb=short",
+]
+markers = [
+    "slow: tests that require real data or full model inference (deselect with -m 'not slow')",
+    "gpu: tests that require a CUDA-capable device",
+]

@@ -1,0 +1,126 @@
+{
+  "COLO320DM": {
+    "clahe__remove_background__apply_gamma__apply_sigmoid": {
+      "combo": [
+        "clahe",
+        "remove_background",
+        "apply_gamma",
+        "apply_sigmoid"
+      ],
+      "fixed_preproc_params": {
+        "clahe__clipLimit": 0.4,
+        "clahe__tileGridSize": 40.0,
+        "remove_background__kernel_size": 13.0,
+        "apply_gamma__gamma_val": 1.45,
+        "apply_sigmoid__gain": 16.0,
+        "apply_sigmoid__threshold": 0.3529411764705882
+      },
+      "fixed_hsv_params": {
+        "white_value_threshold": 190.53747479818318,
+        "white_saturation_threshold": 20.515354934829656
+      },
+      "best_theta": {
+        "threshold_factor": 1.0,
+        "morph_close_kernel": 5.0,
+        "min_area": 3.0,
+        "max_area": 900.0,
+        "merge_distance": 5.0
+      },
+      "best_train_f1": 0.8260979944148261,
+      "best_val_f1": 0.8406113537117904,
+      "best_test_f1": 0.8276553106212425
+    }
+  },
+  "NCI-H2170": {
+    "apply_bilateral_filter__remove_background__apply_gamma__apply_sharpening": {
+      "combo": [
+        "apply_bilateral_filter",
+        "remove_background",
+        "apply_gamma",
+        "apply_sharpening"
+      ],
+      "fixed_preproc_params": {
+        "apply_bilateral_filter__d": 6.0,
+        "apply_bilateral_filter__sigmaColor": 97.44427686266667,
+        "apply_bilateral_filter__sigmaSpace": 98.28160165372796,
+        "remove_background__kernel_size": 15.0,
+        "apply_gamma__gamma_val": 1.1023068845866852,
+        "apply_sharpening__kernel_weight": 3.3906884560255355
+      },
+      "fixed_hsv_params": {
+        "white_value_threshold": 211.05398159072942,
+        "white_saturation_threshold": 27.606099749584054
+      },
+      "best_theta": {
+        "threshold_factor": 1.12803197663398,
+        "morph_close_kernel": 5.0,
+        "min_area": 9.0,
+        "max_area": 429.0,
+        "merge_distance": 8.191520514062503
+      },
+      "best_train_f1": 0.7566520487503027,
+      "best_val_f1": 0.7579462102689487,
+      "best_test_f1": 0.7402544940416077
+    }
+  },
+  "NCI-H716": {
+    "apply_gamma__remove_background__apply_sharpening": {
+      "combo": [
+        "apply_gamma",
+        "remove_background",
+        "apply_sharpening"
+      ],
+      "fixed_preproc_params": {
+        "apply_gamma__gamma_val": 1.45,
+        "remove_background__kernel_size": 9.0,
+        "apply_sharpening__kernel_weight": 6.980878006060447
+      },
+      "fixed_hsv_params": {
+        "white_value_threshold": 201.56103819516247,
+        "white_saturation_threshold": 14.783427323365421
+      },
+      "best_theta": {
+        "threshold_factor": 1.6,
+        "morph_close_kernel": 5.0,
+        "min_area": 1.0,
+        "max_area": 906.0,
+        "merge_distance": 3.324929281241134
+      },
+      "best_train_f1": 0.9122648607975922,
+      "best_val_f1": 0.9098862642169728,
+      "best_test_f1": 0.907822041291073
+    }
+  },
+  "SNU16": {
+    "clahe__remove_background__apply_gamma__apply_sigmoid": {
+      "combo": [
+        "clahe",
+        "remove_background",
+        "apply_gamma",
+        "apply_sigmoid"
+      ],
+      "fixed_preproc_params": {
+        "clahe__clipLimit": 0.4,
+        "clahe__tileGridSize": 27.0,
+        "remove_background__kernel_size": 7.0,
+        "apply_gamma__gamma_val": 1.45,
+        "apply_sigmoid__gain": 13.29829121495554,
+        "apply_sigmoid__threshold": 0.3529411764705882
+      },
+      "fixed_hsv_params": {
+        "white_value_threshold": 198.8197196678725,
+        "white_saturation_threshold": 30.311627620980833
+      },
+      "best_theta": {
+        "threshold_factor": 1.6,
+        "morph_close_kernel": 1.0,
+        "min_area": 1.0,
+        "max_area": 396.0,
+        "merge_distance": 3.9780301068052757
+      },
+      "best_train_f1": 0.8782174414137534,
+      "best_val_f1": 0.8752860411899314,
+      "best_test_f1": 0.8391608391608392
+    }
+  }
+}

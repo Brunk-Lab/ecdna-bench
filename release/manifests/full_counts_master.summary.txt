@@ -1,0 +1,43 @@
+FULL RESOURCE COUNT SUMMARY
+================================================================================
+data_root                : /work/users/b/e/behnamie/ecDNA_Data/bioimage_archive
+gt_mask_dir              : /work/users/b/e/behnamie/ecDNA_Data/bioimage_archive/gt_image
+gt_coords_dir            : /work/users/b/e/behnamie/ecDNA_Data/bioimage_archive/gt_coords
+row_universe             : union
+
+Rows total               : 2986
+Unique IDs               : 2986
+Rows with GT mask         : 2986 / 2986
+Rows with coord file      : 2986 / 2986
+Rows missing GT mask      : 0 / 2986
+Rows missing coord file   : 0 / 2986
+
+CELL LINE COUNTS
+--------------------------------------------------------------------------------
+cell_line
+NCI-H2170    1891
+SUM159PT      458
+SNU16         273
+COLO320DM     225
+NCI-H716      139
+
+COUNT COMPLETENESS
+--------------------------------------------------------------------------------
+ecDNA_gt non-null         : 2986 / 2986
+coord_count_npy non-null  : 2986 / 2986
+
+GT MASK COUNT VS COORD COUNT
+--------------------------------------------------------------------------------
+Rows with both counts     : 2986
+Rows with different counts: 1191
+Median abs difference     : 0.000
+Mean abs difference       : 2.080
+Max abs difference        : 228.000
+coord_count_npy > ecDNA_gt: 1191
+coord_count_npy = ecDNA_gt: 1795
+coord_count_npy < ecDNA_gt: 0
+
+DUPLICATE FILE-STEM CHECKS
+--------------------------------------------------------------------------------
+Duplicate GT stems         : 0
+Duplicate coord stems      : 0

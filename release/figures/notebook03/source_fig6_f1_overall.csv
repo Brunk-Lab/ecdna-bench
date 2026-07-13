@@ -1,0 +1,7 @@
+model,object_f1
+Classic (after opt),0.777147447161002
+Label Engine,0.8246280884980731
+ecSeg,0.4636917524411944
+MIA,0.8003104853063323
+ecCount (threshold mask),0.917437982548312
+ecCount (peaks),0.9419867998724152

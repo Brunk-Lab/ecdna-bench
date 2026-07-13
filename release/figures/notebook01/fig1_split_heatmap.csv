@@ -1,0 +1,5 @@
+cell_line,train,val,test
+NCI-H2170,621,133,134
+SNU16,86,18,19
+COLO320DM,44,9,11
+NCI-H716,49,10,11

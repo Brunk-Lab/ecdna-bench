@@ -1,0 +1,20 @@
+stage,color
+"RGB FISH image
++ ROI mask",#DDDDDD
+"ROI masking
+(zero outside ROI)",#D5E8D4
+"Grayscale
+(channel-wise max)",#D5E8D4
+"Preprocessing chain
+(3–4 ops, BO-tuned per cell line)",#DAE8FC
+"Otsu threshold
+(× scale factor)",#FFF2CC
+"Morphological closing
++ CC extraction",#FFF2CC
+"Size filter
+(min / max area)",#FFF2CC
+Centroid-distance merge,#FFF2CC
+"HSV filtering
+(ecDNA vs chromosome-like signal)",#F8CECC
+"ecDNA objects
++ count",#E1D5E7

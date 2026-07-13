@@ -1,0 +1,337 @@
+# ==============================================================================
+# configs/default.yaml
+# ==============================================================================
+# Single source of truth for every parameter in this repo.
+#
+# This file contains the values used to produce the published results. It is
+# version-controlled and should NOT be edited for routine use. Instead, users
+# copy `configs/paths_example.yaml` to `configs/paths.local.yaml` and fill in
+# local paths; that file is merged over this one at load time.
+#
+# Every key is documented with:
+#   - its role in the pipeline
+#   - the units it is in
+#   - the paper section or supplementary section it is traceable to
+#
+# If you change any value below, you are deviating from the published recipe;
+# that is allowed for exploration but any deviation must be recorded in your
+# run's metadata.
+# ==============================================================================
+
+
+# ------------------------------------------------------------------------------
+# paths — machine-specific data paths are `null` here and must be filled in by
+# copying configs/paths_example.yaml to configs/paths.local.yaml. Paths that
+# point at files inside the repo itself (split files, checkpoint, baseline
+# mask directory) have working defaults here so paths.local.yaml only needs
+# to carry the data-root entries in the common case.
+# ------------------------------------------------------------------------------
+paths:
+  data_root: null                 # <- set in paths.local.yaml
+  metadata_csv: null              # <- set in paths.local.yaml
+
+  # QC-passed consistency CSV produced by run_qc. Set in paths.local.yaml.
+  consistency_csv: null           # <- set in paths.local.yaml
+
+  splits:
+    train: release/split_files/train_ids.csv
+    val:   release/split_files/val_ids.csv
+    test:  release/split_files/test_ids.csv
+
+  results_root: ./results
+  logs_root:    ./logs
+
+  # ecCount training output directory.
+  # train_eccount writes best_model.pt and last_model.pt here.
+  # Override in paths.local.yaml to point at a project-level directory.
+  eccount_out_dir: outputs/eccount_training
+
+  # Path to the trained ecCount checkpoint used by run_eccount.
+  # After training completes, update this in paths.local.yaml to:
+  #   <eccount_out_dir>/best_model.pt
+  eccount_checkpoint: release/model_checkpoints/eccount_best.pt
+
+  baseline_predictions_root: release/baseline_predictions
+
+# ------------------------------------------------------------------------------
+# Fig 1 anchor image settings (locked for publication — FIGURE_SUBMISSION_PLAN.md §6)
+# Override in paths.local.yaml only when testing a different image.
+# ------------------------------------------------------------------------------
+
+  # UID of the anchor NCI-H2170 metaphase spread (Figures 1, 2, 4, 5).
+  # Image paths are resolved from the metadata CSV relpath columns joined to data_root.
+  fig1_anchor_uid: ncih2170_facs_fish_0723_low_her2_52
+
+  # Zoom-inset rectangle [x0, y0, x1, y1] in original-image pixel coordinates.
+  # Measured from the purple-square overlay on the 2448×2048 anchor image.
+  fig1_inset_bbox: [1247, 1225, 1458, 1353]
+
+  # Physical pixel size (µm per pixel at acquisition). Used for the scale bar.
+  fig1_um_per_px: 0.065
+  
+# ------------------------------------------------------------------------------
+# dataset — which images are in play for any given run.
+# ------------------------------------------------------------------------------
+dataset:
+  # Five cell lines are present in the full resource (n = 2,984). Four are in
+  # the benchmark subset (n = 1,145); SUM159PT has no manual ROI masks.
+  cell_lines_full:      [NCI-H2170, SUM159PT, SNU16, COLO320DM, NCI-H716]
+  cell_lines_benchmark: [NCI-H2170, SNU16, COLO320DM, NCI-H716]
+
+  # If true, restrict all downstream workflows to the 1,145-image benchmark
+  # subset (i.e., require manual ROI masks). This is the default for every
+  # result reported in the main text.
+  benchmark_only: true
+
+  # If true, multiply every RGB image by its ROI mask before any further
+  # processing (pixels outside the ROI set to 0). Used throughout.
+  use_roi_mask: true
+
+  # Strict QC: require the per-image GT count to equal the number of
+  # connected components in the rendered GT mask. Samples that fail this
+  # check are excluded from ecCount training only. Supp §10.1.
+  require_count_mask_consistent: true
+
+
+# ------------------------------------------------------------------------------
+# evaluation — the unified matching + metrics framework (paper §2, Supp §13).
+# THESE ARE THE NUMBERS A REVIEWER WILL MOST WANT TO INSPECT.
+# ------------------------------------------------------------------------------
+evaluation:
+  matching:
+    # "OR" (main text) or "AND" (supplementary sensitivity analysis).
+    policy: OR
+
+    # Maximum allowed centroid distance for a candidate match, in pixels,
+    # at the original image resolution (2,048 × 2,448 space).
+    d_max: 20
+
+    # Minimum IoU for a candidate match. For OR, either condition suffices;
+    # for AND, both conditions must hold.
+    iou_min: 0.1
+
+    # Cost function: C_ij = alpha * (1 - O_ij) + (1 - alpha) * d_ij / d_max
+    alpha: 0.5
+
+    # Large penalty excluding invalid pairs from the Hungarian assignment.
+    big_cost: 1.0e6
+
+    # Minimum connected-component area to survive as a candidate object.
+    # Sub-threshold components are discarded as noise. Supp §13.
+    min_component_area: 3
+
+    # Connectivity for connected-component extraction from binary masks.
+    connectivity: 8
+
+  # Density bins for stratified reporting (main Fig 4d/6e).
+  density_bins:
+    edges:  [0, 10, 50, 150, 300]       # lower bounds; last bin is 300+
+    labels: ["0-9", "10-49", "50-149", "150-299", "300+"]
+
+  # Sensitivity sweep (Supp Fig 6, Supp §13).
+  sensitivity:
+    d_max_grid:  [5, 10, 15, 20, 25, 30, 40, 50, 75, 100]
+    iou_min_grid: [0.0, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5]
+    policies: [OR, AND]
+
+
+# ------------------------------------------------------------------------------
+# classical — deterministic baseline (paper §3, Supp §7).
+# ------------------------------------------------------------------------------
+classical:
+  # Path to the per-cell-line frozen parameters produced by the 3-stage
+  # Bayesian optimisation pipeline. This JSON is the ONLY input required
+  # to reproduce the "Classic (after opt)" column of Figure 6.
+  frozen_params_json: configs/classical/stage3_frozen_params.json
+
+  # "Pre-optimisation" defaults used for the "Classic (before opt)" entry
+  # in Figure 3e only. Supp §7.
+  defaults:
+    preprocessing_sequence:
+      - background_suppress
+      - tophat
+      - gamma
+      - unsharp
+    preprocessing_params:
+      background_suppress: { kernel: 15 }
+      tophat:              { kernel: 9  }
+      gamma:               { gamma: 0.8 }
+      unsharp:             { radius: 2.0, amount: 1.5 }
+    detection:
+      threshold_scale:   1.0
+      morph_close_kernel: 3
+      min_area:          3
+      max_area:          500
+      merge_radius:      3.0
+    classification:
+      # HSV rule for chromosome-vs-ecDNA. Supp §7.
+      hsv_value_threshold:      170
+      hsv_saturation_threshold:  50
+
+  # Inference options (written outputs).
+  infer:
+    save_masks:         true
+    save_centroids_csv: true
+    save_overlays:      false
+
+
+# ------------------------------------------------------------------------------
+# classical_opt — 3-stage Bayesian optimisation (paper §3.3, Supp §8).
+# ------------------------------------------------------------------------------
+classical_opt:
+  stage1:
+    # Exhaustive ordered search over preprocessing sequences.
+    min_sequence_length:       3
+    max_sequence_length:       4
+    max_images_per_cell_line: 100
+
+    # Stage-1 internal matching uses a tighter d_max than the main evaluation
+    # (faster ranking; not the published benchmark metric). Supp §8.
+    stage1_d_max: 20
+
+    seed: 42
+
+  stage2:
+    # BO over preprocessing parameters.
+    n_iter:      100
+    init_points:  20
+    seed:         42
+
+  stage3:
+    # BO over detection + merge parameters with preprocessing held fixed.
+    n_iter:      100
+    init_points:  20
+    seed:         42
+
+  # Final selection policy: highest F1 on the held-out test split.
+  selection_metric: test_f1
+
+
+# ------------------------------------------------------------------------------
+# eccount — novel deep-learning model (paper §5, Supp §10).
+# ------------------------------------------------------------------------------
+eccount:
+  # Training / inference input resolution. Preserved across all stages of
+  # the ecCount pipeline (target construction, augmentation, forward pass).
+  # Supp §10.1.
+  input_size: [1024, 1224]
+
+  # Soft Gaussian target construction (Supp §10.2).
+  targets:
+    sigma:     1.0    # standard deviation in input-space pixels (frozen)
+    combine:   max    # element-wise max across per-centroid Gaussians
+    normalize: true   # rescale to [0, 1]
+
+  # Network architecture (Supp §10.4).
+  model:
+    in_channels:  3
+    out_channels: 1
+    base_channels: 32
+    bilinear:   true
+    norm_type:  group
+    num_groups: 8
+    dropout_p:  0.0
+    # Expected trainable parameter count — asserted at init time.
+    # Any architectural change will fail loudly here rather than silently
+    # producing wrong published results.
+    expected_param_count: 7849601
+
+  # Loss (Supp §10.5).
+  loss:
+    pos_weight:  20.0
+    bce_weight:   1.0
+    dice_weight:  1.0
+    dice_smooth:  1.0e-6
+
+  # Training schedule (Supp §10.5).
+  train:
+    batch_size:   2
+    num_workers:  4
+    optimizer:    adam
+    lr:           1.0e-4
+    weight_decay: 0.0
+    epochs:       70
+    scheduler:    plateau       # "plateau" (ReduceLROnPlateau) or "none"
+    scheduler_patience: 5
+    scheduler_factor:   0.5
+    seed: 42
+    amp:  false                 # Automatic mixed precision DISABLED.
+                                # Paper results were produced in fp32.
+                                # Do NOT set to true without re-validating.
+    best_checkpoint_metric: val_loss
+    best_checkpoint_mode:   min
+
+  # Synchronized augmentation applied to (image, gt_mask, target, roi).
+  # Supp §10.3.
+  augmentation:
+    hflip_p:          0.5
+    vflip_p:          0.5
+    brightness_p:     0.2
+    brightness_range: [0.9, 1.1]
+
+  # Inference post-processing (Supp §10.7).
+  # Pipeline order is STRICT: smooth → re-apply ROI → local maxima → threshold → NMS.
+  # Swapping smooth and ROI causes boundary bleed; tested in test_postprocess.py.
+  postprocess:
+    smooth_sigma:      0.5
+    reapply_roi:       true
+    threshold_abs:     0.35
+    peak_min_distance: 2
+    nms_min_distance:  2
+    exclude_border:    0
+    # Fixed-radius disks rendered at peak coordinates for the "peaks"
+    # output mode (object-level and count-level comparison in Fig 6).
+    # Supp §10.8.
+    point_disk_radius: 2
+
+  # Point-based evaluation radius (not used in the main mask-level benchmark).
+  point_eval_match_radius: 5
+
+
+# ------------------------------------------------------------------------------
+# benchmark — cross-model comparison (paper §6, Supp §14).
+# ------------------------------------------------------------------------------
+benchmark:
+  # Models in the main benchmark (Figure 6). Order matches paper figure.
+  models:
+    - classic_post_opt
+    - label_engine
+    - ecseg
+    - mia
+    - eccount_threshold
+    - eccount_peaks
+
+  # Models that appear in supplementary / intermediate figures only.
+  supplementary_models:
+    - classic_pre_opt        # Figure 3e only
+
+  # Run once per matching mode; both CSVs kept in release/frozen_results/.
+  matching_modes: [OR, AND]
+
+  # Subset conventions per figure (paper §6).
+  subset_for_main_aggregate: test
+  subset_for_stratified:     all
+
+
+# ------------------------------------------------------------------------------
+# figures — output settings for paper figures.
+# ------------------------------------------------------------------------------
+figures:
+  # Nature column widths: 88 mm (1-col), 180 mm (2-col). All main figures are
+  # 2-col. Final vector rendering at submission time; reproduction exports at
+  # 300 DPI PNG + PDF.
+  output_formats: [pdf, png]
+  dpi:          300
+  style:        nature      # custom style sheet in ecdna_bench.figures.common
+  font_family:  Arial
+  font_size_pt: 7
+  max_height_mm: 210        # Nature max figure height for a 1-col caption
+
+
+# ------------------------------------------------------------------------------
+# logging — shared by all CLI entry points.
+# ------------------------------------------------------------------------------
+logging:
+  level:   INFO             # DEBUG / INFO / WARNING / ERROR
+  format:  "%(asctime)s | %(levelname)-7s | %(name)s | %(message)s"
+  datefmt: "%Y-%m-%d %H:%M:%S"

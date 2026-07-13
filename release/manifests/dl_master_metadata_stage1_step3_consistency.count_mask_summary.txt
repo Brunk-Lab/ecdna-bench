@@ -1,0 +1,16 @@
+COUNT-vs-MASK CONSISTENCY SUMMARY
+================================================================================
+
+zero_count_empty_gt           : 0 / 1145
+zero_count_nonempty_gt        : 0 / 1145
+positive_count_empty_gt       : 0 / 1145
+positive_count_nonempty_gt    : 1145 / 1145
+count_mask_consistent         : 1145 / 1145
+
+DIAMOND-MERGE STATISTICS (coord_count_npy vs ecDNA_gt)
+--------------------------------------------------------------------------------
+coord_count_npy == ecDNA_gt : 641 / 1145
+coord_count_npy >  ecDNA_gt : 504 / 1145
+  median diff (coord - CC): 0.0
+  mean diff   (coord - CC): 2.5
+  max diff    (coord - CC): 228

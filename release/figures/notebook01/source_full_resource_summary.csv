@@ -1,0 +1,7 @@
+cell_line,full_resource_images,benchmark_images,non_benchmark_images,has_roi_mask_filename,train,val,test
+NCI-H2170,1891,888,1003,888,621,133,134
+SUM159PT,458,0,458,0,0,0,0
+SNU16,273,123,150,123,86,18,19
+COLO320DM,225,64,161,64,44,9,11
+NCI-H716,139,70,69,70,49,10,11
+Total,2986,1145,1841,1145,800,170,175

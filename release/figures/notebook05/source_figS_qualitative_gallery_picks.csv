@@ -1,0 +1,5 @@
+cell_line,unique_id,ecDNA_gt,cell_line_test_median_ecDNA_gt,distance_to_cell_line_test_median,selection_rule
+NCI-H2170,ncih2170_antibiotics_ps_g_56,174,174.0,0.0,held-out test image with ecDNA_gt closest to the cell-line-specific test median
+SNU16,snu16_jc_jq1_ic50_24h_67,213,213.0,0.0,held-out test image with ecDNA_gt closest to the cell-line-specific test median
+COLO320DM,colo320dm_qpcr_jq1_24h_ctrl_39,41,41.0,0.0,held-out test image with ecDNA_gt closest to the cell-line-specific test median
+NCI-H716,ncih716_jc_alo_8nm_24h_13,163,163.0,0.0,held-out test image with ecDNA_gt closest to the cell-line-specific test median

@@ -1,0 +1,57 @@
+# ==============================================================================
+# configs/paths.example.yaml
+# ==============================================================================
+# This is a TEMPLATE. Copy it to `configs/paths.local.yaml` and edit the values
+# for your machine. `paths.local.yaml` is gitignored and will be auto-merged
+# over `configs/default.yaml` by `ecdna_bench.config.load_config`.
+#
+#     cp configs/paths.example.yaml configs/paths.local.yaml
+#     # edit paths.local.yaml
+#
+# Every other config value (matching thresholds, model hyperparameters, ...)
+# lives in `configs/default.yaml` and usually does not need to be changed to
+# reproduce the published results.
+# ==============================================================================
+
+paths:
+  # Root directory that contains the downloaded ecDNA-FISH dataset
+  # (obtained from BioImage Archive at the DOI listed in DATASET.md).
+  # Under this directory we expect the layout described in docs/DATA_SCHEMA.md:
+  #
+  #   <data_root>/
+  #     rgb/            *.tif       (2,048 x 2,448 RGB FISH images)
+  #     dapi/           *.tif       (2,048 x 2,448 DAPI images)
+  #     roi_mask/       *.png       (manual ROI masks, 1,145 images only)
+  #     gt_mask/        *.png       (rendered ground-truth binary masks)
+  #     roi_mask_pred/  *.png       (v1.1 — predicted ROI masks for the 1,839
+  #                                  non-ROI images; deferred)
+  #
+  data_root: /ABSOLUTE/PATH/TO/ecdna_fish_dataset
+
+  # CSV that enumerates every image in the dataset with cell_line, split,
+  # and relative paths to each modality. Ships with the dataset release.
+  metadata_csv: /ABSOLUTE/PATH/TO/ecdna_fish_dataset/metadata.csv
+
+  # Fixed train/val/test UID lists — shipped in `release/split_files/`
+  # so these paths normally point at the repo itself.
+  splits:
+    train: release/split_files/train_ids.csv
+    val: release/split_files/val_ids.csv
+    test: release/split_files/test_ids.csv
+
+  # Root directory for all run outputs (classical inference masks,
+  # ecCount predictions, benchmark CSVs, figures). Gitignored.
+  results_root: ./results
+
+  # Root directory for logs (training history, BO traces, SLURM stdout/stderr).
+  # Gitignored.
+  logs_root: ./logs
+
+  # Optional — the released ecCount checkpoint. Defaults to the committed
+  # checkpoint in `release/model_checkpoints/`. Override only if you want to
+  # evaluate a locally-retrained checkpoint instead.
+  # eccount_checkpoint: ./release/model_checkpoints/eccount_best.pt
+
+  # Optional — location of baseline prediction masks. Defaults to the
+  # committed masks in `release/baseline_predictions/`.
+  # baseline_predictions_root: ./release/baseline_predictions

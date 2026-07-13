@@ -1,0 +1,98 @@
+# ==============================================================================
+# ecdna-bench — Conda environment
+# ==============================================================================
+# Create:
+#   mamba env create -f env/environment.yml
+# Update existing:
+#   mamba env update -f env/environment.yml --prune
+# Activate:
+#   conda activate ecdna-bench
+# ==============================================================================
+#
+# Channel priority: pytorch (for CUDA-aware torch build) > conda-forge > defaults
+# All version pins are extracted from the ecDNA_Hybrid env that produced the
+# published results (conda list --explicit + pip list --format=freeze).
+# Torch and torchvision are installed via pip (nvidia wheels) because the
+# pytorch conda channel lags behind pip for CUDA 12.x builds on Longleaf A100s.
+# ==============================================================================
+
+name: ecdna-bench
+
+channels:
+  - pytorch
+  - conda-forge
+  - defaults
+
+dependencies:
+  # --------------------------------------------------------------------------
+  # Python interpreter — must match what produced the results
+  # --------------------------------------------------------------------------
+  - python=3.10.16
+
+  # --------------------------------------------------------------------------
+  # Core scientific stack — pinned to exact versions from ecDNA_Hybrid
+  # --------------------------------------------------------------------------
+  - numpy=2.2.5
+  - pandas=2.2.3
+  - scipy=1.15.3
+  - scikit-learn=1.6.1
+  - pillow=11.1.0
+  - pyyaml>=6.0,<7.0        # 6.0.2 in old env; allow patch updates
+  - tqdm>=4.65,<5.0         # 4.67.1 in old env
+
+  # --------------------------------------------------------------------------
+  # Image processing — scikit-image via pip (conda version is older)
+  # OpenCV: use headless build (no Qt/display deps needed on HPC)
+  # --------------------------------------------------------------------------
+  - matplotlib=3.10.0
+  - seaborn=0.13.2
+
+  # --------------------------------------------------------------------------
+  # Optimisation (classical Bayesian pipeline)
+  # --------------------------------------------------------------------------
+  # bayesian-optimization installed via pip (see below) — not on conda-forge
+  # at the version we need (3.1.0)
+
+  # --------------------------------------------------------------------------
+  # Testing & dev tools — minor-version flexibility is fine
+  # --------------------------------------------------------------------------
+  - pytest>=7.4,<9.0
+  - pip>=25.0
+
+  # --------------------------------------------------------------------------
+  # Pip-managed packages
+  # These are either: (a) not on conda at the right version, or
+  # (b) CUDA-linked wheels best sourced from PyPI
+  # --------------------------------------------------------------------------
+  - pip:
+    # -- Image processing --
+    - scikit-image==0.25.2
+    - opencv-python-headless==4.10.0   # headless: no display needed on Longleaf
+
+    # -- Deep learning (PyTorch + CUDA 12.8 wheels, Longleaf A100) --
+    - torch==2.8.0
+    - torchvision==0.23.0
+    # Triton is pulled in automatically by torch; pin for reproducibility
+    - triton==3.4.0
+
+    # -- CUDA runtime wheels (already on Longleaf via module, but pin for
+    #    reproducibility in case the module version differs) --
+    # Leave these as transitive deps of torch — do NOT pin explicitly here
+    # unless you hit version conflicts. They will be resolved by pip from
+    # the torch wheel's requirements.
+
+    # -- Classical pipeline optimisation --
+    - bayesian-optimization==3.1.0
+
+    # -- Stats extras used in figures / error analysis --
+    - statsmodels==0.14.4
+    - scikit-posthocs==0.11.4
+    - statannotations==0.7.2
+
+    # -- Dev & test extras --
+    - pytest-cov>=4.1,<6.0
+    - ruff>=0.3,<1.0
+    - black>=23.0,<25.0
+
+    # NOTE: install the project itself separately after env creation:
+    #   pip install -e /proj/brunk_ecdna_cv_project/Poorya/ecdna-bench

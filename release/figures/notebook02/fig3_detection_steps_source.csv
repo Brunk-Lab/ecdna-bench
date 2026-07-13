@@ -1,0 +1,7 @@
+stage,n_objects
+enhanced_grayscale,
+thresholded_mask,
+size_filtered_objects,96.0
+morphological_close,
+merged_objects,96.0
+final_ecdna_objects,96.0

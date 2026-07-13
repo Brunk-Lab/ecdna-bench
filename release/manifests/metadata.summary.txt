@@ -1,0 +1,48 @@
+MASTER METADATA SUMMARY
+================================================================================
+Rows                : 1145
+Unique IDs          : 1145
+
+SPLIT COUNTS (metadata 'split' column)
+--------------------------------------------------------------------------------
+split
+train    800
+test     175
+val      170
+
+SPLIT COUNTS (from train/val/test ID CSVs)
+--------------------------------------------------------------------------------
+split_from_id_csv
+train    800
+test     175
+val      170
+
+SPLIT CONSISTENCY
+--------------------------------------------------------------------------------
+split_consistent
+True    1145
+Rows with n_split_flags != 1 : 0
+
+CELL LINE COUNTS
+--------------------------------------------------------------------------------
+cell_line
+NCI-H2170    888
+SNU16        123
+NCI-H716      70
+COLO320DM     64
+
+PATH-PRESENCE FLAGS
+--------------------------------------------------------------------------------
+has_rgb_relpath         : 1145 / 1145
+has_dapi_relpath        : 1145 / 1145
+has_roi_mask_relpath    : 1145 / 1145
+has_gt_mask_relpath     : 1145 / 1145
+ecDNA_gt non-null         : 1145 / 1145
+ecDNA_gt missing          : 0 / 1145
+  (ecDNA_gt = GT mask CCs, 8-conn, min_area=3 — evaluation target)
+coord_count_npy non-null  : 1145 / 1145
+  (coord_count_npy > ecDNA_gt in 504 images — diamond-merge effect)
+
+DUPLICATE CHECKS
+--------------------------------------------------------------------------------
+Duplicate unique_id rows  : 0

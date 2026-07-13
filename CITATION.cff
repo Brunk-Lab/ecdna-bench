@@ -1,0 +1,52 @@
+cff-version: 1.2.0
+message: "If you use this software or dataset, please cite it as below."
+type: software
+title: "ecdna-bench: A reference FISH imaging resource and benchmarking framework for ecDNA localisation, segmentation and counting"
+abstract: >
+  ecdna-bench provides a reference resource of 2,986 paired RGB + DAPI FISH
+  microscopy images (1,145 with manual ROI masks forming the benchmark subset),
+  a unified evaluation framework for ecDNA detection (object / pixel / count
+  metrics with OR and AND matching policies), and ecCount, a compact U-Net for
+  soft Gaussian heatmap prediction.
+# ---------------------------------------------------------------------------
+# FILL IN: replace each placeholder with the real author details. Add one
+# block per author, in author order. ORCID is optional but recommended.
+# ---------------------------------------------------------------------------
+authors:
+  - family-names: "<<FILL: family name>>"
+    given-names: "<<FILL: given names>>"
+    affiliation: "University of North Carolina at Chapel Hill"
+    orcid: "https://orcid.org/<<FILL: ORCID or delete this line>>"
+  - family-names: "<<FILL: PI family name, e.g. Brunk>>"
+    given-names: "<<FILL: PI given names>>"
+    affiliation: "University of North Carolina at Chapel Hill"
+    orcid: "https://orcid.org/<<FILL: ORCID or delete this line>>"
+repository-code: "https://github.com/brunklab/ecdna-bench"
+license: MIT
+version: "1.0.0"
+date-released: "<<FILL: YYYY-MM-DD of the v1.0.0 GitHub release>>"
+# DOI below is the Zenodo software DOI; set it after minting the release DOI.
+doi: "<<FILL: 10.5281/zenodo.XXXXXXX after release>>"
+keywords:
+  - extrachromosomal DNA
+  - ecDNA
+  - FISH microscopy
+  - object detection
+  - deep learning
+  - benchmark
+  - cancer genomics
+identifiers:
+  - type: other
+    value: "<<FILL: BioImage Archive accession S-BIAD#####>>"
+    description: "Imaging dataset and ecCount checkpoint at the BioImage Archive"
+preferred-citation:
+  type: article
+  title: "A reference FISH imaging resource and benchmarking framework for ecDNA localisation, segmentation and counting"
+  authors:
+    - family-names: "<<FILL: family name>>"
+      given-names: "<<FILL: given names>>"
+    - family-names: "<<FILL: PI family name>>"
+      given-names: "<<FILL: PI given names>>"
+  journal: "Nature Computational Science"
+  year: 2026
+  doi: "<<FILL: paper DOI after acceptance>>"

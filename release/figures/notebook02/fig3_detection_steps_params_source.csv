@@ -1,0 +1,8 @@
+parameter,value
+threshold_factor,1.12803197663398
+morph_close_kernel,5.0
+min_area,9.0
+max_area,429.0
+merge_distance,8.191520514062503
+white_value_threshold,211.05398159072942
+white_saturation_threshold,27.606099749584054

@@ -1,0 +1,5 @@
+cell_line,combo_id,preprocessing_combo,threshold_factor,morph_close_kernel,min_area_px,max_area_px,merge_distance_px,selected_val_f1,heldout_test_f1,white_value_threshold,white_saturation_threshold
+NCI-H2170,apply_bilateral_filter__remove_background__apply_gamma__apply_sharpening,apply_bilateral_filter → remove_background → apply_gamma → apply_sharpening,1.128,5,9,429,8.19,0.7579,0.7403,211.05398159072942,27.606099749584054
+SNU16,clahe__remove_background__apply_gamma__apply_sigmoid,clahe → remove_background → apply_gamma → apply_sigmoid,1.6,1,1,396,3.98,0.8753,0.8392,198.8197196678725,30.311627620980833
+COLO320DM,clahe__remove_background__apply_gamma__apply_sigmoid,clahe → remove_background → apply_gamma → apply_sigmoid,1.0,5,3,900,5.0,0.8406,0.8277,190.53747479818318,20.515354934829656
+NCI-H716,apply_gamma__remove_background__apply_sharpening,apply_gamma → remove_background → apply_sharpening,1.6,5,1,906,3.32,0.9099,0.9078,201.56103819516247,14.783427323365421
