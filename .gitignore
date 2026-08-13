@@ -89,3 +89,5 @@ release/manifests/gt_reconstruction_diagnostics/
 repo_inventory/
 
 scripts/audit_metadata_inputs.py
+
+.virtual_documents/

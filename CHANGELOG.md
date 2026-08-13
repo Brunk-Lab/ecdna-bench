@@ -7,15 +7,7 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
-## [Unreleased]
-
-- Insert the dataset DOI / BioImage Archive accession in `CITATION.cff`,
-  `README.md`, and `DATASET.md` after deposition.
-- Insert the paper DOI after journal acceptance.
-
----
-
-## [1.0.0] — <<FILL: v1.0.0 release date, e.g. 2026-06-XX>>
+## [1.0.0] — {{RELEASE_DATE}}
 
 Initial public release accompanying the *Nature Computational Science*
 submission.
@@ -65,8 +57,10 @@ submission.
 - Label Engine UID canonicalisation logic (authoritative copy).
 
 ### Added — Benchmark orchestrator (`src/ecdna_bench/benchmark/`)
-- Six-model registry: Classic (after opt), Label Engine, ecSeg, MIA,
-  ecCount (threshold mask), ecCount (peaks).
+- Model registry covering the six benchmarked models — Classic (after opt),
+  Label Engine, ecSeg, MIA, ecCount (threshold mask), ecCount (peaks) — plus
+  Classic (before opt), which is used only for the before/after
+  Bayesian-optimisation comparison and is not reported as a benchmark entry.
 - Cross-model evaluation across OR/AND policies.
 - Group aggregation: overall, by split, by cell line, by density bin.
 - Frozen-result writer producing the canonical per-image and summary CSVs.
@@ -84,9 +78,9 @@ submission.
   `release/figures/notebookNN/`. No inference happens at figure time.
 
 ### Added — Tests (`tests/`)
-- 112 pytest tests covering matching invariants, metrics, targets,
-  post-processing, and I/O helpers. Synthetic fixtures only — no dependency
-  on the real images.
+- 126 pytest tests covering matching invariants, metrics, targets,
+  post-processing, and I/O helpers. Synthetic fixtures only, apart from two
+  I/O tests that are skipped unless the released sample images are present.
 
 ### Added — Documentation
 - `README.md`, `DATASET.md`, `CITATION.cff`, `Makefile`.

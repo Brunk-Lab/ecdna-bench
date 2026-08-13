@@ -12,7 +12,7 @@
 | Annotation type | Binary segmentation masks + per-image ecDNA counts |
 | Splits | 800 train / 170 val / 175 test (fixed, UID-level) |
 | License | CC BY 4.0 |
-| Repository | BioImage Archive — accession `<<FILL: S-BIAD##### after deposition>>` |
+| Repository | BioImage Archive — accession `{{ACCESSION}}` |
 | Version | 1.0.0 |
 
 ---
@@ -60,6 +60,9 @@ Source: `release/figures/notebook01/source_full_resource_summary.csv`.
 | Medium    | 50-149  | 450 | 39.3 % |
 | High      | 150-299 | 403 | 35.2 % |
 | Very high | 300+    | 206 | 18.0 % |
+
+Bin edges are inclusive definitions; the lowest per-image count observed in
+the benchmark subset is 1.
 
 Source: `release/figures/notebook01/source_density_bin_summary.csv`.
 
@@ -122,8 +125,8 @@ Bayesian-optimisation stopping).
 ## Downloading the data
 
 The imaging data and the ecCount checkpoint are deposited at the BioImage
-Archive (accession `<<FILL: S-BIAD##### after deposition>>`). Follow the
-download instructions on the accession page, then verify integrity:
+Archive (accession `{{ACCESSION}}`). Follow the download instructions on the
+accession page, then verify integrity:
 
 ```bash
 python -m ecdna_bench.cli.run_qc --config configs/default.yaml
@@ -141,6 +144,9 @@ A per-file SHA256 manifest is provided at:
 ```
 release/manifests/manifest_v1.0.csv
 ```
+
+It covers every released image, mask, and prediction directory, and is the
+authoritative integrity record for the deposition.
 
 Regenerate it with:
 

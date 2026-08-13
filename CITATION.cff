@@ -8,25 +8,35 @@ abstract: >
   a unified evaluation framework for ecDNA detection (object / pixel / count
   metrics with OR and AND matching policies), and ecCount, a compact U-Net for
   soft Gaussian heatmap prediction.
-# ---------------------------------------------------------------------------
-# FILL IN: replace each placeholder with the real author details. Add one
-# block per author, in author order. ORCID is optional but recommended.
-# ---------------------------------------------------------------------------
 authors:
-  - family-names: "<<FILL: family name>>"
-    given-names: "<<FILL: given names>>"
+  - family-names: "Behnamie"
+    given-names: "Poorya"
     affiliation: "University of North Carolina at Chapel Hill"
-    orcid: "https://orcid.org/<<FILL: ORCID or delete this line>>"
-  - family-names: "<<FILL: PI family name, e.g. Brunk>>"
-    given-names: "<<FILL: PI given names>>"
+    orcid: "https://orcid.org/0000-0002-1886-1496"
+  - family-names: "Mehta"
+    given-names: "Aarav"
     affiliation: "University of North Carolina at Chapel Hill"
-    orcid: "https://orcid.org/<<FILL: ORCID or delete this line>>"
+  - family-names: "Guilbaud"
+    given-names: "Damien"
+    affiliation: "University of North Carolina at Chapel Hill"
+  - family-names: "Chen"
+    given-names: "Jingting"
+    affiliation: "University of North Carolina at Chapel Hill"
+  - family-names: "Cope"
+    given-names: "Oliver"
+    affiliation: "University of North Carolina at Chapel Hill"
+  - family-names: "Summers"
+    given-names: "River"
+    affiliation: "University of North Carolina at Chapel Hill"
+  - family-names: "Brunk"
+    given-names: "Elizabeth"
+    affiliation: "University of North Carolina at Chapel Hill"
+    orcid: "https://orcid.org/{{BRUNK_ORCID}}"
 repository-code: "https://github.com/brunklab/ecdna-bench"
 license: MIT
 version: "1.0.0"
-date-released: "<<FILL: YYYY-MM-DD of the v1.0.0 GitHub release>>"
-# DOI below is the Zenodo software DOI; set it after minting the release DOI.
-doi: "<<FILL: 10.5281/zenodo.XXXXXXX after release>>"
+date-released: "{{RELEASE_DATE}}"
+doi: "{{ZENODO_DOI}}"
 keywords:
   - extrachromosomal DNA
   - ecDNA
@@ -37,16 +47,26 @@ keywords:
   - cancer genomics
 identifiers:
   - type: other
-    value: "<<FILL: BioImage Archive accession S-BIAD#####>>"
+    value: "{{ACCESSION}}"
     description: "Imaging dataset and ecCount checkpoint at the BioImage Archive"
 preferred-citation:
   type: article
   title: "A reference FISH imaging resource and benchmarking framework for ecDNA localisation, segmentation and counting"
   authors:
-    - family-names: "<<FILL: family name>>"
-      given-names: "<<FILL: given names>>"
-    - family-names: "<<FILL: PI family name>>"
-      given-names: "<<FILL: PI given names>>"
+    - family-names: "Behnamie"
+      given-names: "Poorya"
+    - family-names: "Mehta"
+      given-names: "Aarav"
+    - family-names: "Guilbaud"
+      given-names: "Damien"
+    - family-names: "Chen"
+      given-names: "Jingting"
+    - family-names: "Cope"
+      given-names: "Oliver"
+    - family-names: "Summers"
+      given-names: "River"
+    - family-names: "Brunk"
+      given-names: "Elizabeth"
   journal: "Nature Computational Science"
   year: 2026
-  doi: "<<FILL: paper DOI after acceptance>>"
+  doi: "{{PAPER_DOI}}"

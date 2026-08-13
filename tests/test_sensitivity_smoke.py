@@ -139,16 +139,15 @@ def multi_model_fixture(tmp_path: Path):
 
 def test_sensitivity_imports_and_runs(sensitivity_fixture, tmp_path):
     """
-    Bug 1 (wrong function name), Bug 2 (wrong kwargs), Bug 3 (wrong unpack)
-    all raise before writing any output. This test verifies none of them fire.
+    Guards the A2 import/kwarg/unpack bugs against the *current* public
+    matching API (evaluation.matching), not the removed private helpers.
     """
     consistency_csv, mask_dir, n_images = sensitivity_fixture
 
-    from ecdna_bench.benchmark.run import (
-        _extract_objects,
-        _load_gray,
-        _match_for_mode,
-        _precompute_pairwise,
+    from ecdna_bench.benchmark.run import _extract_objects, _load_gray
+    from ecdna_bench.evaluation.matching import (
+        precompute_pairwise,
+        resolve_matching_from_pairwise,
     )
 
     gt = _load_gray(consistency_csv.parent / "gt" / "img_a.png")
@@ -157,26 +156,28 @@ def test_sensitivity_imports_and_runs(sensitivity_fixture, tmp_path):
     gt_objs   = _extract_objects(gt, min_area=3)
     pred_objs = _extract_objects(gt, min_area=3)  # identical → perfect match
 
-    dist, ov, dok, ook = _precompute_pairwise(pred_objs, gt_objs, 100.0, 0.0)
-    tp, fp, fn, ign, _dbg = _match_for_mode(dist, ov, dok, ook, 20.0, 0.5, "or")
+    pw  = precompute_pairwise(pred_objs, gt_objs, max_precompute_dist=100.0)
+    res = resolve_matching_from_pairwise(
+        pw, d_max=20.0, min_iou=0.1, alpha=0.5, policy="OR",
+    )
 
-    assert tp == len(gt_objs), "perfect prediction must yield tp == n_gt"
-    assert fp == 0
-    assert fn == 0
+    assert res.tp == len(gt_objs), "perfect prediction must yield tp == n_gt"
+    assert res.fp == 0
+    assert res.fn == 0
 
 
 def test_sensitivity_perfect_prediction_values(sensitivity_fixture, tmp_path):
     """
-    For img_a (perfect prediction, 2 GT objects) at (d_max=20, iou_min=0.1, OR):
-    tp=2, fp=0, fn=0.
-    For img_b (empty prediction, 1 GT):
-    tp=0, fp=0, fn=1.
-    Aggregated over both images: tp=2, fp=0, fn=1.
+    img_a (perfect prediction, 2 GT): tp=2, fp=0, fn=0.
+    img_b (empty prediction, 1 GT):   tp=0, fp=0, fn=1.
+    Aggregated: tp=2, fp=0, fn=1.
     """
     consistency_csv, mask_dir, _ = sensitivity_fixture
 
-    from ecdna_bench.benchmark.run import (
-        _extract_objects, _load_gray, _match_for_mode, _precompute_pairwise,
+    from ecdna_bench.benchmark.run import _extract_objects, _load_gray
+    from ecdna_bench.evaluation.matching import (
+        precompute_pairwise,
+        resolve_matching_from_pairwise,
     )
 
     df = pd.read_csv(consistency_csv)
@@ -195,15 +196,17 @@ def test_sensitivity_perfect_prediction_values(sensitivity_fixture, tmp_path):
         gt_objs   = _extract_objects(gt,   min_area=3)
         pred_objs = _extract_objects(pred, min_area=3)
 
-        dist, ov, dok, ook = _precompute_pairwise(pred_objs, gt_objs, 100.0, 0.0)
-        ook_10 = ov >= 0.1
-        tp, fp, fn, _, _ = _match_for_mode(dist, ov, dok, ook_10, 20.0, 0.5, "or")
-        tp_total += tp; fp_total += fp; fn_total += fn
+        pw  = precompute_pairwise(pred_objs, gt_objs, max_precompute_dist=100.0)
+        res = resolve_matching_from_pairwise(
+            pw, d_max=20.0, min_iou=0.1, alpha=0.5, policy="OR",
+        )
+        tp_total += res.tp
+        fp_total += res.fp
+        fn_total += res.fn
 
     assert tp_total == 2, f"expected tp=2, got {tp_total}"
     assert fp_total == 0, f"expected fp=0, got {fp_total}"
     assert fn_total == 1, f"expected fn=1 (img_b empty pred), got {fn_total}"
-
 
 def test_sensitivity_grid_constants():
     """Canonical grid values match PROJECT_RULES.md §2 exactly."""
@@ -395,14 +398,44 @@ def test_cli_accepts_model_all_argument():
         sys.argv = argv_backup
 
 
-def test_registry_has_six_models():
+def test_registry_contains_the_expected_models():
     """
-    `--model all` only makes sense if the registry contains the canonical
-    six models. Guard against accidental reduction.
-    """
-    from ecdna_bench.benchmark.registry import MODEL_REGISTRY
+    The registry holds seven entries: the six models reported in the paper,
+    plus `classical_before_opt`, which exists only for the before/after
+    Bayesian-optimisation comparison and is not a benchmarked model.
 
-    assert len(MODEL_REGISTRY) == 6, (
-        f"Expected 6 models in MODEL_REGISTRY, found {len(MODEL_REGISTRY)}: "
-        f"{sorted(MODEL_REGISTRY)}"
+    Asserting the key set (rather than a bare count) also guards the locked
+    display names used in figures, tables and captions.
+    """
+    from ecdna_bench.benchmark.registry import MODEL_REGISTRY, MODEL_ORDER
+
+    expected_keys = {
+        "classical",              # Classic (after opt)   — benchmarked
+        "classical_before_opt",   # Classic (before opt)  — comparison only
+        "label_engine",           # benchmarked
+        "ecseg",                  # benchmarked
+        "mia",                    # benchmarked
+        "eccount_mask",           # benchmarked
+        "eccount_peaks",          # benchmarked
+    }
+    assert set(MODEL_REGISTRY) == expected_keys, (
+        f"MODEL_REGISTRY drifted. Expected {sorted(expected_keys)}, "
+        f"found {sorted(MODEL_REGISTRY)}"
     )
+
+    # The six models reported in the paper, with locked spellings.
+    paper_six = {
+        "Classic (after opt)",
+        "Label Engine",
+        "ecSeg",
+        "MIA",
+        "ecCount (threshold mask)",
+        "ecCount (peaks)",
+    }
+    display_names = {spec.name for spec in MODEL_REGISTRY.values()}
+    assert paper_six <= display_names, (
+        f"Locked display names missing: {sorted(paper_six - display_names)}"
+    )
+
+    # MODEL_ORDER drives figure and table ordering — it must cover the registry.
+    assert set(MODEL_ORDER) == display_names

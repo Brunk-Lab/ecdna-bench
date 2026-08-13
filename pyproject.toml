@@ -20,10 +20,14 @@ description = "A reference FISH imaging resource and benchmarking framework for 
 readme = "README.md"
 requires-python = ">=3.10"
 license = { file = "LICENSE" }
-# FILL IN: add the real authors below (the lab entry can stay as a fallback).
 authors = [
-    { name = "<<FILL: First Last>>", email = "<<FILL: email>>" },
-    { name = "Brunk Lab", email = "brunk@unc.edu" },
+    { name = "Poorya Behnamie" },
+    { name = "Aarav Mehta" },
+    { name = "Damien Guilbaud" },
+    { name = "Jingting Chen" },
+    { name = "Oliver Cope" },
+    { name = "River Summers" },
+    { name = "Elizabeth Brunk", email = "brunk@unc.edu" },
 ]
 keywords = [
     "extrachromosomal DNA",
@@ -118,7 +122,7 @@ eval = [
 Homepage = "https://github.com/brunklab/ecdna-bench"
 Repository = "https://github.com/brunklab/ecdna-bench"
 Issues = "https://github.com/brunklab/ecdna-bench/issues"
-# Dataset = "https://www.ebi.ac.uk/biostudies/studies/<<FILL: S-BIAD#####>>"
+Dataset = "https://www.ebi.ac.uk/biostudies/studies/{{ACCESSION}}"
 
 # ==============================================================================
 # Setuptools configuration — src-layout, package discovery
@@ -128,13 +132,14 @@ Issues = "https://github.com/brunklab/ecdna-bench/issues"
 where = ["src"]
 include = ["ecdna_bench*"]
 
-[tool.setuptools.package-data]
-# Ship the frozen classical-pipeline parameter JSON inside the installed package
-# so users can import + run the post-opt classical pipeline without checking
-# out the source tree.
-"ecdna_bench" = [
-    "../configs/classical/stage3_frozen_params.json",
-]
+# NOTE ON PACKAGE DATA
+# The frozen classical-pipeline parameters live at
+# configs/classical/stage3_frozen_params.json, outside the package tree.
+# setuptools resolves package-data relative to the package directory, so a
+# "../configs/..." entry is silently ignored and ships nothing. The JSON is
+# distributed with the repository and located via configs/default.yaml at
+# runtime; if it ever needs to ship inside the wheel, move it under
+# src/ecdna_bench/ first.
 
 # ==============================================================================
 # Linting / formatting configuration
