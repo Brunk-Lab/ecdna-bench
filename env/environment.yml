@@ -1,25 +1,33 @@
 # ==============================================================================
 # ecdna-bench — Conda environment
 # ==============================================================================
-# Create:
-#   mamba env create -f env/environment.yml
+# Create (use --prefix so the env lands on /proj, not in your home quota):
+#   conda env create --prefix /proj/<onyen>/envs/ecdna-bench -f env/environment.yml
 # Update existing:
-#   mamba env update -f env/environment.yml --prune
+#   conda env update --prefix /proj/<onyen>/envs/ecdna-bench -f env/environment.yml --prune
 # Activate:
-#   conda activate ecdna-bench
+#   conda activate /proj/<onyen>/envs/ecdna-bench
+#
+# Then install the project itself:
+#   pip install -e .
 # ==============================================================================
 #
-# Channel priority: pytorch (for CUDA-aware torch build) > conda-forge > defaults
-# All version pins are extracted from the ecDNA_Hybrid env that produced the
-# published results (conda list --explicit + pip list --format=freeze).
-# Torch and torchvision are installed via pip (nvidia wheels) because the
-# pytorch conda channel lags behind pip for CUDA 12.x builds on Longleaf A100s.
+# Channel priority: conda-forge > defaults.
+# Torch and torchvision are installed via pip (CUDA 12.8 wheels) because the
+# pytorch conda channel lags behind pip for CUDA 12.x builds.
+#
+# REPRODUCIBILITY NOTE
+# Every pin below is the version present in the environment that produced the
+# frozen results (verified against `conda list` and `pip list --format=freeze`,
+# 2026-08). Development and linting tools are deliberately NOT pinned here —
+# they do not affect results. Install them with:
+#   pip install -e ".[dev]"
+#
+# `name:` is omitted on purpose: it is ignored when --prefix is used, and
+# leaving it out avoids a confusing warning.
 # ==============================================================================
 
-name: ecdna-bench
-
 channels:
-  - pytorch
   - conda-forge
   - defaults
 
@@ -30,69 +38,140 @@ dependencies:
   - python=3.10.16
 
   # --------------------------------------------------------------------------
-  # Core scientific stack — pinned to exact versions from ecDNA_Hybrid
+  # Core scientific stack — exact versions from the result-producing env
   # --------------------------------------------------------------------------
   - numpy=2.2.5
   - pandas=2.2.3
   - scipy=1.15.3
-  - scikit-learn=1.6.1
+  - scikit-learn=1.6.1        # required by bayesian-optimization (GP surrogate)
   - pillow=11.1.0
-  - pyyaml>=6.0,<7.0        # 6.0.2 in old env; allow patch updates
-  - tqdm>=4.65,<5.0         # 4.67.1 in old env
+  - pyyaml>=6.0,<7.0
+  - tqdm>=4.65,<5.0
 
   # --------------------------------------------------------------------------
-  # Image processing — scikit-image via pip (conda version is older)
-  # OpenCV: use headless build (no Qt/display deps needed on HPC)
+  # Plotting (used by notebooks 01-05)
   # --------------------------------------------------------------------------
   - matplotlib=3.10.0
   - seaborn=0.13.2
 
   # --------------------------------------------------------------------------
-  # Optimisation (classical Bayesian pipeline)
-  # --------------------------------------------------------------------------
-  # bayesian-optimization installed via pip (see below) — not on conda-forge
-  # at the version we need (3.1.0)
-
-  # --------------------------------------------------------------------------
-  # Testing & dev tools — minor-version flexibility is fine
+  # Testing
   # --------------------------------------------------------------------------
   - pytest>=7.4,<9.0
   - pip>=25.0
 
   # --------------------------------------------------------------------------
   # Pip-managed packages
-  # These are either: (a) not on conda at the right version, or
-  # (b) CUDA-linked wheels best sourced from PyPI
+  # Either not on conda at the required version, or CUDA-linked wheels best
+  # sourced from PyPI.
   # --------------------------------------------------------------------------
   - pip:
     # -- Image processing --
     - scikit-image==0.25.2
-    - opencv-python-headless==4.10.0   # headless: no display needed on Longleaf
+    - opencv-python-headless==4.13.0.92   # headless: no display needed on HPC
 
-    # -- Deep learning (PyTorch + CUDA 12.8 wheels, Longleaf A100) --
+    # -- Deep learning (PyTorch cu128 wheels) --
     - torch==2.8.0
     - torchvision==0.23.0
-    # Triton is pulled in automatically by torch; pin for reproducibility
-    - triton==3.4.0
+    - triton==3.4.0            # transitive dep of torch; pinned for reproducibility
 
-    # -- CUDA runtime wheels (already on Longleaf via module, but pin for
-    #    reproducibility in case the module version differs) --
-    # Leave these as transitive deps of torch — do NOT pin explicitly here
-    # unless you hit version conflicts. They will be resolved by pip from
-    # the torch wheel's requirements.
+    # CUDA runtime wheels are resolved automatically as transitive deps of
+    # torch. Do NOT pin them explicitly here unless you hit a conflict.
 
     # -- Classical pipeline optimisation --
     - bayesian-optimization==3.1.0
 
-    # -- Stats extras used in figures / error analysis --
-    - statsmodels==0.14.4
-    - scikit-posthocs==0.11.4
+    # -- Stats used in figures / error analysis --
+    - statsmodels==0.14.6
     - statannotations==0.7.2
 
-    # -- Dev & test extras --
-    - pytest-cov>=4.1,<6.0
-    - ruff>=0.3,<1.0
-    - black>=23.0,<25.0
+    # -- Notebook environment (the five notebooks ARE the figure pipeline) --
+    - jupyterlab>=4.0,<5.0# ==============================================================================
+# ecdna-bench — Conda environment
+# ==============================================================================
+# Create (use --prefix so the env lands on /proj, not in your home quota):
+#   conda env create --prefix /proj/<onyen>/envs/ecdna-bench -f env/environment.yml
+# Update existing:
+#   conda env update --prefix /proj/<onyen>/envs/ecdna-bench -f env/environment.yml --prune
+# Activate:
+#   conda activate /proj/<onyen>/envs/ecdna-bench
+#
+# Then install the project itself:
+#   pip install -e .
+# ==============================================================================
+#
+# Channel priority: conda-forge > defaults.
+# Torch and torchvision are installed via pip (CUDA 12.8 wheels) because the
+# pytorch conda channel lags behind pip for CUDA 12.x builds.
+#
+# REPRODUCIBILITY NOTE
+# Every pin below is the version present in the environment that produced the
+# frozen results (verified against `conda list` and `pip list --format=freeze`,
+# 2026-08). Development and linting tools are deliberately NOT pinned here —
+# they do not affect results. Install them with:
+#   pip install -e ".[dev]"
+#
+# `name:` is omitted on purpose: it is ignored when --prefix is used, and
+# leaving it out avoids a confusing warning.
+# ==============================================================================
 
-    # NOTE: install the project itself separately after env creation:
-    #   pip install -e /proj/brunk_ecdna_cv_project/Poorya/ecdna-bench
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  # --------------------------------------------------------------------------
+  # Python interpreter — must match what produced the results
+  # --------------------------------------------------------------------------
+  - python=3.10.16
+
+  # --------------------------------------------------------------------------
+  # Core scientific stack — exact versions from the result-producing env
+  # --------------------------------------------------------------------------
+  - numpy=2.2.5
+  - pandas=2.2.3
+  - scipy=1.15.3
+  - scikit-learn=1.6.1        # required by bayesian-optimization (GP surrogate)
+  - pillow=11.1.0
+  - pyyaml>=6.0,<7.0
+  - tqdm>=4.65,<5.0
+
+  # --------------------------------------------------------------------------
+  # Plotting (used by notebooks 01-05)
+  # --------------------------------------------------------------------------
+  - matplotlib=3.10.0
+  - seaborn=0.13.2
+
+  # --------------------------------------------------------------------------
+  # Testing
+  # --------------------------------------------------------------------------
+  - pytest>=7.4,<9.0
+  - pip>=25.0
+
+  # --------------------------------------------------------------------------
+  # Pip-managed packages
+  # Either not on conda at the required version, or CUDA-linked wheels best
+  # sourced from PyPI.
+  # --------------------------------------------------------------------------
+  - pip:
+    # -- Image processing --
+    - scikit-image==0.25.2
+    - opencv-python-headless==4.13.0.92   # headless: no display needed on HPC
+
+    # -- Deep learning (PyTorch cu128 wheels) --
+    - torch==2.8.0
+    - torchvision==0.23.0
+    - triton==3.4.0            # transitive dep of torch; pinned for reproducibility
+
+    # CUDA runtime wheels are resolved automatically as transitive deps of
+    # torch. Do NOT pin them explicitly here unless you hit a conflict.
+
+    # -- Classical pipeline optimisation --
+    - bayesian-optimization==3.1.0
+
+    # -- Stats used in figures / error analysis --
+    - statsmodels==0.14.6
+    - statannotations==0.7.2
+
+    # -- Notebook environment (the five notebooks ARE the figure pipeline) --
+    - jupyterlab>=4.0,<5.0

@@ -18,7 +18,6 @@ run_eccount         Run ecCount inference → threshold + peaks mask PNGs.
 run_baseline        Harmonize one external baseline (ecseg/mia/label_engine).
 benchmark           Full cross-model benchmark evaluation.
 sensitivity         Sensitivity sweep (d_max × IoU_min × OR/AND).
-make_figures        Generate paper figures from frozen CSVs.
 
 No business logic lives in CLI modules — each is a thin argparse wrapper
 that loads config, calls the library API, and logs results.

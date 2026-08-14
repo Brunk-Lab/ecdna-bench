@@ -16,7 +16,7 @@ help:
 	@echo "ecdna-bench — available targets"
 	@echo "────────────────────────────────────────────────────────────────"
 	@echo "  install            pip install -e . (editable install)"
-	@echo "  test               run pytest (112 tests)"
+	@echo "  test               run pytest (126 tests)"
 	@echo "  lint               ruff + mypy"
 	@echo ""
 	@echo "  build-metadata     build metadata.csv + counts_master.csv"

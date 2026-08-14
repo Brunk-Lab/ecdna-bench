@@ -91,3 +91,6 @@ repo_inventory/
 scripts/audit_metadata_inputs.py
 
 .virtual_documents/
+
+# Figure panels are release content — re-include after the blanket *.png rule above
+!release/figures/**/*.png
