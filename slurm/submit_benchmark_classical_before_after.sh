@@ -11,8 +11,8 @@
 
 set -euo pipefail
 
-PYTHON=/proj/brunk_ecdna_cv_project/Poorya/envs/ecdna-bench/bin/python
-PROJECT_ROOT=/proj/brunk_ecdna_cv_project/Poorya/ecdna-bench
+PYTHON="${ECDNA_PYTHON:-python}"
+PROJECT_ROOT="${ECDNA_PROJECT_ROOT:-${SLURM_SUBMIT_DIR:-$PWD}}"
 
 export OMP_NUM_THREADS=1
 export MKL_NUM_THREADS=1

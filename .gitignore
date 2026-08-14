@@ -94,3 +94,6 @@ scripts/audit_metadata_inputs.py
 
 # Figure panels are release content — re-include after the blanket *.png rule above
 !release/figures/**/*.png
+
+configs/paths.local.yaml.*
+configs/paths_local.yaml.*

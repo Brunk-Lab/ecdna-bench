@@ -1,7 +1,10 @@
+# Overlay for the classical pipeline using the pre-optimisation (default)
+# parameters. Used only for the before/after Bayesian-optimisation comparison
+# in Figure 3; not a benchmarked model.
 paths:
-  consistency_csv: /proj/brunk_ecdna_cv_project/Poorya/ecdna-bench/release/manifests/dl_master_metadata_stage1_step3_consistency.csv
-  frozen_params_json: /proj/brunk_ecdna_cv_project/Poorya/ecdna-bench/configs/classical/default_before_opt_frozen_params.json
-  classical_masks: /work/users/b/e/behnamie/ecDNA_Data/benchmark/predictions/classical_default
+  consistency_csv: null           # <- set in paths.local.yaml
+  frozen_params_json: configs/classical/default_before_opt_frozen_params.json
+  classical_masks: null           # <- set in paths.local.yaml
 
 classical:
   n_workers: 16

@@ -16,7 +16,7 @@ Outputs (written to --out-dir, default ./repo_inventory):
 
 Typical use on Longleaf
 -----------------------
-    cd /proj/brunk_ecdna_cv_project/Poorya/ecdna-bench
+    cd /path/to/ecdna-bench
     python inventory_repo.py --root . --out-dir repo_inventory
 
 Add --hash only if you also want SHA256 checksums of every file (slow on the
@@ -367,7 +367,7 @@ def write_summary_md(file_rows, dir_stats, errors, root: Path,
 def main() -> None:
     ap = argparse.ArgumentParser(description="Inventory a project directory.")
     ap.add_argument("--root", type=Path,
-                    default=Path("/proj/brunk_ecdna_cv_project/Poorya/ecdna-bench"),
+                    default=Path("."),
                     help="Directory to inventory (default: the ecdna-bench repo).")
     ap.add_argument("--out-dir", type=Path, default=Path("repo_inventory"),
                     help="Where to write the report files.")

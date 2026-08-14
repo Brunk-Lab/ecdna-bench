@@ -7,13 +7,13 @@
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=96g
 #SBATCH -t 24:00:00
-#SBATCH --output=/proj/brunk_ecdna_cv_project/Poorya/ecdna-bench/logs/opt_h2170_%A_%a.out
-#SBATCH --error=/proj/brunk_ecdna_cv_project/Poorya/ecdna-bench/logs/opt_h2170_%A_%a.err
+#SBATCH --output=logs/opt_h2170_%A_%a.out
+#SBATCH --error=logs/opt_h2170_%A_%a.err
 
 set -euo pipefail
 
-PYTHON=/proj/brunk_ecdna_cv_project/Poorya/envs/ecdna-bench/bin/python
-PROJECT_ROOT=/proj/brunk_ecdna_cv_project/Poorya/ecdna-bench
+PYTHON="${ECDNA_PYTHON:-python}"
+PROJECT_ROOT="${ECDNA_PROJECT_ROOT:-${SLURM_SUBMIT_DIR:-$PWD}}"
 
 export PYTHONPATH="$PROJECT_ROOT/src:${PYTHONPATH:-}"
 export PYTHONUNBUFFERED=1

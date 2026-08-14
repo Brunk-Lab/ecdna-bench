@@ -5,7 +5,7 @@
 #
 # This file contains the values used to produce the published results. It is
 # version-controlled and should NOT be edited for routine use. Instead, users
-# copy `configs/paths_example.yaml` to `configs/paths.local.yaml` and fill in
+# copy `configs/paths.example.yaml` to `configs/paths.local.yaml` and fill in
 # local paths; that file is merged over this one at load time.
 #
 # Every key is documented with:
@@ -21,7 +21,7 @@
 
 # ------------------------------------------------------------------------------
 # paths — machine-specific data paths are `null` here and must be filled in by
-# copying configs/paths_example.yaml to configs/paths.local.yaml. Paths that
+# copying configs/paths.example.yaml to configs/paths.local.yaml. Paths that
 # point at files inside the repo itself (split files, checkpoint, baseline
 # mask directory) have working defaults here so paths.local.yaml only needs
 # to carry the data-root entries in the common case.

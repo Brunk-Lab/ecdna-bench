@@ -18,7 +18,7 @@ set -euo pipefail
 # This bypasses the module system PATH conflict entirely — no need for
 # `module load anaconda` or `conda activate` in batch scripts.
 # ---------------------------------------------------------------------------
-PYTHON=/proj/brunk_ecdna_cv_project/Poorya/envs/ecdna-bench/bin/python
+PYTHON="${ECDNA_PYTHON:-python}"
 
 # Confirm we have the right Python before doing anything else
 echo "Python : $PYTHON"
@@ -29,7 +29,7 @@ export MKL_NUM_THREADS=1
 export OPENBLAS_NUM_THREADS=1
 export OPENCV_LOG_LEVEL=ERROR
 
-PROJECT_ROOT="/proj/brunk_ecdna_cv_project/Poorya/ecdna-bench"
+PROJECT_ROOT="${ECDNA_PROJECT_ROOT:-${SLURM_SUBMIT_DIR:-$PWD}}"
 
 cd "$PROJECT_ROOT"
 mkdir -p logs outputs/eccount_training

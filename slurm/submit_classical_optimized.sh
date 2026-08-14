@@ -12,13 +12,13 @@
 set -Eeuo pipefail
 trap 'echo ""; echo "ERROR on line $LINENO"; echo "Command: $BASH_COMMAND"; echo "Exit code: $?"; echo "Finished with error at: $(date)"' ERR
 
-PYTHON=/proj/brunk_ecdna_cv_project/Poorya/envs/ecdna-bench/bin/python
-PROJECT_ROOT=/proj/brunk_ecdna_cv_project/Poorya/ecdna-bench
+PYTHON="${ECDNA_PYTHON:-python}"
+PROJECT_ROOT="${ECDNA_PROJECT_ROOT:-${SLURM_SUBMIT_DIR:-$PWD}}"
 
 CONFIG="$PROJECT_ROOT/configs/default.classical_optimised.yaml"
 CONSISTENCY_CSV="$PROJECT_ROOT/release/manifests/dl_master_metadata_stage1_step3_consistency.csv"
 FROZEN_JSON="$PROJECT_ROOT/configs/classical/stage3_frozen_params.json"
-OUT_DIR="/work/users/b/e/behnamie/ecDNA_Data/benchmark/predictions/classical_optimised"
+OUT_DIR="${ECDNA_CLASSICAL_OUT_DIR:-$PROJECT_ROOT/outputs/predictions/classical_optimised}"
 RUN_LOG="$PROJECT_ROOT/logs/classical_optimised_run_${SLURM_JOB_ID}.log"
 
 cd "$PROJECT_ROOT"

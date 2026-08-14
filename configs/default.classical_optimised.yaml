@@ -1,7 +1,12 @@
+# Overlay for the classical pipeline using the frozen post-optimisation
+# parameters. Merge over configs/default.yaml:
+#   python -m ecdna_bench.cli.run_classical --config configs/default.classical_optimised.yaml
+# Machine-specific paths (consistency_csv, classical_masks) are set in
+# configs/paths.local.yaml, as for every other config in this repo.
 paths:
-  consistency_csv: /proj/brunk_ecdna_cv_project/Poorya/ecdna-bench/release/manifests/dl_master_metadata_stage1_step3_consistency.csv
-  frozen_params_json: /proj/brunk_ecdna_cv_project/Poorya/ecdna-bench/configs/classical/stage3_frozen_params.json
-  classical_masks: /work/users/b/e/behnamie/ecDNA_Data/benchmark/predictions/classical_optimised
+  consistency_csv: null           # <- set in paths.local.yaml
+  frozen_params_json: configs/classical/stage3_frozen_params.json
+  classical_masks: null           # <- set in paths.local.yaml
 
 classical:
   n_workers: 16

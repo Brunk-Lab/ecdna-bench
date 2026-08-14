@@ -13,7 +13,7 @@
 
 set -euo pipefail
 
-PYTHON=/proj/brunk_ecdna_cv_project/Poorya/envs/ecdna-bench/bin/python
+PYTHON="${ECDNA_PYTHON:-python}"
 
 echo "Python : $PYTHON"
 "$PYTHON" --version
@@ -23,7 +23,7 @@ export MKL_NUM_THREADS=1
 export OPENBLAS_NUM_THREADS=1
 export OPENCV_LOG_LEVEL=ERROR
 
-PROJECT_ROOT="/proj/brunk_ecdna_cv_project/Poorya/ecdna-bench"
+PROJECT_ROOT="${ECDNA_PROJECT_ROOT:-${SLURM_SUBMIT_DIR:-$PWD}}"
 
 cd "$PROJECT_ROOT"
 mkdir -p logs

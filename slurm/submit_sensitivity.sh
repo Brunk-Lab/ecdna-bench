@@ -16,8 +16,8 @@ trap 'echo ""; echo "ERROR on line $LINENO"; echo "Command: $BASH_COMMAND"; echo
 # Use the conda env's Python directly by absolute path.
 # Same convention as submit_eccount_train.sh / submit_classical_default.sh.
 # ---------------------------------------------------------------------------
-PYTHON=/proj/brunk_ecdna_cv_project/Poorya/envs/ecdna-bench/bin/python
-PROJECT_ROOT=/proj/brunk_ecdna_cv_project/Poorya/ecdna-bench
+PYTHON="${ECDNA_PYTHON:-python}"
+PROJECT_ROOT="${ECDNA_PROJECT_ROOT:-${SLURM_SUBMIT_DIR:-$PWD}}"
 
 CONFIG="$PROJECT_ROOT/configs/default.yaml"
 
