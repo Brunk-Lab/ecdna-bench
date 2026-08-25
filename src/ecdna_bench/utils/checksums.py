@@ -136,7 +136,7 @@ def verify_manifest(
     with open(manifest_csv, newline="") as f:
         reader = csv.DictReader(f)
         for row in reader:
-            rel = row["relpath"]
+            rel = row.get("relpath") or row["relative_path"]
             expected_size = int(row["size_bytes"])
             expected_digest = row["sha256"]
             p = root_p / rel
