@@ -6,10 +6,10 @@ Run sensitivity sweep over d_max × IoU_min × OR/AND matching policies.
 Usage
 -----
     # single model (legacy)
-    python -m ecdna_bench.cli.sensitivity --config configs/benchmark.yaml --model eccount_peaks
+    python -m ecdna_bench.cli.sensitivity --config configs/default.yaml --model eccount_peaks
 
     # all six models in the registry
-    python -m ecdna_bench.cli.sensitivity --config configs/benchmark.yaml --model all
+    python -m ecdna_bench.cli.sensitivity --config configs/default.yaml --model all
 
 The sweep evaluates the chosen model(s) across a grid of matching parameters
 and writes:
@@ -65,7 +65,7 @@ def parse_args() -> argparse.Namespace:
     p.add_argument(
         "--config",
         type=Path,
-        default=Path("configs/benchmark.yaml"),
+        default=Path("configs/default.yaml"),
     )
     p.add_argument(
         "--model",

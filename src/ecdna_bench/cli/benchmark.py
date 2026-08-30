@@ -5,7 +5,7 @@ Run the full cross-model benchmark evaluation.
 
 Usage
 -----
-    python -m ecdna_bench.cli.benchmark --config configs/benchmark.yaml
+    python -m ecdna_bench.cli.benchmark --config configs/default.yaml
 
 Pipeline
 --------
@@ -44,7 +44,7 @@ def parse_args() -> argparse.Namespace:
         description="Run full cross-model benchmark evaluation.",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    p.add_argument("--config", type=Path, default=Path("configs/benchmark.yaml"))
+    p.add_argument("--config", type=Path, default=Path("configs/default.yaml"))
     p.add_argument("--models", nargs="*", default=None,
                    help="Model keys to include (default: all in registry).")
     p.add_argument("--n-workers", type=int, default=None)
