@@ -83,8 +83,8 @@ else
 fi
 
 if command -v quota >/dev/null 2>&1; then
-    QUOTA_LINE=$(quota -s 2>/dev/null | grep -v '^Disk quotas' | grep -v 'Filesystem' | head -1 | xargs)
-    [[ -n "$QUOTA_LINE" ]] && echo "     quota: $QUOTA_LINE"
+    QUOTA_OUT=$(quota -s 2>/dev/null | tail -n +2)
+    [[ -n "$QUOTA_OUT" ]] && { echo "     your quota:"; sed 's/^/       /' <<<"$QUOTA_OUT"; }
 fi
 
 # -----------------------------------------------------------------------------
@@ -256,14 +256,54 @@ else
     fail "Model parameter count is '$NPARAM', expected 7849601"; FAILED=1
 fi
 
-RESULTS_ROOT=$(PYTHONNOUSERSITE=1 "$PY" -c "
-from ecdna_bench.config import load_config
-print(load_config('configs/default.yaml')['paths']['results_root'])
-" 2>/dev/null)
-if [[ "$RESULTS_ROOT" == *"$ONYEN"* ]]; then
-    ok "Output will go to your own folder"
+# NOTE: there are two functions called load_config.
+#   ecdna_bench.config.load_config      -> typed Config object, strict
+#   ecdna_bench.cli._common.load_config -> plain dict, keeps every key
+# The command-line tools use the dict one, so that is what we verify here.
+CFG_CHECK=$(cd "$REPO" && PYTHONNOUSERSITE=1 "$PY" -c "
+from ecdna_bench.cli._common import load_config as cli_load
+from ecdna_bench.config import load_config as typed_load
+
+cfg = cli_load('configs/default.yaml')
+p = cfg.get('paths', {})
+for k in ('results_root', 'logs_root', 'consistency_csv', 'eccount_out_dir'):
+    print('CLI_%s=%s' % (k.upper(), p.get(k) or ''))
+
+t = typed_load('configs/default.yaml')
+print('OVERRIDE=%s' % (t.local_override_yaml or 'NONE'))
+print('TYPED_RESULTS=%s' % (t.paths.results_root or ''))
+" 2>&1)
+
+if [[ "$CFG_CHECK" != *"OVERRIDE="* ]]; then
+    fail "Could not read the configuration:"
+    echo "$CFG_CHECK" | sed 's/^/      /'
+    FAILED=1
 else
-    fail "Output would go to '$RESULTS_ROOT' — that is not yours"; FAILED=1
+    [[ "$(sed -n 's/^OVERRIDE=//p' <<<"$CFG_CHECK")" == "NONE" ]] \
+        && { fail "configs/paths.local.yaml was not merged — your settings are ignored"; FAILED=1; } \
+        || ok "Your paths file is being used"
+
+    # Every writable location must sit inside this user's own space.
+    BAD=0
+    for KEY in CLI_RESULTS_ROOT CLI_LOGS_ROOT CLI_ECCOUNT_OUT_DIR TYPED_RESULTS; do
+        VAL=$(sed -n "s/^${KEY}=//p" <<<"$CFG_CHECK")
+        [[ -z "$VAL" ]] && continue
+        # A relative path resolves inside this repository, which is yours.
+        [[ "$VAL" != /* ]] && continue
+        if [[ "$VAL" != *"/$ONYEN/"* && "$VAL" != *"/$ONYEN" ]]; then
+            fail "$KEY would write to '$VAL' — that is outside your space"
+            BAD=1; FAILED=1
+        fi
+    done
+    [[ "$BAD" -eq 0 ]] && ok "Every output location is inside your own folder"
+
+    # Inputs are expected to be shared and read-only; just report them.
+    CONS=$(sed -n 's/^CLI_CONSISTENCY_CSV=//p' <<<"$CFG_CHECK")
+    if [[ -n "$CONS" && -r "$CONS" ]]; then
+        ok "Metadata table readable"
+    elif [[ -n "$CONS" ]]; then
+        fail "Cannot read the metadata table at '$CONS'"; FAILED=1
+    fi
 fi
 
 echo "  … running the test suite (about 30 seconds)"
