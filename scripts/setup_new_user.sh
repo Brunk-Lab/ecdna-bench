@@ -71,12 +71,20 @@ ok "Environment found"
 # -----------------------------------------------------------------------------
 step "Step 3 of 9 — checking your home directory"
 
-HOME_USE=$(df -P "$HOME" 2>/dev/null | awk 'NR==2 {gsub(/%/,"",$5); print $5}')
-if [[ -n "${HOME_USE:-}" && "$HOME_USE" -gt 90 ]]; then
-    warn "Home is ${HOME_USE}% full. Jupyter may refuse to start."
-    warn "After this script finishes, run:  conda clean --all --yes"
+# df reports the whole shared filesystem, not your personal quota, so it is
+# useless here. Test what actually matters: can you write to your home?
+if echo test > "$HOME/.ecdna_write_test" 2>/dev/null; then
+    rm -f "$HOME/.ecdna_write_test"
+    ok "Home directory is writable"
 else
-    ok "Home has room (${HOME_USE:-?}% used)"
+    warn "Cannot write to your home directory — it is probably at its quota."
+    warn "Jupyter will not start until this is cleared. Try:"
+    warn "    conda clean --all --yes && rm -rf ~/.cache/pip"
+fi
+
+if command -v quota >/dev/null 2>&1; then
+    QUOTA_LINE=$(quota -s 2>/dev/null | grep -v '^Disk quotas' | grep -v 'Filesystem' | head -1 | xargs)
+    [[ -n "$QUOTA_LINE" ]] && echo "     quota: $QUOTA_LINE"
 fi
 
 # -----------------------------------------------------------------------------
@@ -141,16 +149,35 @@ ok "Workspace ready at $MYDIR"
 # -----------------------------------------------------------------------------
 step "Step 6 of 9 — getting the code"
 
+# Never hang waiting for a username and password. The repository is private,
+# so an HTTPS clone would prompt — and GitHub no longer accepts passwords.
+export GIT_TERMINAL_PROMPT=0
+export GIT_SSH_COMMAND="ssh -oBatchMode=yes -oStrictHostKeyChecking=accept-new"
+
+GITHUB_SSH="git@github.com:PooryaBehnamie/ecdna-bench.git"
+
 if [[ -d "$REPO/.git" ]]; then
     ok "Repository already present at $REPO"
-elif git clone --quiet https://github.com/PooryaBehnamie/ecdna-bench.git "$REPO" 2>/dev/null; then
-    ok "Cloned from GitHub"
+
+elif [[ -d "$SOURCE_REPO/.git" ]] && git clone --quiet "$SOURCE_REPO" "$REPO" 2>/dev/null; then
+    # Preferred route: the full repository is already on this filesystem.
+    # A local clone copies the entire history and needs no GitHub account.
+    ok "Cloned from the shared repository — full history, no login required"
+    echo "     'git pull' will fetch updates from $SOURCE_REPO"
+
+elif git clone --quiet "$GITHUB_SSH" "$REPO" 2>/dev/null; then
+    ok "Cloned from GitHub over SSH"
+
 elif [[ -d "$SOURCE_REPO" ]]; then
-    warn "GitHub unreachable — copying from the shared repository instead"
+    warn "Git clone unavailable — copying the folder instead"
     cp -r "$SOURCE_REPO" "$REPO" || die "Copy failed"
     ok "Copied from $SOURCE_REPO"
+
 else
-    die "Could not obtain the code from GitHub or from $SOURCE_REPO"
+    die "Could not obtain the code.
+  Tried: a local clone of $SOURCE_REPO, then GitHub over SSH.
+  The repository is private, so an HTTPS clone needs a personal access token.
+  Easiest fix: ask for read access to $SOURCE_REPO on this filesystem."
 fi
 
 cd "$REPO" || die "Cannot enter $REPO"
@@ -259,6 +286,7 @@ cat <<SUMMARY
 
   Your workspace : $MYDIR
   Your code      : $REPO
+  Code came from : $(git -C "$REPO" remote get-url origin 2>/dev/null || echo "a direct copy")
   Environment    : $ENV_CANONICAL
 
   Load your new settings once:
