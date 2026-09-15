@@ -1,12 +1,12 @@
 """
 ecdna_bench.evaluation.matching — Hungarian 1-to-1 assignment between
-predicted and ground-truth objects, with first-class OR / AND validity
+predicted and gold-standard objects, with first-class OR / AND validity
 policies and a dedicated "ignored prediction" bucket.
 
 What this module does
 ---------------------
 Given two lists of object dicts (see :mod:`ecdna_bench.evaluation.objects`
-for the schema), decide which predictions correspond to which ground truths,
+for the schema), decide which predictions correspond to which gold-standard objects,
 and bucket every un-paired prediction as either a true false positive (``fp``)
 or an *ignored* duplicate (``ignored_pred``). The latter is a prediction that
 *had* a valid geometric candidate but was passed over by the 1-to-1 Hungarian
@@ -19,7 +19,7 @@ The OR / AND policy is the other key contribution of this module. Any
 candidate pair (pred i, gt j) has two binary gates:
 
   * ``dist_ok[i,j]``  — the centroid distance is at most ``d_max`` pixels.
-  * ``overlap_ok[i,j]`` — the prediction bounding box "hits" the GT mask
+  * ``overlap_ok[i,j]`` — the prediction bounding box "hits" the GS mask
                           *and* their true IoU is at least ``min_iou``.
 
 Under the **OR** policy (the paper's main-text convention), a pair is a
@@ -52,16 +52,16 @@ calls both in sequence.
 Output schema
 -------------
 Every matching call returns a :class:`MatchResult` with four lists that
-partition the predictions and the ground truths:
+partition the predictions and the gold-standard objects:
 
   * ``matched``        : list of ``(pred_idx, gt_idx)`` tuples (the TPs).
   * ``unmatched_pred`` : predictions with *no* valid candidate at all → FP.
   * ``ignored_pred``   : predictions that had a candidate but lost → ignored.
-  * ``unmatched_gt``   : GTs that nobody matched to → FN.
+  * ``unmatched_gt``   : GS objects that nobody matched to → FN.
 
 ``len(matched) + len(unmatched_pred) + len(ignored_pred)`` always equals the
 total number of predictions; ``len(matched) + len(unmatched_gt)`` always
-equals the total number of GTs. These identities are enforced by the tests
+equals the total number of GS objects. These identities are enforced by the tests
 in ``tests/test_matching.py``.
 """
 
@@ -118,11 +118,11 @@ class MatchResult:
         selected by the 1-to-1 Hungarian assignment → ignored in
         precision/recall/F1. This is the paper's "ignored" bucket.
     unmatched_gt : list[int]
-        GTs that nobody matched to → counted as FN.
+        GS objects that nobody matched to → counted as FN.
     n_pred : int
         Total number of predictions supplied to the matcher.
     n_gt : int
-        Total number of ground-truth objects supplied to the matcher.
+        Total number of gold-standard objects supplied to the matcher.
     """
 
     matched: list[tuple[int, int]] = field(default_factory=list)
@@ -160,7 +160,7 @@ class MatchResult:
 @dataclass(frozen=True)
 class PairwiseTensors:
     """
-    Matching-parameter-independent geometry between predictions and GTs.
+    Matching-parameter-independent geometry between predictions and GS objects.
 
     This is the output of :func:`precompute_pairwise` and the input of
     :func:`resolve_matching_from_pairwise`. Reusing the same tensors across
@@ -179,8 +179,8 @@ class PairwiseTensors:
         Overlap score in ``[0, 1]``. The exact definition follows the
         Supplementary §13 recipe and is documented in :func:`precompute_pairwise`.
     hit : np.ndarray, shape ``(n_pred, n_gt)``, dtype bool
-        True iff the prediction bbox contains at least one GT-positive
-        pixel (or, when no GT mask is available, iff bbox IoU > 0). This
+        True iff the prediction bbox contains at least one GS-positive
+        pixel (or, when no GS mask is available, iff bbox IoU > 0). This
         is the "hit gate" used together with ``min_iou`` to decide
         ``overlap_ok`` downstream.
     n_pred : int
@@ -212,7 +212,7 @@ def precompute_pairwise(
 ) -> PairwiseTensors:
     """
     Compute all matching-parameter-*independent* pairwise geometry between
-    predictions and GTs in one pass over the data.
+    predictions and GS objects in one pass over the data.
 
     The work here is dominated by the small-bbox ROI extraction for IoU,
     which is the single most expensive operation in the evaluation. Doing
@@ -284,7 +284,7 @@ def precompute_pairwise(
 
             if g_mask is not None:
                 g_h, g_w = g_mask.shape[:2]
-                # Clip the prediction bbox into the GT mask frame.
+                # Clip the prediction bbox into the GS mask frame.
                 y1 = max(0, min(py1, g_h))
                 y2 = max(0, min(py2, g_h))
                 x1 = max(0, min(px1, g_w))
@@ -295,7 +295,7 @@ def precompute_pairwise(
                     gt_pos_in_roi = int(np.count_nonzero(g_roi))
 
                     if gt_pos_in_roi > 0:
-                        # Hit gate passes if *any* GT-positive pixel lies
+                        # Hit gate passes if *any* GS-positive pixel lies
                         # inside the prediction bbox.
                         hit_gate = True
 
@@ -305,10 +305,10 @@ def precompute_pairwise(
                             and p_mask.shape == g_mask.shape
                         ):
                             # CASE A: prediction carries a mask of the same
-                            # shape as the GT mask. Use true mask-IoU inside
+                            # shape as the GS mask. Use true mask-IoU inside
                             # the prediction bbox ROI. This penalizes huge
                             # prediction bounding boxes that happen to
-                            # contain a small GT spot: their area_p is
+                            # contain a small GS spot: their area_p is
                             # large, so union grows, so IoU falls.
                             p_roi = p_mask[y1:y2, x1:x2] > 0
                             inter = int(np.count_nonzero(p_roi & g_roi))
@@ -322,7 +322,7 @@ def precompute_pairwise(
                             # CASE B: prediction has no mask (e.g., we only
                             # have its bbox). Fall back to treating the
                             # bbox itself as the prediction footprint:
-                            # intersection = GT-positive pixels inside bbox,
+                            # intersection = GS-positive pixels inside bbox,
                             # area_p     = full bbox ROI area,
                             # area_g     = gt_pos_in_roi,
                             # union      = area_p (because g_roi ⊆ bbox).
@@ -331,7 +331,7 @@ def precompute_pairwise(
                             if area_p > 0:
                                 overlap_score = float(gt_pos_in_roi / float(area_p))
             else:
-                # GT mask missing → fallback to bbox IoU only. The hit gate
+                # GS mask missing → fallback to bbox IoU only. The hit gate
                 # reduces to "do the bboxes overlap at all".
                 overlap_score = float(bbox_iou(p_bbox, g["bbox"]))
                 if overlap_score > 0.0:
@@ -517,7 +517,7 @@ def match_objects(
 
 
 # ==============================================================================
-# Center-only matcher — used when GT is points, not masks.
+# Center-only matcher — used when GS is points, not masks.
 # ==============================================================================
 
 
@@ -531,10 +531,10 @@ def match_boxes_to_centers(
 ) -> MatchResult:
     """
     Match predicted objects (with bboxes + centroids) against a list of
-    ground-truth centroid points.
+    gold-standard centroid points.
 
     This is the evaluation mode used when a dataset provides only point
-    annotations (e.g., the refined centroid-only GT used for some
+    annotations (e.g., the refined centroid-only GS used for some
     supplementary analyses). The policy here is implicitly "AND": a pair
     must satisfy *both* the optional "point lies inside prediction bbox"
     gate and the centroid-distance gate. This is intentional: with no
@@ -546,11 +546,11 @@ def match_boxes_to_centers(
     pred_objs : sequence of dict
         Standard prediction objects.
     gt_centers : sequence of (cy, cx) tuples
-        Ground-truth point annotations.
+        Gold-standard point annotations.
     d_max : float
         Maximum Euclidean centroid distance for a candidate pair.
     require_inside : bool, default True
-        If True, the GT point must lie within the prediction bbox to be
+        If True, the GS point must lie within the prediction bbox to be
         considered a candidate. If False, the distance gate alone is used.
     big_cost : float, default BIG_COST
         Sentinel for invalid pairs in the cost matrix.

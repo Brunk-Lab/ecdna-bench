@@ -11,7 +11,7 @@ Figure 6.
 Why a dedicated module?
 -----------------------
 The sweep is dominated by the *per-image* cost of computing pairwise
-geometry (one Python loop over prediction × GT pairs, with a small ROI
+geometry (one Python loop over prediction × GS pairs, with a small ROI
 extraction for the IoU on each valid pair). The per-*parameter* cost is
 just an elementwise mask of precomputed tensors plus a small Hungarian
 solve, which is cheap. So the right shape for the code is:

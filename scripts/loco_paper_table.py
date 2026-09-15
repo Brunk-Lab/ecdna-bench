@@ -28,7 +28,7 @@ numbers that can go in a manuscript. Three things are wrong for that purpose:
 
 3.  count_mae IS NOT SCALE-FREE. COLO320DM averages ~46 objects per image and
     SNU16 ~283, so a raw MAE ranking is misleading. Relative MAE and the mean
-    ground-truth count are both reported.
+    gold-standard count are both reported.
 
 It also adds mean signed count bias, which collect_loco_results.py does not
 compute at all. ecCount peaks being the only near-zero-bias model (+0.4) is a

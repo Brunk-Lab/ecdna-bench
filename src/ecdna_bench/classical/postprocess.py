@@ -6,7 +6,7 @@ Eval-time post-processing helpers for the classical pipeline.
 Two responsibilities
 --------------------
 1. **Split heuristic** — ``split_large_predictions`` splits a blob that
-   contains multiple GT centroids into one predicted object per GT centroid.
+   contains multiple GS centroids into one predicted object per GS centroid.
    This is applied *at evaluation time* (never during training or pure
    inference); it is an optional step that can improve localization metrics
    when the detector fuses adjacent ecDNAs into one blob.
@@ -43,12 +43,12 @@ def split_large_predictions(
     gt_objs: List[Dict],
     split_size: int = 10,
 ) -> List[Dict]:
-    """Replace a blob that covers ≥ 2 GT centroids with one sub-prediction per centroid.
+    """Replace a blob that covers ≥ 2 GS centroids with one sub-prediction per centroid.
 
-    For each predicted object whose bounding box contains 2 or more GT
+    For each predicted object whose bounding box contains 2 or more GS
     centroids, discard the original prediction and emit one small square
-    prediction centred on each GT centroid.  Objects with 0 or 1 contained
-    GT centroids are passed through unchanged.
+    prediction centred on each GS centroid.  Objects with 0 or 1 contained
+    GS centroids are passed through unchanged.
 
     This heuristic is applied *after* detection and merging, solely to improve
     localization metrics; it has no effect on count-only evaluation.
@@ -58,10 +58,10 @@ def split_large_predictions(
     pred_objs:
         List of predicted objects (standard dict format with ``"bbox"``).
     gt_objs:
-        List of ground-truth objects (standard dict format with ``"centroid"``).
+        List of gold-standard objects (standard dict format with ``"centroid"``).
     split_size:
         Side length (in pixels) of the synthetic square bbox created around
-        each GT centroid.
+        each GS centroid.
 
     Returns
     -------

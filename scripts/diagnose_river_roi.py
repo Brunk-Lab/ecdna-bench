@@ -7,9 +7,9 @@ Run this after benchmark_river_roi.py has finished. It does five things:
   A. Repair the `subset` column, which was wrong in the first run.
   B. Explain the 13 images that have no ecCount prediction.
   C. Test whether `gt_image` is the right comparator, by checking it against
-     the frozen benchmark ground-truth counts on the 1,145 benchmark images.
+     the frozen benchmark gold-standard counts on the 1,145 benchmark images.
   D. Compare predicted ROIs against manual ROIs geometrically.
-  E. Report the ground-truth burden distribution per cell line.
+  E. Report the gold-standard burden distribution per cell line.
 
 C and D are the ones that matter. The run produced positive count bias
 everywhere (+9.4 overall, +26.1 on COLO320DM) where the benchmark reports
@@ -17,7 +17,7 @@ everywhere (+9.4 overall, +26.1 on COLO320DM) where the benchmark reports
 table and these checks separate them:
 
   (1) The predicted ROI covers regions the manual ROI excluded, so ecCount
-      detects real ecDNA that the ground truth does not contain. Those become
+      detects real ecDNA that the gold standard does not contain. Those become
       false positives and drive bias positive.
   (2) COLO320DM and SUM159PT have very low burden (implied means of 27 and 5
       ecDNA per image), so relative bias is unstable there and a handful of
@@ -181,9 +181,9 @@ def main() -> int:
     print(miss_df.groupby("cell_line").size().to_string())
 
     # ── C. Is gt_image the right comparator? ───────────────────────────────
-    rule("C. Is gt_image the same ground truth the benchmark used?")
+    rule("C. Is gt_image the same gold standard the benchmark used?")
     print("If gt_image holds the UNMASKED annotation while the benchmark scored")
-    print("against an ROI-MASKED ground truth, then this run compared ecCount")
+    print("against an ROI-MASKED gold standard, then this run compared ecCount")
     print("against a different target and the numbers are not comparable.\n")
 
     frozen = pd.read_csv(repo / "release/frozen_results/or_matching/per_image_metrics.csv")
@@ -224,11 +224,11 @@ def main() -> int:
     print(f"gt_image smaller in     : {int((cmp['delta_image_minus_bench'] < 0).sum())}")
 
     if n_eq / max(len(cmp), 1) > 0.95:
-        print("\nVERDICT: gt_image matches the benchmark ground truth. The comparator")
+        print("\nVERDICT: gt_image matches the benchmark gold standard. The comparator")
         print("is correct and the positive bias is a real property of running ecCount")
         print("inside predicted ROIs.")
     else:
-        print("\nVERDICT: gt_image does NOT match the benchmark ground truth.")
+        print("\nVERDICT: gt_image does NOT match the benchmark gold standard.")
         print("The ROI run scored against a different target. Every number from")
         print("benchmark_river_roi.py is uninterpretable until this is resolved.")
         print("Most likely gt_image is the unmasked annotation and the benchmark")
@@ -290,7 +290,7 @@ def main() -> int:
                 print("must be stated as a property of the comparison, not of ecCount.")
 
     # ── E. Burden distribution ─────────────────────────────────────────────
-    rule("E. Ground-truth burden per cell line")
+    rule("E. Gold-standard burden per cell line")
     disc = repo / "release/figures/notebook05/source_figS_gt_count_disclosure_long.csv"
     if disc.exists():
         d = pd.read_csv(disc)

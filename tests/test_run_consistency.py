@@ -52,8 +52,8 @@ _MIN_AREA = 3
 def two_image_fixture(tmp_path: Path):
     """
     Two images:
-      img_a: 2 GT blobs, 2 identical pred blobs (perfect match).
-      img_b: 1 GT blob,  0 pred blobs (all FN).
+      img_a: 2 GS blobs, 2 identical pred blobs (perfect match).
+      img_b: 1 GS blob,  0 pred blobs (all FN).
     Returns list of (uid, gt_path, pred_path) tuples.
     """
     H, W = 64, 64
@@ -140,7 +140,7 @@ def test_runner_matches_eval_stack_object_metrics(two_image_fixture, mode):
 
 @pytest.mark.parametrize("mode", ["or", "and"])
 def test_perfect_prediction_gives_f1_one(two_image_fixture, mode):
-    """img_a has identical GT and pred — F1 must be 1.0."""
+    """img_a has identical GS and pred — F1 must be 1.0."""
     uid, gt_path, pred_path = two_image_fixture[0]  # img_a
     row = _eval_one_via_runner(uid, gt_path, pred_path, mode)
     assert abs(row["obj_f1"] - 1.0) < 1e-9, f"mode={mode}: expected f1=1.0 for perfect prediction"
@@ -148,7 +148,7 @@ def test_perfect_prediction_gives_f1_one(two_image_fixture, mode):
 
 @pytest.mark.parametrize("mode", ["or", "and"])
 def test_empty_prediction_gives_f1_zero(two_image_fixture, mode):
-    """img_b has 1 GT and 0 pred — F1 must be 0.0, fn=1."""
+    """img_b has 1 GS and 0 pred — F1 must be 0.0, fn=1."""
     uid, gt_path, pred_path = two_image_fixture[1]  # img_b
     row = _eval_one_via_runner(uid, gt_path, pred_path, mode)
     assert row["obj_f1"] == 0.0,  f"mode={mode}: expected f1=0.0 for empty prediction"

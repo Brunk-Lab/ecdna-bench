@@ -3,7 +3,7 @@ ecdna_bench.data.samples — the `ImageSample` dataclass and filter helpers.
 
 A `Sample` is a lightweight, in-memory record that carries the resolved
 paths to all modalities of one metaphase spread, plus its UID, cell-line
-label, split membership, and ground-truth ecDNA count. Samples do NOT carry
+label, split membership, and gold-standard ecDNA count. Samples do NOT carry
 image arrays — they are path-level handles that downstream code uses to
 demand-load images only when needed.
 
@@ -62,7 +62,7 @@ class Sample:
         Path to the manual ROI mask (only present for the 1,145-image
         benchmark subset).
     gt_mask_path
-        Path to the rendered ground-truth binary mask (7 × 7 diamonds at
+        Path to the rendered gold-standard binary mask (7 × 7 diamonds at
         each annotated centroid).
     cell_line
         Canonical cell-line name, e.g. ``"NCIH2170"``. See
@@ -72,7 +72,7 @@ class Sample:
         for images that are in the full resource but not the benchmark
         subset.
     ecdna_gt
-        Ground-truth ecDNA count (number of annotated centroids).
+        Gold-standard ecDNA count (number of annotated centroids).
     extra
         Any additional per-sample metadata (e.g. the `count_mask_consistent`
         flag from QC, or `original_rgb_name` for dataset auditing).

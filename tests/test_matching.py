@@ -10,14 +10,14 @@ Critical invariants tested
 --------------------------
 1.  tp + fp + fn + ignored == n_pred + n_gt   (total partition)
 2.  tp + fp + ignored == n_pred               (every pred accounted for)
-3.  tp + fn == n_gt                           (every GT accounted for)
+3.  tp + fn == n_gt                           (every GS accounted for)
 4.  Perfect match → tp=N, fp=fn=ignored=0
 5.  No overlap / far apart → no TP
 6.  OR policy F1 ≥ AND policy F1             (OR is more permissive)
-7.  3 preds 1 GT → tp=1, ignored=2 (OR, close distance)
-8.  Empty pred + non-empty GT → tp=0, fn=N, fp=0
-9.  Empty pred + empty GT → all zeros
-10. Non-empty pred + empty GT → tp=0, fp=N, fn=0
+7.  3 preds 1 GS → tp=1, ignored=2 (OR, close distance)
+8.  Empty pred + non-empty GS → tp=0, fn=N, fp=0
+9.  Empty pred + empty GS → all zeros
+10. Non-empty pred + empty GS → tp=0, fp=N, fn=0
 """
 
 from __future__ import annotations
@@ -205,14 +205,14 @@ class TestORvsAND:
 
 
 # ---------------------------------------------------------------------------
-# 7. 3 preds on 1 GT → tp=1, ignored=2
+# 7. 3 preds on 1 GS → tp=1, ignored=2
 # ---------------------------------------------------------------------------
 
 class TestIgnoredBucket:
 
     def test_three_preds_one_gt(self, three_preds_one_gt):
         pred, gt = three_preds_one_gt
-        # Large d_max so all three preds are valid candidates for the GT
+        # Large d_max so all three preds are valid candidates for the GS
         r = match_objects(pred, gt, max_dist=40, min_iou=0.0, alpha=0.5, policy="or")
         assert r.tp == 1, f"expected tp=1, got {r.tp}"
         # The 2 losing candidates should be 'ignored', not FP
@@ -232,12 +232,12 @@ class TestIgnoredBucket:
 
     def test_isolated_pred_is_fp_not_ignored(self):
         """A pred with NO valid candidates at all must be FP, not ignored."""
-        gt   = [_obj(5, 5)]           # GT near origin
-        pred = [_obj(5, 5), _obj(50, 50)]  # second pred far from any GT
+        gt   = [_obj(5, 5)]           # GS near origin
+        pred = [_obj(5, 5), _obj(50, 50)]  # second pred far from any GS
         # With d_max=5 and min_iou=0.1: pred@(50,50) has dist≈63 > d_max
         # and IoU=0 < 0.1 → no valid candidate → must be FP under OR policy
         r = match_objects(pred, gt, max_dist=5, min_iou=0.1, alpha=0.5, policy="or")
-        # First pred matches GT → tp=1; second has no candidates → fp=1
+        # First pred matches GS → tp=1; second has no candidates → fp=1
         assert r.tp == 1
         assert r.fp == 1
         assert r.ignored_count == 0

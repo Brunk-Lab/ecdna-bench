@@ -18,10 +18,10 @@ columns (at a minimum):
     rgb_relpath              str     path relative to ``data_root``
     dapi_relpath             str
     roi_mask_relpath         str     (1,145-subset only; blank otherwise)
-    gt_mask_relpath          str     rendered ground-truth binary mask
+    gt_mask_relpath          str     rendered gold-standard binary mask
     ecDNA_gt                 int     CANONICAL per-image ecDNA count:
                                      8-connectivity connected components of
-                                     the rendered GT mask, min_area=3 px.
+                                     the rendered GS mask, min_area=3 px.
                                      This is what every model in the benchmark
                                      is evaluated against.
     coord_count_npy          int     annotation-point count from NPY/NPZ files.
@@ -97,7 +97,7 @@ PREFERRED_COLUMN_ORDER: tuple[str, ...] = (
     "gt_mask_relpath",
     "mia_mask_relpath",
     # ecDNA_gt is the CANONICAL evaluation count: connected components of the
-    # rendered 7×7-diamond GT mask under 8-connectivity with min_area=3 px.
+    # rendered 7×7-diamond GS mask under 8-connectivity with min_area=3 px.
     # This is what every model in the benchmark predicts and is compared against.
     # See PROJECT_RULES.md §2 and §7.
     "ecDNA_gt",
@@ -340,7 +340,7 @@ def summarize_master_metadata(df: "pd.DataFrame") -> str:
     if "ecDNA_gt" in df.columns:
         lines.append(f"ecDNA_gt non-null         : {df['ecDNA_gt'].notna().sum()} / {total}")
         lines.append(f"ecDNA_gt missing          : {df['ecDNA_gt'].isna().sum()} / {total}")
-        lines.append(f"  (ecDNA_gt = GT mask CCs, 8-conn, min_area=3 — evaluation target)")
+        lines.append(f"  (ecDNA_gt = GS mask CCs, 8-conn, min_area=3 — evaluation target)")
     if "coord_count_npy" in df.columns:
         npy_nn = df["coord_count_npy"].notna().sum()
         lines.append(f"coord_count_npy non-null  : {npy_nn} / {total}")
@@ -437,7 +437,7 @@ def build_metadata(
     ---------------------------------------
     ecDNA_gt
         Canonical evaluation target: 8-connectivity connected components of
-        the rendered GT mask with min_area=3 px.  Matches the evaluation
+        the rendered GS mask with min_area=3 px.  Matches the evaluation
         framework in PROJECT_RULES.md §2.  This is what every model in the
         benchmark predicts and is evaluated against.
     coord_count_npy
@@ -549,7 +549,7 @@ def build_metadata(
         return "UNKNOWN"
 
     def _count_mask_cc_min3(p: Path) -> int | None:
-        """Count 8-connectivity CCs with min_area=3 px in a GT mask.
+        """Count 8-connectivity CCs with min_area=3 px in a GS mask.
 
         This is the canonical count definition (PROJECT_RULES.md §2 / §7).
         Every model in the benchmark predicts mask CCs, so the evaluation
@@ -651,7 +651,7 @@ def build_metadata(
 
         # ------------------------------------------------------------------
         # ecDNA_gt — CANONICAL COUNT (evaluation target)
-        # Always derived from the rendered GT mask: 8-conn CCs, min_area=3 px.
+        # Always derived from the rendered GS mask: 8-conn CCs, min_area=3 px.
         # This is what every model predicts, so we evaluate against this.
         # ------------------------------------------------------------------
         ecdna_gt: int | None = None

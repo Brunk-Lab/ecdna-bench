@@ -16,7 +16,7 @@ Count columns in counts_master.csv
 ------------------------------------
 ecDNA_gt
     The CANONICAL evaluation count: 8-connectivity connected components of
-    the rendered GT mask with min_area=3 px.  This matches the evaluation
+    the rendered GS mask with min_area=3 px.  This matches the evaluation
     framework exactly and is what every model in the benchmark is compared
     against.  See PROJECT_RULES.md §2 and §7.
 
@@ -31,7 +31,7 @@ count_source
 Required config keys (under ``paths``)
 ----------------------------------------
 * ``rgb_dir``        — root of RGB image files
-* ``gt_mask_dir``    — root of rendered GT binary mask files
+* ``gt_mask_dir``    — root of rendered GS binary mask files
 * ``split_dir``      — directory containing train_ids.csv / val_ids.csv / test_ids.csv
 * ``metadata_csv``   — output path for metadata CSV
 * ``counts_csv``     — output path for counts CSV

@@ -2,7 +2,7 @@
 ecdna_bench.evaluation.density — density-bin stratification.
 
 The paper reports every headline metric both globally and split by five
-density bins chosen to separate clinically-relevant regimes:
+count bins chosen to separate clinically-relevant regimes:
 
     [0, 10)   "0-9"      — essentially ecDNA-negative cells
     [10, 50)  "10-49"    — low burden
@@ -87,7 +87,7 @@ def assign_density_bin(
     labels: Sequence[str] = DEFAULT_DENSITY_LABELS,
 ) -> str:
     """
-    Assign a per-image density bin label for an integer ground-truth count.
+    Assign a per-image count bin label for an integer gold-standard count.
 
     Behavior matches the stage11 / stage14b implementations: bins are
     half-open on the right, the last bin is ``[edges[-1], ∞)``.
@@ -179,7 +179,7 @@ def stratify_by_density(
     df : pandas.DataFrame
         Must contain ``count_col`` (default ``ecDNA_gt``).
     count_col : str, default ``"ecDNA_gt"``
-        Column holding the per-image GT count.
+        Column holding the per-image GS count.
     bin_col : str, default ``"density_bin"``
         Name of the column to write.
     labels, edges : sequences

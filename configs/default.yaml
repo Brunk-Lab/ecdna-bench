@@ -87,8 +87,8 @@ dataset:
   # processing (pixels outside the ROI set to 0). Used throughout.
   use_roi_mask: true
 
-  # Strict QC: require the per-image GT count to equal the number of
-  # connected components in the rendered GT mask. Samples that fail this
+  # Strict QC: require the per-image GS count to equal the number of
+  # connected components in the rendered GS mask. Samples that fail this
   # check are excluded from ecCount training only. Supp §10.1.
   require_count_mask_consistent: true
 
@@ -123,7 +123,7 @@ evaluation:
     # Connectivity for connected-component extraction from binary masks.
     connectivity: 8
 
-  # Density bins for stratified reporting (main Fig 4d/6e).
+  # Count bins for stratified reporting (main Fig 4d/6e).
   density_bins:
     edges:  [0, 10, 50, 150, 300]       # lower bounds; last bin is 300+
     labels: ["0-9", "10-49", "50-149", "150-299", "300+"]

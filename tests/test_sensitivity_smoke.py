@@ -43,8 +43,8 @@ def _write_mask(path: Path, h: int, w: int, blobs: list[tuple[int, int, int]]) -
 def sensitivity_fixture(tmp_path: Path):
     """
     Two synthetic images with one prediction directory:
-      img_a: GT has 2 blobs; pred is identical (perfect prediction).
-      img_b: GT has 1 blob;  pred is empty (all FN).
+      img_a: GS has 2 blobs; pred is identical (perfect prediction).
+      img_b: GS has 1 blob;  pred is empty (all FN).
 
     Returns (consistency_csv_path, mask_dir, n_images).
     """
@@ -94,7 +94,7 @@ def multi_model_fixture(tmp_path: Path):
     gt_dir = tmp_path / "gt"
     gt_dir.mkdir()
 
-    # One GT, two images.
+    # One GS, two images.
     _write_mask(gt_dir / "img_a.png", H, W, [(5, 5, 7), (40, 40, 7)])
     _write_mask(gt_dir / "img_b.png", H, W, [(30, 30, 7)])
 
@@ -102,7 +102,7 @@ def multi_model_fixture(tmp_path: Path):
     # so the aggregated CSV must distinguish them.
     mask_dirs: dict[str, Path] = {}
 
-    # model_perfect: identical to GT on both images
+    # model_perfect: identical to GS on both images
     md = tmp_path / "pred_perfect"; md.mkdir()
     _write_mask(md / "img_a.png", H, W, [(5, 5, 7), (40, 40, 7)])
     _write_mask(md / "img_b.png", H, W, [(30, 30, 7)])
@@ -168,8 +168,8 @@ def test_sensitivity_imports_and_runs(sensitivity_fixture, tmp_path):
 
 def test_sensitivity_perfect_prediction_values(sensitivity_fixture, tmp_path):
     """
-    img_a (perfect prediction, 2 GT): tp=2, fp=0, fn=0.
-    img_b (empty prediction, 1 GT):   tp=0, fp=0, fn=1.
+    img_a (perfect prediction, 2 GS): tp=2, fp=0, fn=0.
+    img_b (empty prediction, 1 GS):   tp=0, fp=0, fn=1.
     Aggregated: tp=2, fp=0, fn=1.
     """
     consistency_csv, mask_dir, _ = sensitivity_fixture
@@ -369,8 +369,8 @@ def test_sensitivity_multi_model_combined_csv(multi_model_fixture, tmp_path, mon
     assert required_cols.issubset(result.columns)
 
     # Spot-check the per-model values:
-    # model_perfect: 3 GT total, 3 TP, 0 FP, 0 FN → f1 == 1.0
-    # model_empty:   3 GT total, 0 TP, 0 FP, 3 FN → f1 == 0.0
+    # model_perfect: 3 GS total, 3 TP, 0 FP, 0 FN → f1 == 1.0
+    # model_empty:   3 GS total, 0 TP, 0 FP, 3 FN → f1 == 0.0
     perfect = result.loc[result["model"] == "model_perfect"].iloc[0]
     empty   = result.loc[result["model"] == "model_empty"  ].iloc[0]
     assert perfect["tp"] == 3 and perfect["fp"] == 0 and perfect["fn"] == 0

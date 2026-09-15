@@ -20,12 +20,12 @@ Family overview
 
 3. **Count metrics** — operate on paired arrays of true / predicted
    ecDNA counts. Outputs MAE, trimmed MAE, RMSE, signed bias, MdAPE
-   (median absolute percentage error, computed on nonzero-GT images),
+   (median absolute percentage error, computed on nonzero-GS images),
    Pearson ρ, Spearman ρ. These are the metrics that convert a
    localization output into a clinical-style counting endpoint.
 
 The ``ecDNA_gt`` column of the benchmark CSVs is the canonical source of
-ground-truth counts; predicted counts come from whatever post-processing
+gold-standard counts; predicted counts come from whatever post-processing
 the model applied to its output mask.
 """
 
@@ -167,7 +167,7 @@ def pixel_confusion(
     threshold: float = 0.5,
 ) -> dict[str, int]:
     """
-    Compute pixel-level TP / FP / FN / TN between a binary GT mask and a
+    Compute pixel-level TP / FP / FN / TN between a binary GS mask and a
     (binary or probability) prediction mask.
 
     Both inputs must share the same 2D shape; a shape mismatch raises
@@ -175,7 +175,7 @@ def pixel_confusion(
     a prediction saved at model resolution rather than original image
     resolution) that we refuse to silently resize either side — the
     benchmark orchestrator's harmonization step is responsible for
-    resizing predictions to the GT frame before they reach this function.
+    resizing predictions to the GS frame before they reach this function.
     """
     if gt_mask.shape != pred_mask.shape:
         raise ValueError(

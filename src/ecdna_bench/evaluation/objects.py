@@ -15,7 +15,7 @@ Every downstream module consumes lists of dicts in the following shape::
         "mask": np.ndarray | None,     # uint8 binary mask, same shape as the
                                        # full image. May be None when the
                                        # source did not carry a mask (e.g.
-                                       # centroid-only ground truth).
+                                       # centroid-only gold standard).
     }
 
 Any extra keys ("gt_pos_count", "score", "is_split", …) are allowed and are
@@ -26,7 +26,7 @@ additional metadata is caller-defined.
 Why a dict, not a dataclass?
 ----------------------------
 Historically these object lists are produced by many different code paths
-(classical pipeline, GT decoder, external-baseline adapters, ecCount
+(classical pipeline, GS decoder, external-baseline adapters, ecCount
 post-processor) and consumed by one matcher. A plain ``dict`` is the most
 portable container for that many-producer / one-consumer pattern, and it
 imposes no import ordering between the producers. The fields are documented
@@ -42,10 +42,10 @@ and the ``evaluation.matching.connectivity = 8`` config field.
 Minimum area
 ------------
 The default ``min_area = 3`` is the paper's documented cutoff for both the
-prediction side and the ground-truth side (Supplementary §13). Components
+prediction side and the gold-standard side (Supplementary §13). Components
 smaller than 3 pixels are almost always salt-noise or single-pixel artifacts
 rather than real ecDNA, and keeping them would inflate both the false-positive
-count (on the prediction side) and the false-negative count (on the GT side).
+count (on the prediction side) and the false-negative count (on the GS side).
 """
 
 from __future__ import annotations
@@ -75,7 +75,7 @@ def _binarize_mask(mask: np.ndarray) -> np.ndarray:
     """
     Return a boolean foreground mask from any of the formats we encounter:
 
-    - 2D uint8 with values in {0, 1} (already-binary GT)
+    - 2D uint8 with values in {0, 1} (already-binary GS)
     - 2D uint8 with values in {0, 255} (PNG-encoded binary)
     - 2D float in [0, 1] (probability map)
     - 2D integer instance-labeled mask (any positive label is foreground)
@@ -135,7 +135,7 @@ def objects_from_mask(
         of the same shape as the input. If False, the ``mask`` key is
         ``None``. Turning this off is a useful memory optimization when a
         caller only needs centroids/bboxes/areas (e.g., the centroid-only
-        GT code path), at the cost of losing IoU-at-mask capability in the
+        GS code path), at the cost of losing IoU-at-mask capability in the
         matcher.
     extra_keys : bool, default False
         If True, additionally attach ``gt_pos_count`` (the per-component

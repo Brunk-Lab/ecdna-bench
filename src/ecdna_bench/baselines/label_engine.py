@@ -186,7 +186,7 @@ def harmonize_label_engine(
 
         if pred_path is None or not pred_path.is_file():
             results[uid] = "missing"
-            logger.debug("LabelEngine | missing prediction for uid=%s", uid)
+            logger.debug("Label Engine | missing prediction for uid=%s", uid)
             continue
 
         try:
@@ -196,10 +196,10 @@ def harmonize_label_engine(
             results[uid] = "ok"
         except Exception as exc:
             results[uid] = f"error: {exc}"
-            logger.warning("LabelEngine | uid=%s error: %s", uid, exc)
+            logger.warning("Label Engine | uid=%s error: %s", uid, exc)
 
     ok      = sum(1 for v in results.values() if v == "ok")
     missing = sum(1 for v in results.values() if v == "missing")
     errors  = sum(1 for v in results.values() if v.startswith("error"))
-    logger.info("LabelEngine harmonize | ok=%d missing=%d errors=%d", ok, missing, errors)
+    logger.info("Label Engine harmonize | ok=%d missing=%d errors=%d", ok, missing, errors)
     return results

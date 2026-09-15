@@ -12,7 +12,7 @@ Two naming styles are supported:
 1. **counts-only style** — simple trailing-suffix stripping (`_Merge.tif`,
    `_DAPI.tif`, etc.). Used for the full resource of n = 2,984 images.
 
-2. **localized-GT style** — normalized UID (lowercased, special tokens
+2. **localized-GS style** — normalized UID (lowercased, special tokens
    stripped) plus a strict Jaccard-on-tokens matcher. Used for the 1,145
    benchmark-subset images that have manual ROI masks and point annotations.
 
@@ -64,7 +64,7 @@ VALID_EXTS: frozenset[str] = frozenset(
     {".tif", ".tiff", ".png", ".jpg", ".jpeg", ".bmp"}
 )
 
-# Minimum Jaccard on token sets for the localized-GT matcher to accept a
+# Minimum Jaccard on token sets for the localized-GS matcher to accept a
 # cross-modality file as belonging to the same metaphase spread.
 STRICT_JACCARD_MIN: float = 0.95
 
@@ -100,7 +100,7 @@ COUNTS_DAPI_SUFFIXES_EXTENDED: tuple[str, ...] = (
     "_Merge",
 )
 
-# Suffixes stripped by the localized-GT normalizer.
+# Suffixes stripped by the localized-GS normalizer.
 _LOCALIZED_STRIP_SUFFIXES: tuple[str, ...] = (
     "_dapi",
     "_merge",
@@ -202,13 +202,13 @@ def _find_corresponding_by_suffix(
 
 
 # ==============================================================================
-# Localized-GT naming style
+# Localized-GS naming style
 # ==============================================================================
 
 
 def extract_uid_localized(filename: str) -> str:
     """
-    Normalize a filename into a localized-GT UID.
+    Normalize a filename into a localized-GS UID.
 
     Steps
     -----
@@ -245,7 +245,7 @@ def find_corresponding_file_localized(
     jaccard_min: float = STRICT_JACCARD_MIN,
 ) -> str | None:
     """
-    Strict cross-modality matcher for the localized-GT style.
+    Strict cross-modality matcher for the localized-GS style.
 
     Requirements
     ------------

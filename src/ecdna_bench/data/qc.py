@@ -4,7 +4,7 @@ ecdna_bench.data.qc — automated quality-control checks on the master metadata.
 Three checks, each a pure function taking a DataFrame and returning a DataFrame:
 
 1. ``run_file_audit``
-     For every row, attempt to read the RGB / DAPI / ROI / GT files, record
+     For every row, attempt to read the RGB / DAPI / ROI / GS files, record
      shapes, and verify the four modalities are spatially consistent. Adds
      columns ``rgb_exists``, ``*_read_ok``, ``shapes_match_all``,
      ``file_audit_pass``, etc. Supp Methods §3 / §5.
@@ -15,13 +15,13 @@ Three checks, each a pure function taking a DataFrame and returning a DataFrame:
      ``count_mask_consistent``. This is the strict filter used to select the
      ecCount training set (Supp §10.1). Supp Methods §5.
 
-     Note: after a correct ``build_metadata`` run, ``ecDNA_gt`` is the GT-mask
+     Note: after a correct ``build_metadata`` run, ``ecDNA_gt`` is the GS-mask
      CC count (not the annotation-point count), so this check is about
      sign-agreement between the mask CC count and the mask's emptiness — which
      is always satisfied for well-formed benchmark images.
 
 3. ``run_gt_morphology_audit``
-     Decompose each GT mask into connected components, apply the canonical
+     Decompose each GS mask into connected components, apply the canonical
      min_area=3 filter, and record area stats and diamond-merge discrepancy.
      Supp Methods §4 / §7. This is a pure reporting step — nothing downstream
      depends on its output — but it is the source for the Supplementary Figure
@@ -291,9 +291,9 @@ def run_count_mask_consistency(df: "pd.DataFrame") -> "pd.DataFrame":
     (Supp §10.1). Callers should retain inconsistent rows in the full dataset
     release but exclude them from training.
 
-    After a correct ``build_metadata`` run, ``ecDNA_gt`` is the GT-mask CC
+    After a correct ``build_metadata`` run, ``ecDNA_gt`` is the GS-mask CC
     count (8-conn, min_area=3 px), so ``count_mask_consistent`` is True for
-    all well-formed images: any image with a non-empty GT mask has at least
+    all well-formed images: any image with a non-empty GS mask has at least
     one CC and therefore ``ecDNA_gt >= 1``.
     """
     import pandas as pd
@@ -322,7 +322,7 @@ def run_count_mask_consistency(df: "pd.DataFrame") -> "pd.DataFrame":
 
 
 # ==============================================================================
-# GT morphology audit — replicates stage2_step1
+# GS morphology audit — replicates stage2_step1
 # ==============================================================================
 
 
@@ -334,7 +334,7 @@ def run_gt_morphology_audit(
     progress: bool = True,
 ) -> "pd.DataFrame":
     """
-    For every GT mask, count connected components and record area stats.
+    For every GS mask, count connected components and record area stats.
 
     Consumes a DataFrame with at least ``gt_fullpath`` and ``ecDNA_gt``
     columns (the file-audit output satisfies this).
@@ -371,7 +371,7 @@ def run_gt_morphology_audit(
     if progress:
         try:
             from tqdm import tqdm
-            rows_iter = tqdm(rows, total=len(rows), desc="GT morphology audit")
+            rows_iter = tqdm(rows, total=len(rows), desc="GS morphology audit")
         except ImportError:
             rows_iter = rows
     else:
@@ -463,7 +463,7 @@ def run_all_qc(
     For provenance logging:
       - file audit pass rate : ``sum(file_audit_pass) / N``
       - count/mask pass rate : ``sum(count_mask_consistent) / N``
-      - GT component mismatch: ``sum(~gt_components_match_ecDNA_gt)`` (if run)
+      - GS component mismatch: ``sum(~gt_components_match_ecDNA_gt)`` (if run)
     """
     df1 = run_file_audit(master_df, data_root, progress=progress)
     df2 = run_count_mask_consistency(df1)
@@ -570,7 +570,7 @@ def run_qc(
     consistency checks, then writes the combined QC CSV to ``output_csv``.
 
     ``counts_master.csv`` must carry an ``ecDNA_gt`` column whose values are
-    GT-mask connected-component counts (8-connectivity, min_area=3 px) —
+    GS-mask connected-component counts (8-connectivity, min_area=3 px) —
     i.e. the output of ``build_metadata`` in this package.  An optional
     ``coord_count_npy`` column (annotation-point counts from NPY/NPZ files)
     is forwarded into the QC output for the morphology-audit step.
@@ -608,7 +608,7 @@ def run_qc(
         )
     else:
         # Verify that metadata.csv and counts_master.csv agree on ecDNA_gt.
-        # Both must use the same canonical count (GT mask CCs, 8-conn, min_area=3).
+        # Both must use the same canonical count (GS mask CCs, 8-conn, min_area=3).
         check = master_df[["unique_id", "ecDNA_gt"]].merge(
             counts_df[["unique_id", "ecDNA_gt"]].rename(
                 columns={"ecDNA_gt": "ecDNA_gt_counts"}
@@ -629,7 +629,7 @@ def run_qc(
             ].head(10)
             raise ValueError(
                 "metadata.csv and counts_master.csv disagree on ecDNA_gt. "
-                "Both must use the canonical count (GT mask CCs, 8-conn, min_area=3 px). "
+                "Both must use the canonical count (GS mask CCs, 8-conn, min_area=3 px). "
                 "Re-run build_metadata to regenerate both files from scratch.\n"
                 f"First mismatches:\n{examples.to_string(index=False)}"
             )

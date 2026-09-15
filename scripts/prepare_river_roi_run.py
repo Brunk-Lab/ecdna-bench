@@ -12,19 +12,19 @@ Why no code change is needed
 multiplies the RGB by that mask before the forward pass.
 ``benchmark/run.py`` reads ``gt_fullpath``.  So redirecting those two columns
 redirects the entire run.  This script writes the redirected CSVs and the
-ROI-masked GT masks they point at.
+ROI-masked GS masks they point at.
 
 The evaluation rule
 -------------------
-The predicted ROI is applied to BOTH sides — the RGB ecCount sees and the GT
+The predicted ROI is applied to BOTH sides — the RGB ecCount sees and the GS
 it is scored against.  Anything outside the predicted ROI is outside the
-measurement for both.  Scoring ecCount against an unmasked GT would penalise
+measurement for both.  Scoring ecCount against an unmasked GS would penalise
 it for ecDNA it was never shown, which measures River's model, not ecCount.
 
 What it writes (and nothing else)
 ---------------------------------
     release/river_roi_run/
-        gt_mask_river/                 GT ∧ River ROI, one PNG per image
+        gt_mask_river/                 GS ∧ River ROI, one PNG per image
         consistency_benchmark.csv      the 1,145, roi+gt redirected
         consistency_extension.csv      the ~1,841 that have no manual ROI
         config_river_eccount.yaml      output dirs for inference
@@ -76,7 +76,7 @@ IMG_EXT = {".png", ".tif", ".tiff"}
 # Tolerances. Exceeding any of these is a stop, not a warning.
 MAX_MISSING_FRAC = 0.05      # images with no River mask
 MAX_SHAPE_FAIL = 0           # shape mismatches: zero tolerance
-MAX_EMPTY_FRAC = 0.02        # GT ∧ ROI empty where GT was not
+MAX_EMPTY_FRAC = 0.02        # GS ∧ ROI empty where GS was not
 
 
 # --------------------------------------------------------------------------
@@ -205,7 +205,7 @@ def build_rows(args) -> tuple[list[dict], list[dict]]:
 
 def process(rows: list[dict], river: dict[str, Path], out_gt_dir: Path,
             label: str, apply: bool) -> tuple[list[dict], dict]:
-    """Intersect GT with the River mask for each row. Returns (records, tally)."""
+    """Intersect GS with the River mask for each row. Returns (records, tally)."""
     print(f"\n{'=' * 74}\n{label}  (n = {len(rows):,})\n{'=' * 74}")
     recs = []
     tally = dict(ok=0, no_river=0, shape_fail=0, read_fail=0,
@@ -269,7 +269,7 @@ def process(rows: list[dict], river: dict[str, Path], out_gt_dir: Path,
 
     kf = np.array([r["kept_frac"] for r in recs if np.isfinite(r["kept_frac"])])
     if kf.size:
-        print(f"  GT pixels retained inside the predicted ROI: "
+        print(f"  GS pixels retained inside the predicted ROI: "
               f"median {np.median(kf):.4f}   p10 {np.percentile(kf, 10):.4f}   "
               f"min {kf.min():.4f}")
 
@@ -281,7 +281,7 @@ def process(rows: list[dict], river: dict[str, Path], out_gt_dir: Path,
         sys.exit(f"\nERROR: {tally['no_river']:,} images have no River mask "
                  f"(> {MAX_MISSING_FRAC:.0%}). Ask River before continuing.")
     if tally["empty_after"] > MAX_EMPTY_FRAC * n:
-        sys.exit(f"\nERROR: {tally['empty_after']:,} GT masks are wiped out "
+        sys.exit(f"\nERROR: {tally['empty_after']:,} GS masks are wiped out "
                  f"entirely by the predicted ROI (> {MAX_EMPTY_FRAC:.0%}). "
                  f"That is a mask-correspondence problem, not a model result.")
     return recs, tally
@@ -308,7 +308,7 @@ paths:
 
 CONFIG_BENCH = """\
 # Written by prepare_river_roi_run.py — scoring inside River's ROI.
-# GT is the ROI-masked GT; predictions are the ROI-restricted ecCount output.
+# GS is the ROI-masked GS; predictions are the ROI-restricted ecCount output.
 paths:
   consistency_csv: {consistency}
   frozen_results_dir: {out}/frozen_results

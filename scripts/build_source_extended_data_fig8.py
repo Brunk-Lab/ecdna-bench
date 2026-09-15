@@ -45,7 +45,7 @@ INPUTS
                       split_composition.csv   role, cell_line, n_images, gt_objects
                       train_history.csv       per-epoch losses
     --benchmark     optional: benchmark metadata with cell line, split and a
-                    per-image ground-truth count, for panel b
+                    per-image gold-standard count, for panel b
     --in-distribution  optional: the per-cell-line F1 CSV, read only to report
                     its scope in the audit
 

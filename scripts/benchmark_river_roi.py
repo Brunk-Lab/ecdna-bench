@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 """
-benchmark_river_roi.py — ecCount inside River-predicted ROIs, dual ground truth.
+benchmark_river_roi.py — ecCount inside River-predicted ROIs, dual gold standard.
 
 Scores ecCount (peaks) and ecCount (threshold mask) on every image for which a
-River-predicted ROI run exists, against two different ground truths:
+River-predicted ROI run exists, against two different gold-standard objects:
 
-  gt_river  ecDNA GT intersected with the *predicted* ROI
+  gt_river  ecDNA GS intersected with the *predicted* ROI
             (release/river_roi_run/gt_mask_river)
             -> "did ecCount find what was inside the ROI it was given?"
 
-  gt_full   the full manual ecDNA GT, unrestricted
+  gt_full   the full manual ecDNA GS, unrestricted
             (ecDNA_Data/bioimage_archive/gt_image)
             -> "what does the whole pipeline recover end to end?"
 
@@ -24,7 +24,7 @@ TWO DISCLOSURES THAT MUST TRAVEL WITH THESE NUMBERS
     (345 images). This script tags every row with `roi_model_saw_image` and
     reports the subsets separately. Supplementary Methods section 11.
 
-2.  Scoring against `gt_river` means the ground truth was filtered by the same
+2.  Scoring against `gt_river` means the gold standard was filtered by the same
     model under evaluation. Those results are conditional on the ROI, not
     end-to-end, and every output column is labelled `gt_variant` so the two
     can never be silently pooled.
@@ -79,8 +79,8 @@ MODELS = {
 }
 
 GT_VARIANTS = {
-    "gt_river": "GT restricted to the predicted ROI (conditional on ROI)",
-    "gt_full": "Full manual GT (end-to-end)",
+    "gt_river": "GS restricted to the predicted ROI (conditional on ROI)",
+    "gt_full": "Full manual GS (end-to-end)",
 }
 
 MODEL_ORDER = ["ecCount (peaks)", "ecCount (threshold mask)"]
@@ -243,7 +243,7 @@ def score_one_image(job: dict) -> list[dict]:
                     "error": f"score: {exc}",
                 })
 
-    # ROI retention: what fraction of true GT objects survived the ROI step.
+    # ROI retention: what fraction of true GS objects survived the ROI step.
     if "gt_full" in gt_counts and "gt_river" in gt_counts:
         n_full = gt_counts["gt_full"]
         n_river = gt_counts["gt_river"]
@@ -288,7 +288,7 @@ def build_inventory(args) -> pd.DataFrame:
     pred_idx = {k: index_masks(v) for k, v in pred_dirs.items()}
     gt_idx = {k: index_masks(v) for k, v in gt_dirs.items()}
 
-    # An image is scoreable if it has at least one prediction and one GT.
+    # An image is scoreable if it has at least one prediction and one GS.
     uids = set()
     for d in list(pred_idx.values()):
         uids |= set(d)
@@ -424,13 +424,13 @@ def make_figures(per_image, retention, by_cl, by_subset, out_dir):
 
     cls = [c for c in CL_ORDER if c in set(by_cl["cell_line"])]
     variants = ["gt_river", "gt_full"]
-    vlabel = {"gt_river": "GT inside predicted ROI\n(conditional)",
-              "gt_full": "Full GT\n(end to end)"}
+    vlabel = {"gt_river": "GS inside predicted ROI\n(conditional)",
+              "gt_full": "Full GS\n(end to end)"}
 
-    # ---- Fig 1: object F1 by cell line, both GT variants ------------------
+    # ---- Fig 1: object F1 by cell line, both GS variants ------------------
     for metric, ylab, fname, ylim in [
         ("object_f1", "Object-level F1", "fig_roi_f1_by_cell_line", (0, 1.05)),
-        ("pixel_dice", "Pixel Dice", "fig_roi_dice_by_cell_line", None),
+        ("pixel_dice", "Pixel-level Dice", "fig_roi_dice_by_cell_line", None),
         ("pixel_iou", "Pixel IoU", "fig_roi_iou_by_cell_line", None),
     ]:
         fig, axes = plt.subplots(1, len(variants), figsize=(4.4 * len(variants), 3.0),
@@ -571,12 +571,12 @@ def make_figures(per_image, retention, by_cl, by_subset, out_dir):
             ax.grid(linestyle="--", linewidth=0.35, alpha=0.35)
             ax.set_axisbelow(True)
             if r == len(variants) - 1:
-                ax.set_xlabel("Ground-truth count + 1", fontsize=6.5)
+                ax.set_xlabel("Gold-standard count + 1", fontsize=6.5)
             if c_i == 0:
                 ax.set_ylabel("Predicted count + 1", fontsize=6.5)
     axes[0, -1].legend(loc="upper left", bbox_to_anchor=(1.02, 1.0), frameon=False,
                        fontsize=5.8, markerscale=1.6)
-    fig.suptitle("Predicted versus true ecDNA count inside predicted ROIs",
+    fig.suptitle("Predicted versus gold-standard ecDNA count inside predicted ROIs",
                  fontsize=8, y=1.01)
     fig.tight_layout(rect=[0, 0, 0.88, 1])
     save(fig, "fig_roi_count_agreement")
@@ -653,11 +653,11 @@ def main() -> int:
     sys.path.insert(0, str(src if src.exists() else repo))
 
     print("=" * 78)
-    print("ecCount inside River-predicted ROIs — dual ground truth")
+    print("ecCount inside River-predicted ROIs — dual gold standard")
     print("=" * 78)
     print(f"repo      : {repo}")
     print(f"river run : {args.river_run}")
-    print(f"full GT   : {args.gt_full_dir}")
+    print(f"full GS   : {args.gt_full_dir}")
     print(f"out dir   : {out_dir}")
     print(f"matching  : {POLICY}, d_max={D_MAX:g} px, IoU_min={IOU_MIN}, "
           f"alpha={ALPHA}, conn={CONNECTIVITY}, min_area={MIN_AREA}")
@@ -665,7 +665,7 @@ def main() -> int:
 
     inv = build_inventory(args)
     if inv.empty:
-        print("\nNothing to score: no uid had both a prediction and a ground truth.")
+        print("\nNothing to score: no uid had both a prediction and a gold standard.")
         return 1
 
     inv.to_csv(out_dir / "inventory.csv", index=False)

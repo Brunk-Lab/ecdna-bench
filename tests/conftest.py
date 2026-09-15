@@ -81,25 +81,25 @@ def _make_obj(cy: float, cx: float, h: int = 5, w: int = 5,
 
 @pytest.fixture()
 def two_gt_objects() -> List[Dict]:
-    """Two GT objects at (6, 6) and (22, 22) on a 32×32 canvas."""
+    """Two GS objects at (6, 6) and (22, 22) on a 32×32 canvas."""
     return [_make_obj(6, 6), _make_obj(22, 22)]
 
 
 @pytest.fixture()
 def two_pred_objects() -> List[Dict]:
-    """Two pred objects at (6, 6) and (22, 22) — perfect overlap with GT."""
+    """Two pred objects at (6, 6) and (22, 22) — perfect overlap with GS."""
     return [_make_obj(6, 6), _make_obj(22, 22)]
 
 
 @pytest.fixture()
 def one_pred_object() -> List[Dict]:
-    """Single pred object at (6, 6) — matches first GT only."""
+    """Single pred object at (6, 6) — matches first GS only."""
     return [_make_obj(6, 6)]
 
 
 @pytest.fixture()
 def three_preds_one_gt() -> Tuple[List[Dict], List[Dict]]:
-    """3 predictions clustered around 1 GT at (16, 16).
+    """3 predictions clustered around 1 GS at (16, 16).
 
     Under OR policy (d_max large): tp=1, ignored=2.
     """
@@ -110,7 +110,7 @@ def three_preds_one_gt() -> Tuple[List[Dict], List[Dict]]:
 
 @pytest.fixture()
 def no_overlap_objects() -> Tuple[List[Dict], List[Dict]]:
-    """GT at (5, 5), pred at (27, 27) — completely separated."""
+    """GS at (5, 5), pred at (27, 27) — completely separated."""
     gt   = [_make_obj(5, 5)]
     pred = [_make_obj(27, 27)]
     return pred, gt

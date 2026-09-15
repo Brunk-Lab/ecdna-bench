@@ -130,7 +130,7 @@ class TestPixelMetrics:
 
     def test_dice_equals_f1(self, tiny_gt_mask):
         pred = tiny_gt_mask.copy()
-        pred[0:5, :] = 0  # zero out some GT pixels → recall < 1
+        pred[0:5, :] = 0  # zero out some GS pixels → recall < 1
         m = pixel_metrics(tiny_gt_mask, pred)
         # For binary masks, Dice == F1 == 2P*R/(P+R)
         if m["precision"] > 0 and m["recall"] > 0:

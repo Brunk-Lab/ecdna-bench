@@ -7,11 +7,11 @@ Key design constraints (from §2 of REWRITE_PLAN.md)
 ----------------------------------------------------
 * σ = 1.0 px is the frozen paper value.  It is defined in the FINAL
   training pixel space (1024 × 1224), so targets must be generated
-  AFTER resizing the GT mask.
+  AFTER resizing the GS mask.
 * Merge mode is element-wise **max** (NOT sum).  Overlapping Gaussians
   do not accumulate — the brightest wins.
 * The map is normalized to [0, 1] after all centroids are drawn.
-* An all-zero GT mask → all-zero target (``keep_empty_as_zeros=True``).
+* An all-zero GS mask → all-zero target (``keep_empty_as_zeros=True``).
 * Centroids are extracted with 8-connectivity (cv2.CV_32S).
 """
 
@@ -52,7 +52,7 @@ class SoftTargetConfig:
     normalize:
         If True, normalize the final map to [0, 1].
     keep_empty_as_zeros:
-        If True, an all-zero GT mask returns an all-zero target instead
+        If True, an all-zero GS mask returns an all-zero target instead
         of raising an error.
     """
     sigma:               float     = 1.0   # frozen paper value
@@ -199,14 +199,14 @@ def make_centroid_gaussian_target(
     gt_mask: np.ndarray,
     config: Optional[SoftTargetConfig] = None,
 ) -> np.ndarray:
-    """Generate a soft Gaussian target map from a GT mask.
+    """Generate a soft Gaussian target map from a GS mask.
 
     This is the main entry point used by ``EcCountDataset``.
 
     Parameters
     ----------
     gt_mask:
-        2-D ground-truth mask (any nonzero pixel = foreground).
+        2-D gold-standard mask (any nonzero pixel = foreground).
     config:
         ``SoftTargetConfig``.  Uses paper defaults (σ=1.0) if None.
 
@@ -222,7 +222,7 @@ def make_centroid_gaussian_target(
     if binary.max() == 0:
         if cfg.keep_empty_as_zeros:
             return np.zeros(binary.shape, dtype=np.float32)
-        raise ValueError("GT mask is empty and keep_empty_as_zeros=False")
+        raise ValueError("GS mask is empty and keep_empty_as_zeros=False")
 
     pts = extract_component_centroids(binary, connectivity=cfg.connectivity)
     return gaussian_at_points(

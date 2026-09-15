@@ -6,7 +6,7 @@ Build lightweight full-resource ecDNA count tables.
 This script is independent from ecdna_bench.cli.build_metadata.
 
 It does NOT use train/val/test split files.
-It scans the full GT mask directory and coordinate directory, then writes:
+It scans the full GS mask directory and coordinate directory, then writes:
 
 1. full_counts_master.csv
    One row per UID with:
@@ -20,7 +20,7 @@ It scans the full GT mask directory and coordinate directory, then writes:
 Definitions
 -----------
 ecDNA_gt:
-    Connected-component count from the rendered GT mask:
+    Connected-component count from the rendered GS mask:
     mask > 0, 8-connectivity, min_area >= 3 px.
 
 coord_count_npy:
@@ -152,7 +152,7 @@ def require_path(paths: dict[str, Any], key: str) -> Path:
 
 def file_key(path: Path) -> str:
     """
-    Case-insensitive file key used to match GT masks and coordinate files.
+    Case-insensitive file key used to match GS masks and coordinate files.
 
     Assumes the UID is the filename stem.
     """
@@ -245,7 +245,7 @@ def canonical_uid_for_key(
     coord_files: dict[str, Path],
 ) -> str:
     """
-    Use the GT filename stem as the canonical UID when available.
+    Use the GS filename stem as the canonical UID when available.
     Otherwise use the coordinate filename stem.
     """
     if key in gt_files:
@@ -264,7 +264,7 @@ def canonical_uid_for_key(
 
 def count_mask_cc_min3(mask_path: Path) -> int | None:
     """
-    Count connected components in a rendered GT mask.
+    Count connected components in a rendered GS mask.
 
     Definition:
         binary mask = image > 0
@@ -388,9 +388,9 @@ def build_full_resource_tables(
     Build full resource count and minimal metadata tables.
 
     row_universe:
-        "union"        = GT masks OR coordinate files
-        "intersection" = only UIDs with both GT mask AND coordinate file
-        "gt"           = only UIDs with GT mask
+        "union"        = GS masks OR coordinate files
+        "intersection" = only UIDs with both GS mask AND coordinate file
+        "gt"           = only UIDs with GS mask
         "coords"       = only UIDs with coordinate file
     """
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -531,9 +531,9 @@ def make_summary(
     lines.append("")
     lines.append(f"Rows total               : {n_rows}")
     lines.append(f"Unique IDs               : {counts_df['unique_id'].nunique()}")
-    lines.append(f"Rows with GT mask         : {int(has_gt.sum())} / {n_rows}")
+    lines.append(f"Rows with GS mask         : {int(has_gt.sum())} / {n_rows}")
     lines.append(f"Rows with coord file      : {int(has_coords.sum())} / {n_rows}")
-    lines.append(f"Rows missing GT mask      : {int((~has_gt).sum())} / {n_rows}")
+    lines.append(f"Rows missing GS mask      : {int((~has_gt).sum())} / {n_rows}")
     lines.append(f"Rows missing coord file   : {int((~has_coords).sum())} / {n_rows}")
     lines.append("")
     lines.append("CELL LINE COUNTS")
@@ -557,7 +557,7 @@ def make_summary(
         diff = counts_df.loc[both, "count_delta"]
 
         lines.append("")
-        lines.append("GT MASK COUNT VS COORD COUNT")
+        lines.append("GS MASK COUNT VS COORD COUNT")
         lines.append("-" * 80)
         lines.append(f"Rows with both counts     : {int(both.sum())}")
         lines.append(f"Rows with different counts: {int((diff != 0).sum())}")
@@ -576,12 +576,12 @@ def make_summary(
     lines.append("")
     lines.append("DUPLICATE FILE-STEM CHECKS")
     lines.append("-" * 80)
-    lines.append(f"Duplicate GT stems         : {len(duplicate_gt)}")
+    lines.append(f"Duplicate GS stems         : {len(duplicate_gt)}")
     lines.append(f"Duplicate coord stems      : {len(duplicate_coords)}")
 
     if duplicate_gt:
         lines.append("")
-        lines.append("Example duplicate GT stems")
+        lines.append("Example duplicate GS stems")
         lines.append("-" * 80)
         for key, paths in list(duplicate_gt.items())[:10]:
             lines.append(f"{key}:")
@@ -633,9 +633,9 @@ def parse_args() -> argparse.Namespace:
         default="union",
         help=(
             "Which UIDs to include. "
-            "union = GT masks OR coord files; "
+            "union = GS masks OR coord files; "
             "intersection = both; "
-            "gt = GT masks only; "
+            "gt = GS masks only; "
             "coords = coord files only."
         ),
     )

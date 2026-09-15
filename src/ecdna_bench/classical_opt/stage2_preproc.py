@@ -237,7 +237,7 @@ def _split_theta(theta: Dict[str, float]) -> Tuple[Dict[str, Dict[str, Any]], Di
 # ---------------------------------------------------------------------------
 
 def _eval_one_image(args: Tuple) -> Tuple[int, int, int, int]:
-    """Return (tp, fp, fn, ignored).  On failure after GT load: (0, 0, n_gt, 0)."""
+    """Return (tp, fp, fn, ignored).  On failure after GS load: (0, 0, n_gt, 0)."""
     import cv2
 
     (uid, rgb_path, roi_path, gt_path,

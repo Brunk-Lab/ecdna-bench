@@ -84,7 +84,7 @@ EXPECTED_SPLIT_SIZES = {"train": 800, "val": 170, "test": 175}
 # Per-cell-line composition, computed from the frozen consistency CSV.
 # The dry run must reproduce this table exactly.
 EXPECTED_COMPOSITION = {
-    #  cell line     train  val  test   all   GT objects
+    #  cell line     train  val  test   all   GS objects
     "COLO320DM":  (   44,    9,   11,    64,    2_943),
     "NCI-H2170":  (  621,  133,  134,   888,  176_883),
     "NCI-H716":   (   49,   10,   11,    70,   13_340),
@@ -120,7 +120,7 @@ def check_invariants(df: pd.DataFrame, strict: bool = True) -> List[str]:
     gt_total = int(df["ecDNA_gt"].sum())
     if gt_total != EXPECTED_GT_TOTAL:
         failures.append(
-            f"ground-truth object total is {gt_total:,}, "
+            f"gold-standard object total is {gt_total:,}, "
             f"expected {EXPECTED_GT_TOTAL:,}"
         )
 

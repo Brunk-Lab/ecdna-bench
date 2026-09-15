@@ -22,7 +22,7 @@ paths:
   #     rgb/            *.tif       (2,048 x 2,448 RGB FISH images)
   #     dapi/           *.tif       (2,048 x 2,448 DAPI images)
   #     roi_mask/       *.png       (manual ROI masks, 1,145 images only)
-  #     gt_mask/        *.png       (rendered ground-truth binary masks)
+  #     gt_mask/        *.png       (rendered gold-standard binary masks)
   #     roi_mask_pred/  *.png       (v1.1 — predicted ROI masks for the 1,839
   #                                  non-ROI images; deferred)
   #

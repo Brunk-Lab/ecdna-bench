@@ -74,7 +74,7 @@ class EvalConfig:
 # ---------------------------------------------------------------------------
 
 def _assign_density_bin(gt_count: int) -> str:
-    """Assign one of the frozen density bins."""
+    """Assign one of the frozen count bins."""
     if gt_count < 10:   return "0-9"
     if gt_count < 50:   return "10-49"
     if gt_count < 150:  return "50-149"
@@ -132,18 +132,18 @@ def _eval_one(args: tuple) -> Dict[str, Any]:
     """Worker: evaluate one (uid, model) pair under both matching modes.
 
     Returns ``{mode: row_dict}``.
-    Raises on GT load failure; returns all-zero prediction on missing pred mask.
+    Raises on GS load failure; returns all-zero prediction on missing pred mask.
     """
     (uid, split, cell_line, gt_path_str, pred_path_str,
      model_name, d_max, iou_min, alpha, min_area, pixel_thr) = args
 
     gt_path = Path(gt_path_str)
     if not gt_path.is_file():
-        raise FileNotFoundError(f"GT mask not found: {gt_path}")
+        raise FileNotFoundError(f"GS mask not found: {gt_path}")
 
     gt_mask = _load_gray(gt_path)
     if gt_mask is None:
-        raise RuntimeError(f"Cannot read GT mask: {gt_path}")
+        raise RuntimeError(f"Cannot read GS mask: {gt_path}")
 
     pred_path = Path(pred_path_str) if pred_path_str else None
     pred_exists = 0
@@ -159,7 +159,7 @@ def _eval_one(args: tuple) -> Dict[str, Any]:
     if gt_mask.shape != pred_mask.shape:
         raise ValueError(
             f"Shape mismatch uid={uid} model={model_name}: "
-            f"GT={gt_mask.shape} PRED={pred_mask.shape}"
+            f"GS={gt_mask.shape} PRED={pred_mask.shape}"
         )
 
     gt_objs   = _extract_objects(gt_mask,   min_area)
@@ -250,7 +250,7 @@ def run_benchmark(
     eval_cfg:        EvalConfig,
     out_dir:         Path,
 ) -> Dict[str, pd.DataFrame]:
-    """Evaluate all models against GT on all images, for all matching modes.
+    """Evaluate all models against GS on all images, for all matching modes.
 
     Parameters
     ----------

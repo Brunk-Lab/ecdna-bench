@@ -131,7 +131,7 @@ def _build_items_for_model(
         gt = _load_gray(gt_path)
         if gt is None:
             logger.warning(
-                "[%s] Cannot load GT for uid=%s — skipping.", model_key, uid
+                "[%s] Cannot load GS for uid=%s — skipping.", model_key, uid
             )
             continue
 
@@ -141,7 +141,7 @@ def _build_items_for_model(
 
         if gt.shape != pred.shape:
             logger.warning(
-                "[%s] Shape mismatch for uid=%s — skipping. GT=%s PRED=%s",
+                "[%s] Shape mismatch for uid=%s — skipping. GS=%s PRED=%s",
                 model_key,
                 uid,
                 gt.shape,

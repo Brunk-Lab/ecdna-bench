@@ -86,7 +86,7 @@ def draw_points(
 
     Supported markers:
       - "circle"    : filled disk
-      - "crosshair" : plus sign (used for ground-truth point annotations)
+      - "crosshair" : plus sign (used for gold-standard point annotations)
     """
     vis = to_bgr(image)
     if len(points) == 0:
@@ -124,7 +124,7 @@ def draw_tp_fp_fn(
     Color coding matches the paper's Figure 2e:
       TP      = green predicted boxes
       FP      = red predicted boxes
-      FN      = blue GT boxes
+      FN      = blue GS boxes
       ignored = grey predicted boxes (lost the one-to-one assignment tiebreaker)
     """
     vis = to_bgr(image)

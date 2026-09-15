@@ -24,7 +24,7 @@ the NCI-H2170 row is flagged as confounded and must not be quoted alone.
 
 GUARDS
 ------
-Each run is checked against the ground-truth object total for its held-out
+Each run is checked against the gold-standard object total for its held-out
 line before its metrics are read. A run whose totals do not match scored a
 different set of images than it was supposed to, and its numbers are dropped
 rather than reported.
@@ -41,7 +41,7 @@ import pandas as pd
 
 logger = logging.getLogger("loco_collect")
 
-# Held-out ground-truth totals, from the frozen consistency CSV.
+# Held-out gold-standard totals, from the frozen consistency CSV.
 # Sum = 228,039, the locked benchmark total.
 HELD_OUT_GT = {
     "COLO320DM": (64, 2_943),

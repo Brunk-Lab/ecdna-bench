@@ -8,7 +8,7 @@ Four aggregation axes
 * Overall (one row per model)
 * By split (train / val / test)
 * By cell line
-* By density bin [0–9, 10–49, 50–149, 150–299, 300+]
+* By count bin [0–9, 10–49, 50–149, 150–299, 300+]
 
 Public API
 ----------

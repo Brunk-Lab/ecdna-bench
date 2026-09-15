@@ -161,7 +161,7 @@ All harmonized masks (and all ecCount output masks) conform to:
 | Dtype | uint8 |
 | Foreground | 255 |
 | Background | 0 |
-| Resolution | Original full-resolution (same as GT mask) |
+| Resolution | Original full-resolution (same as GS mask) |
 | Min CC area | 3 px (matching evaluation framework) |
 
 ---

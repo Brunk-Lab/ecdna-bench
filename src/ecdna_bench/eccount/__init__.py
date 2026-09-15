@@ -6,7 +6,7 @@ ecCount — the novel deep-learning contribution of the paper.
 Sub-modules
 -----------
 targets
-    Soft Gaussian target map generation from GT masks.
+    Soft Gaussian target map generation from GS masks.
     ``make_centroid_gaussian_target``, ``SoftTargetConfig``
 dataset
     PyTorch Dataset with synchronized augmentation.

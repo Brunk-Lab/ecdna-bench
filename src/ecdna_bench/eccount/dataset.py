@@ -7,7 +7,7 @@ Design rules
 ------------
 * Soft target is generated AFTER resizing to the final training resolution
   (1024 × 1224), so σ is defined in model pixel space.
-* All spatial augmentations are synchronized across image / GT / target / ROI.
+* All spatial augmentations are synchronized across image / GS / target / ROI.
 * The dataset filters to ``count_mask_consistent == True`` rows.
 * No disk paths are hard-coded; everything comes from the DataFrame.
 """
@@ -44,7 +44,7 @@ class DatasetConfig:
     normalize_to_01:
         Scale uint8 RGB to [0, 1].
     return_gt_mask:
-        Include binary GT mask in the returned dict.
+        Include binary GS mask in the returned dict.
     return_roi_mask:
         Include ROI mask in the returned dict.
     return_metadata:

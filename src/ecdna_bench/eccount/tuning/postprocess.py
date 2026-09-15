@@ -64,7 +64,7 @@ class PostprocessRunResult:
     mean_pred_count:    float
     mean_gt_count:      float
     mae:                float
-    f1:                 Optional[float]  = None   # object-level F1 if GT available
+    f1:                 Optional[float]  = None   # object-level F1 if GS available
     extra:              Optional[dict]   = None
 
 
@@ -83,7 +83,7 @@ def sweep_postprocess_grid(
     roi_masks:
         Optional list of (H, W) binary masks (same length as prob_maps).
     gt_counts:
-        Optional list of ground-truth counts for MAE computation.
+        Optional list of gold-standard counts for MAE computation.
     configs:
         List of config dicts.  Defaults to ``POSTPROCESS_GRID`` (108 configs).
 

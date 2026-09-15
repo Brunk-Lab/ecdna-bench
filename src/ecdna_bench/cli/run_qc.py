@@ -7,7 +7,7 @@ Usage
 -----
     python -m ecdna_bench.cli.run_qc --config configs/default.yaml
 
-    # Include the slower GT morphology audit (adds diamond-merge statistics):
+    # Include the slower GS morphology audit (adds diamond-merge statistics):
     python -m ecdna_bench.cli.run_qc --config configs/default.yaml \\
         --include-gt-morphology
 
@@ -30,15 +30,15 @@ Outputs
 What this checks
 -----------------
 1. File audit (run_file_audit)
-   Every RGB / DAPI / ROI / GT file exists, is readable, and the four
+   Every RGB / DAPI / ROI / GS file exists, is readable, and the four
    modalities have matching spatial dimensions.
 
 2. Count-mask consistency (run_count_mask_consistency)
    ``ecDNA_gt == 0  iff  gt_mask is empty``.
-   After a correct build_metadata run, ecDNA_gt is the GT-mask CC count,
+   After a correct build_metadata run, ecDNA_gt is the GS-mask CC count,
    so this check is sign-based and all 1,145 images pass.
 
-3. GT morphology audit (run_gt_morphology_audit, optional)
+3. GS morphology audit (run_gt_morphology_audit, optional)
    Per-image CC counts with min_area=3 filter, area statistics, and the
    diamond-merge discrepancy (coord_count_npy - ecDNA_gt).  Source for
    the Supplementary Figure on annotation uncertainty.
@@ -92,7 +92,7 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         default=False,
         help=(
-            "Also run the GT morphology audit (per-image CC counts, area stats, "
+            "Also run the GS morphology audit (per-image CC counts, area stats, "
             "and diamond-merge discrepancy between coord_count_npy and ecDNA_gt). "
             "Slower (~15 min for 1,145 images) but required for the "
             "Supplementary Figure on annotation uncertainty."
@@ -139,7 +139,7 @@ def main() -> None:
     # ------------------------------------------------------------------
     logger.info("Running QC on %s ...", metadata_csv)
     if args.include_gt_morphology:
-        logger.info("GT morphology audit enabled (diamond-merge statistics will be computed)")
+        logger.info("GS morphology audit enabled (diamond-merge statistics will be computed)")
 
     from ecdna_bench.data.qc import run_qc
 

@@ -33,7 +33,7 @@ area_ratio
     |predicted| / |manual|. Above 1 means the prediction is larger than the
     manual annotation. This is the quantity behind the positive count bias in
     the ROI run: a larger ROI lets ecCount find real ecDNA that the manual
-    ground truth never covered, and those score as false positives.
+    gold standard never covered, and those score as false positives.
 
 object_retention
     Annotated ecDNA objects whose centroid lies inside the predicted ROI,
