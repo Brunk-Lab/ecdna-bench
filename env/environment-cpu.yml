@@ -1,0 +1,60 @@
+# ==============================================================================
+# ecdna-bench: conda environment for computers without an NVIDIA GPU
+# ==============================================================================
+# Same versions as env/environment.yml, with the CPU build of PyTorch and
+# JupyterLab for the tutorial notebooks. Works on Linux, Windows (WSL
+# recommended) and Apple-silicon macOS. PyTorch 2.8 has no Intel-macOS build.
+#
+#   conda env create -f env/environment-cpu.yml
+#   conda activate ecdna-bench-cpu
+#   python -m pip install -e . --no-deps
+#
+# Without conda, use env/requirements-cpu.txt (same versions).
+# Only the conda-forge channel is used, so no Anaconda "defaults" license
+# question arises.
+# ==============================================================================
+
+name: ecdna-bench-cpu
+
+channels:
+  - conda-forge
+
+dependencies:
+  - python=3.10.16
+
+  # Core scientific stack (versions that produced the published results)
+  - numpy=2.2.5
+  - pandas=2.2.3
+  - scipy=1.15.3
+  - scikit-learn=1.6.1
+  - pillow=11.1.0
+  - pyyaml>=6.0,<7.0
+  - tqdm>=4.65,<5.0
+
+  # Figures and notebooks
+  - matplotlib=3.10.0
+  - seaborn=0.13.2
+  - jupyterlab>=4.0,<5.0
+  - ipykernel>=6.29
+
+  # Tests
+  - pytest>=7.4,<9.0
+  - pip>=25.0
+
+  - pip:
+    # CPU-only PyTorch wheels (Linux and Windows); macOS uses the standard wheels
+    - --extra-index-url https://download.pytorch.org/whl/cpu
+    - torch==2.8.0
+    - torchvision==0.23.0
+
+    # Image processing
+    - scikit-image==0.25.2
+    - opencv-python-headless==4.10.0.84
+
+    # Classical pipeline optimization
+    - bayesian-optimization==3.1.0
+
+    # Statistics used in the figure notebooks
+    - statsmodels==0.14.4
+    - scikit-posthocs==0.11.4
+    - statannotations==0.7.2

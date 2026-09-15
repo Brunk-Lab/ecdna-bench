@@ -1,206 +1,149 @@
-# Reproduction Guide
+# Reproduction guide
 
-This document maps every paper figure and table to the **notebook** that
-generates it and lists the output files produced. There is no `make_figures`
-CLI; all figures are produced by the five notebooks under `notebooks/`.
+This guide maps the published numbers and figure panels to the files and code
+that produce them, and lists the commands to recompute them. For installation
+and data download, see [`TUTORIAL_EXTERNAL.md`](TUTORIAL_EXTERNAL.md) (any
+computer) or [`TUTORIAL_LONGLEAF.md`](TUTORIAL_LONGLEAF.md) (Brunk Lab).
 
-**Prerequisites:** follow the [Quick start](../README.md#quick-start) section to
-install the package and configure paths. All commands assume the working
-directory is the repo root and `configs/paths.local.yaml` is populated.
-
----
-
-## How figures are generated
-
-The five notebooks read **only** from the frozen CSVs in
-`release/frozen_results/` (and the figure source-data CSVs alongside each
-figure) and write their outputs to `release/figures/notebook0N/`. **No model
-inference happens at figure time** — the figures are a pure function of the
-frozen results. Data-plot panels are written as `.svg`; microscopy composite
-panels (RGB / GT / ROI overlays) are written as `.png` rasters because they are
-not vectorisable.
-
-To regenerate a figure, run its notebook (interactively in JupyterLab, or
-headlessly):
-
-```bash
-jupyter nbconvert --to notebook --execute \
-    notebooks/03_models_comparison.ipynb \
-    --output 03_models_comparison_reproduction.ipynb
-```
+All commands run from the repository root.
 
 ---
 
-## Notebook → outputs (authoritative map)
+## 1. Published numbers
 
-### `notebooks/01_dataset_exploration.ipynb` — Figure 1 (dataset composition)
-**Input:** `release/manifests/metadata.csv` + the `notebook01` figure
-source-data CSVs (`source_benchmark_count_summary.csv`,
-`source_full_resource_summary.csv`, `source_density_bin_summary.csv`,
-`fig1_*_composition_*.csv`, `fig1_count_distribution.csv`,
-`fig1_split_heatmap.csv`).
-**Outputs** (`release/figures/notebook01/`):
-- Data plots (`.svg`): `fig1_count_distribution`,
-  `fig1_count_by_cell_line_boxstrip`, `fig1_density_composition_heatmap`,
-  `fig1_resource_composition_horizontal`, `fig1_split_heatmap`.
-- Microscopy composites (`.png`): `fig1_anchor_composite`,
-  `fig1_anchor_rgb_gt_with_zoom`, `fig1_anchor_inset_clean`,
-  `fig1_anchor_roi_masking_workflow`.
+Every number in the paper's comparison comes from the frozen tables in
+`release/frozen_results/`:
 
-### `notebooks/02_classical_pipeline.ipynb` — Figure 3 (classical pipeline + BO)
-**Input:** `release/frozen_results/or_matching/per_image_metrics.csv`, the BO
-trajectory/probe source CSVs (`source_bo_trajectories.csv`,
-`source_bo_selected_probes.csv`, `source_frozen_params_table.csv`), and the
-before/after source CSVs.
-**Outputs** (`release/figures/notebook02/`, `.svg`):
-`fig3_pipeline_schematic`, `fig3_preproc_steps`, `fig3_preproc_steps_composite`,
-`fig3_detection_steps`, `fig3_bo_trajectories_simplified`,
-`fig3_bo_before_after_summary`, `fig3_before_after_bo_overlay`,
-`fig3_before_after_f1_by_cell_line`, `fig3_frozen_params_table`.
-
-### `notebooks/03_models_comparison.ipynb` — Figures 4, 5, 6
-**Input:** `release/frozen_results/or_matching/` CSVs +
-`release/model_checkpoints/train_history.csv`.
-**Outputs** (`release/figures/notebook03/`, `.svg`):
-- Figure 4: `fig4_qualitative_six_models`.
-- Figure 5 (ecCount): `fig5_training_curves`, `fig5_probability_map`,
-  `fig5_postproc_steps`, `fig5_threshold_vs_peaks`,
-  `fig5_threshold_vs_peaks_zoomed`.
-- Figure 6 (benchmark): `fig6_f1_overall`, `fig6_f1_by_cell_line`,
-  `fig6_f1_by_density`, `fig6_test_count_mae`, `fig6_test_only`,
-  `fig6_count_agreement`.
-
-### `notebooks/04_matching_and_sensitivity.ipynb` — Figure 2 + supplementary
-**Input:** `source_fig2_pair_table.csv`,
-`source_fig2_matching_example_summary.csv`, `sensitivity_sweep.csv`,
-`source_figS_sensitivity_*.csv`, `source_figS_or_vs_and_headline.csv`.
-**Outputs** (`release/figures/notebook04/`, `.svg`):
-`fig2_matching_example`, `figS_or_vs_and_headline`,
-`figS_sensitivity_heatmaps`, `figS_sensitivity_range`,
-`figS_sensitivity_range_and`.
-
-### `notebooks/05_finalisation.ipynb` — Figures 3/4/6 additions + supplementary
-**Input:** `release/frozen_results/or_matching/` CSVs,
-`pixel_dice_locked_numbers.csv`, `source_fig3_*wilcoxon*.csv`,
-`source_figS_gt_count_disclosure*.csv`, `source_figS_qualitative_gallery_*.csv`,
-`source_fig6_global_performance_bars.csv`.
-**Outputs** (`release/figures/notebook05/`, `.svg`):
-`fig3_anchor_classical_overlay`, `fig3_classical_wilcoxon_delta`,
-`fig4_segmentation_test_bars`, `fig6_global_performance_bars`,
-`fig6_f1_by_cell_line_heatmap`, `fig6_count_agreement_top3`,
-`figS_f1_by_cell_line_heatmap_7row`, `figS_gt_count_disclosure`,
-`figS_pixel_dice_locked_numbers`, `figS_qualitative_gallery`.
-
----
-
-## Figure / Table → notebook quick reference
-
-Some display items are assembled from panels produced by **more than one**
-notebook.
-
-| Display item | Notebook(s) |
+| File (in `or_matching/`) | Content |
 |---|---|
-| Figure 1 — dataset composition | `01` |
-| Figure 2 — evaluation / matching framework | `04` |
-| Figure 3 — classical pipeline + BO | `02` (main panels) + `05` (anchor overlay, Wilcoxon Δ) |
-| Figure 4 — qualitative gallery + segmentation baselines | `03` (qualitative) + `05` (segmentation test bars) |
-| Figure 5 — ecCount | `03` |
-| Figure 6 — six-model benchmark | `03` (F1/MAE/agreement) + `05` (global bars, per-cell-line heatmap, top-3 agreement) |
-| Supplementary figures (`figS_*`) | `04` (sensitivity, OR-vs-AND) + `05` (per-cell-line heatmap, GT-count disclosure, pixel-Dice, qualitative gallery) |
-| Table 1 — overall benchmark results | `benchmark` CLI (see below) |
+| `summary_overall.csv` | pooled metrics per method, all 1,145 benchmark image sets |
+| `summary_by_split.csv` | the same per partition (train, val, test) |
+| `summary_by_cell_line.csv` | the same per cell line |
+| `summary_by_density_bin.csv` | the same per gold-standard count bin |
+| `per_image_metrics.csv` | one row per image set and method |
+| `ranked_by_obj_f1.csv` | methods ranked by pooled object-level F1 |
 
-Supplementary-figure **numbers** are assigned in
-`release/manuscript/Supplementary_Figures_updated.docx`; the `figS_*` filenames
-above are the generation-level identifiers.
+`and_matching/` holds the same files for the AND policy (sensitivity analysis
+only); the file names are identical, so always check the folder.
 
----
-
-## Source data
-
-Every `.svg` panel is written together with the source-data CSV it was drawn
-from, in the same `release/figures/notebook0N/` directory. Those CSVs are the
-canonical figure source data bundled for submission.
-
----
-
-## Table 1 — Overall benchmark results
-
-Source data: `release/frozen_results/or_matching/summary_overall.csv`.
-
-To regenerate the underlying numbers from scratch:
+Check any results folder against the paper:
 
 ```bash
-python -m ecdna_bench.cli.benchmark --config configs/default.yaml
+python scripts/verify_headline_numbers.py                       # the frozen tables
+python scripts/verify_headline_numbers.py --results runs/benchmark
 ```
 
-The Table 1 values in the paper are taken directly from the `obj_f1`,
-`count_mae`, and `pix_dice` columns of `summary_overall.csv`.
-
----
-
-## Running the full pipeline from scratch
-
-To reproduce from raw data (no pre-computed masks). All stages use a single
-config, `configs/default.yaml`:
+Recompute the tables from the prediction masks (into a new folder, never over
+the frozen ones):
 
 ```bash
-# 1. Build and QC metadata (~10 min)
-python -m ecdna_bench.cli.build_metadata --config configs/default.yaml
-python -m ecdna_bench.cli.run_qc         --config configs/default.yaml
-
-# 2. Optimise classical pipeline (~6 h on 16 CPUs)
-python -m ecdna_bench.cli.optimize_classical --stage all --config configs/default.yaml
-
-# 3. Run classical inference (~30 min on 16 CPUs)
-python -m ecdna_bench.cli.run_classical --config configs/default.yaml
-
-# 4. Train ecCount (~12 h on 1 GPU, 70 epochs)
-python -m ecdna_bench.cli.train_eccount --config configs/default.yaml
-
-# 5. Run ecCount inference (~20 min on 1 GPU)
-python -m ecdna_bench.cli.run_eccount --config configs/default.yaml
-
-# 6. Harmonise baselines (~2 min each)
-python -m ecdna_bench.cli.run_baseline --model ecseg        --config configs/default.yaml
-python -m ecdna_bench.cli.run_baseline --model mia          --config configs/default.yaml
-python -m ecdna_bench.cli.run_baseline --model label_engine --config configs/default.yaml
-
-# 7. Run benchmark (~10 min on 8 CPUs)
-python -m ecdna_bench.cli.benchmark   --config configs/default.yaml
-
-# 8. Sensitivity sweep (~30 min on 4 CPUs)
-python -m ecdna_bench.cli.sensitivity --config configs/default.yaml
-
-# 9. Generate all figures: run notebooks/01..05
-#    (interactively in JupyterLab, or headlessly with jupyter nbconvert --execute)
+python -m ecdna_bench.cli.benchmark --config configs/default.yaml \
+    --output-dir runs/benchmark --n-workers 8
+python scripts/verify_headline_numbers.py --results runs/benchmark
 ```
 
----
-
-## Hardware requirements
-
-| Step | Minimum | Used in paper |
-|------|---------|---------------|
-| Classical optimisation | 8 CPU cores | UNC Longleaf HPC, 16 cores |
-| ecCount training | 1 GPU (8 GB VRAM) | NVIDIA A100 40 GB |
-| ecCount inference | 1 GPU (4 GB VRAM) | NVIDIA A100 40 GB |
-| Benchmark evaluation | 4 CPU cores | UNC Longleaf HPC, 8 cores |
-| Figures (notebooks 01–05) | CPU only | MacBook Pro M2 |
+Outside the lab's cluster, prepare the configuration first with
+`scripts/prepare_local_run.py bia` (see the external tutorial, section 3).
 
 ---
 
-## Expected runtimes
+## 2. Figure panels
 
-Approximate wall-clock times on the hardware used in the paper:
+The figure notebooks read the frozen tables and write each panel with a
+`source_*.csv` of the plotted values into `release/figures/notebookNN/`. No
+model is run at figure time. Data plots are written as `.svg`; microscopy
+composites as `.png`.
 
-| Stage | Runtime |
-|-------|---------|
-| build_metadata + run_qc | ~10 min |
-| optimize_classical (all cell lines) | ~6 h |
-| run_classical | ~30 min |
-| train_eccount (70 epochs) | ~12 h |
-| run_eccount | ~20 min |
-| run_baseline (3 models) | ~5 min total |
-| benchmark | ~10 min |
-| sensitivity | ~30 min |
-| figures (notebooks 01–05) | a few minutes each, CPU only |
+Before re-running a notebook, set its output folder in the first cell to a
+folder of your own; `release/figures/` is the published version.
+
+```bash
+jupyter nbconvert --to notebook --execute notebooks/03_models_comparison.ipynb \
+    --output-dir runs/figures_check
+```
+
+| Notebook | Panels (file prefixes) | Main inputs |
+|---|---|---|
+| `01_dataset_exploration.ipynb` | `fig1_*`: resource composition, count distributions, partitions, the example image set | `release/manifests/metadata.csv`, `notebook01/source_*.csv` |
+| `02_classical_pipeline.ipynb` | `fig3_*`: classical pipeline, optimization trajectories, before and after optimization, frozen parameters | `or_matching/per_image_metrics.csv`, `source_bo_*.csv`, `source_frozen_params_table.csv` |
+| `03_models_comparison.ipynb` | `fig4_qualitative_six_models`; `fig5_*` (ecCount training and post-processing); `fig6_*` (comparison) | `or_matching/*.csv`, `train_history.csv` |
+| `04_matching_and_sensitivity.ipynb` | `fig2_matching_example`; `figS_*` sensitivity and OR versus AND | `source_fig2_*.csv`, `sensitivity_sweep.csv` |
+| `05_finalisation.ipynb` | `fig3_anchor_classical_overlay`, `fig3_classical_wilcoxon_delta`, `fig4_segmentation_test_bars`, `fig6_global_performance_bars`, `fig6_f1_by_cell_line_heatmap`, `fig6_count_agreement_top3`, `figS_*` heatmap, count disclosure, pixel-level Dice and gallery | `or_matching/*.csv`, `source_fig3_*wilcoxon*.csv`, `source_figS_*.csv` |
+
+The file prefixes are generation-level names. The final figure and Extended
+Data panel numbers are those of the manuscript, where panels were assembled
+from these files.
+
+Panels produced by scripts rather than notebooks:
+
+| Script | Panels |
+|---|---|
+| `scripts/collect_loco_results.py`, `scripts/rescore_in_distribution_by_scope.py`, `scripts/build_source_extended_data_fig8.py`, `scripts/loco_figures.py` | leave-one-cell-line-out results (main Fig. 6d–g, Extended Data Fig. 8) |
+| ROI analysis scripts (`roi_accuracy_metrics.py`, `roi_accuracy_plots.py`, `roi_example_figures.py`) | ROI agreement (Extended Data Fig. 2) |
+
+---
+
+## 3. The statistics
+
+The paired Wilcoxon signed-rank tests of the classical pipeline before and
+after optimization (Extended Data Fig. 4e) are computed from
+`release/figures/notebook05/source_fig3_classical_wilcoxon_delta.csv`; the
+results are in `source_fig3_wilcoxon.csv` in the same folder. They were
+recomputed under SciPy 1.13.1 and 1.15.3 with identical results.
+
+---
+
+## 4. The full pipeline
+
+From the raw images (after downloading the full archive and writing
+`configs/paths.local.yaml`):
+
+```bash
+# metadata and quality control
+python -m ecdna_bench.cli.build_metadata     --config configs/default.yaml
+python -m ecdna_bench.cli.run_qc             --config configs/default.yaml
+
+# classical pipeline: optimization (per cell line), then inference
+python -m ecdna_bench.cli.optimize_classical --config configs/default.yaml --stage all
+python -m ecdna_bench.cli.run_classical      --config configs/default.yaml
+
+# ecCount: training, then inference
+python -m ecdna_bench.cli.train_eccount      --config configs/default.yaml
+python -m ecdna_bench.cli.run_eccount        --config configs/default.yaml
+
+# comparators: convert their native outputs to the common mask format
+python -m ecdna_bench.cli.run_baseline       --config configs/default.yaml --model ecseg
+python -m ecdna_bench.cli.run_baseline       --config configs/default.yaml --model mia
+python -m ecdna_bench.cli.run_baseline       --config configs/default.yaml --model label_engine
+
+# scoring and the matching sensitivity analysis
+python -m ecdna_bench.cli.benchmark          --config configs/default.yaml --output-dir runs/benchmark
+python -m ecdna_bench.cli.sensitivity        --config configs/default.yaml
+
+# leave-one-cell-line-out (four runs plus the size-matched control)
+python scripts/train_eccount_loco.py --hold-out all --dry-run
+sbatch --array=0-4 slurm/submit_eccount_loco.sh        # or train_eccount_loco.py per cell line
+```
+
+On a SLURM cluster, `slurm/` has a job file for each stage.
+
+The native outputs of the comparators are not produced by this repository:
+ecSeg was run with its released `metaseg.h5` weights, MIA predictions are
+archived outputs of the original study, and Label Engine is trained and run
+with <https://github.com/Brunk-Lab/Label-Engine>. The deposited prediction masks
+(S-BIAD4097, `predictions/`) are the converted outputs used for every result.
+See [`EXTERNAL_BASELINES.md`](EXTERNAL_BASELINES.md).
+
+---
+
+## 5. Compute
+
+| Stage | Resources used | Notes |
+|---|---|---|
+| Classical optimization | CPU nodes, one job per cell line | about 6 h per job |
+| ecCount training | one GPU | 70 epochs at about 80 s each (`train_history.csv`) |
+| ecCount inference | one GPU (a CPU works) | several seconds per image on a CPU |
+| Scoring and sensitivity | CPU nodes | minutes to hours depending on workers |
+| Leave-one-cell-line-out | one GPU per run | about 1 h 40 min per run; about 35 min when NCI-H2170 is held out |
+| ROI model training | one NVIDIA L40 GPU | 23.7 h for 200 epochs |
+| Figures | CPU | minutes per notebook |

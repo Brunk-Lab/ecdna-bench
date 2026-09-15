@@ -1,349 +1,545 @@
 #!/bin/bash
 # =============================================================================
-# ecdna-bench — new user setup
+# ecdna-bench — set up a lab member's account on UNC Longleaf   (version 2)
 #
-# Sets up everything a new user needs on Longleaf: shell settings, workspace,
-# a clone of the code, a local paths file, and a Jupyter kernel.
+# What changed from version 1, and why
+# -------------------------------------
+# Version 1 appended exports to ~/.bashrc (PIP_CACHE_DIR, XDG_CACHE_HOME,
+# CONDA_PKGS_DIRS, PROJ, DATA, REPO, ...).  Because ~/.bashrc runs in every
+# shell, those settings changed the behavior of EVERY conda environment the
+# person uses: where conda and pip keep their package caches, where
+# matplotlib, Jupyter and other tools keep theirs, and generic variable names
+# such as $DATA and $REPO that other projects also use.
+#
+# Version 2 changes nothing globally:
+#   * all settings live in ONE file, <your folder>/ecdna-bench.env, and are
+#     applied only when you type `ecdna` (and undone with `ecdna_off`);
+#   * every variable is prefixed ECDNA_ so it cannot collide with other work;
+#   * the only line added to ~/.bashrc is the `ecdna` shortcut (skip it with
+#     --no-bashrc);
+#   * the Jupyter kernel carries its own settings, so other kernels are
+#     untouched;
+#   * nothing is ever installed into the shared environment or into ~/.local.
 #
 # USAGE
-#   bash setup_new_user.sh
+#   bash setup_new_user.sh              set up (asks for your ONYEN)
+#   bash setup_new_user.sh --migrate    also remove the version-1 block from ~/.bashrc
+#   bash setup_new_user.sh --uninstall  remove the shortcut and the kernel
+#   bash setup_new_user.sh --check      only run the checks
+#   Options: --onyen NAME  --no-bashrc  --yes (no questions)  --skip-tests
 #
-# Safe to run more than once. It checks for existing settings and skips
-# anything already done, so re-running after a failure is fine.
+# Safe to run more than once.
 # =============================================================================
 
 set -uo pipefail
 
+VERSION=2
 GREEN=$'\033[0;32m'; RED=$'\033[0;31m'; YELLOW=$'\033[1;33m'
 BLUE=$'\033[0;34m'; BOLD=$'\033[1m'; NC=$'\033[0m'
+[[ -t 1 ]] || { GREEN=""; RED=""; YELLOW=""; BLUE=""; BOLD=""; NC=""; }
 
-ok()    { echo "  ${GREEN}✓${NC} $*"; }
-warn()  { echo "  ${YELLOW}!${NC} $*"; }
-fail()  { echo "  ${RED}✗${NC} $*"; }
-step()  { echo; echo "${BOLD}${BLUE}▸ $*${NC}"; }
-die()   { echo; fail "$*"; echo; echo "Setup stopped. Nothing was left half-done that matters."; exit 1; }
+ok()    { echo "  ${GREEN}ok${NC}   $*"; }
+warn()  { echo "  ${YELLOW}note${NC} $*"; }
+fail()  { echo "  ${RED}FAIL${NC} $*"; }
+step()  { echo; echo "${BOLD}${BLUE}> $*${NC}"; }
+die()   { echo; fail "$*"; echo; echo "Setup stopped."; exit 1; }
+
+# ---------------------------------------------------------------------------
+# Options
+# ---------------------------------------------------------------------------
+ONYEN_ARG=""; DO_BASHRC=1; ASSUME_YES=0; MODE="install"; MIGRATE=0; RUN_TESTS=1
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --onyen)      ONYEN_ARG="${2:-}"; shift ;;
+        --no-bashrc)  DO_BASHRC=0 ;;
+        --yes|-y)     ASSUME_YES=1 ;;
+        --migrate)    MIGRATE=1 ;;
+        --uninstall)  MODE="uninstall" ;;
+        --check)      MODE="check" ;;
+        --skip-tests) RUN_TESTS=0 ;;
+        -h|--help)    sed -n '2,32p' "$0"; exit 0 ;;
+        *)            die "unknown option: $1 (see --help)" ;;
+    esac
+    shift
+done
+
+ask() {  # ask "question" -> returns 0 for yes
+    [[ "$ASSUME_YES" -eq 1 ]] && return 0
+    [[ -t 0 ]] || return 1
+    local reply
+    read -r -p "  $1 [Y/n] " reply
+    [[ -z "$reply" || "$reply" =~ ^[Yy] ]]
+}
+
+# ---------------------------------------------------------------------------
+# Locations (ECDNA_PROJ_ROOT exists only so the script can be tested)
+# ---------------------------------------------------------------------------
+PROJ="${ECDNA_PROJ_ROOT:-/proj/brunk_ecdna_cv_project}"
+SHARED="$PROJ/Poorya"
+ENV_CANONICAL="$SHARED/envs/ecdna-bench"
+DATA="$SHARED/ecDNA_Data"
+SOURCE_REPO="$SHARED/ecdna-bench"
+# Benchmark table: the lab copy with /proj file locations if it exists,
+# otherwise the released table in the shared repository.
+CONS_LAB="$DATA/manifests/dl_master_metadata_stage1_step3_consistency_proj.csv"
+CONS_RELEASED="$SOURCE_REPO/release/manifests/dl_master_metadata_stage1_step3_consistency.csv"
+if [[ -f "$CONS_LAB" ]]; then CONS_DEFAULT="$CONS_LAB"; else CONS_DEFAULT="$CONS_RELEASED"; fi
+GITHUB_HTTPS="https://github.com/Brunk-Lab/ecdna-bench.git"
+PY="$ENV_CANONICAL/bin/python"
+MARK_BEGIN="# >>> ecdna-bench shortcut (setup v2) >>>"
+MARK_END="# <<< ecdna-bench shortcut (setup v2) <<<"
+V1_BEGIN="# >>> ecdna-bench settings >>>"
+V1_MANUAL="# ecdna-bench project settings"
 
 echo
-echo "${BOLD}=============================================${NC}"
-echo "${BOLD}  ecdna-bench — setting up your account${NC}"
-echo "${BOLD}=============================================${NC}"
+echo "${BOLD}ecdna-bench account setup, version $VERSION${NC}"
 
-# -----------------------------------------------------------------------------
-# 1. Who are you
-# -----------------------------------------------------------------------------
-step "Step 1 of 9 — identifying you"
-
+step "1. Who you are"
 ONYEN_GUESS="$(whoami)"
-read -r -p "  Your ONYEN [${ONYEN_GUESS}]: " ONYEN_INPUT
-ONYEN="${ONYEN_INPUT:-$ONYEN_GUESS}"
-
-[[ "$ONYEN" =~ ^[a-zA-Z0-9_-]+$ ]] || die "'$ONYEN' does not look like a valid ONYEN."
-ok "ONYEN: $ONYEN"
-
-PROJ=/proj/brunk_ecdna_cv_project
+if [[ -n "$ONYEN_ARG" ]]; then
+    ONYEN="$ONYEN_ARG"
+elif [[ -t 0 && "$ASSUME_YES" -eq 0 ]]; then
+    read -r -p "  Your ONYEN [${ONYEN_GUESS}]: " ONYEN_INPUT
+    ONYEN="${ONYEN_INPUT:-$ONYEN_GUESS}"
+else
+    ONYEN="$ONYEN_GUESS"
+fi
+[[ "$ONYEN" =~ ^[A-Za-z0-9_-]+$ ]] || die "'$ONYEN' does not look like an ONYEN."
 MYDIR="$PROJ/$ONYEN"
 REPO="$MYDIR/repos/ecdna-bench"
-ENV_CANONICAL="$PROJ/Poorya/envs/ecdna-bench"
-DATA="$PROJ/Poorya/ecDNA_Data"
-SOURCE_REPO="$PROJ/Poorya/ecdna-bench"
+ENVFILE="$MYDIR/ecdna-bench.env"
+KERNEL_DIR="${JUPYTER_DATA_DIR:-$HOME/.local/share/jupyter}/kernels/ecdna-bench"
+ok "ONYEN $ONYEN; your folder is $MYDIR"
 
-# -----------------------------------------------------------------------------
-# 2. Can you reach the shared storage
-# -----------------------------------------------------------------------------
-step "Step 2 of 9 — checking access to the lab storage"
+# ---------------------------------------------------------------------------
+# ~/.bashrc helpers (Python does the editing; a backup is always made first)
+# ---------------------------------------------------------------------------
+BASHRC="$HOME/.bashrc"
+edit_bashrc() {  # edit_bashrc <remove-v2|remove-v1|detect-v1>
+    local python_bin="/usr/bin/python3"
+    [[ -x "$python_bin" ]] || python_bin="$PY"
+    PYTHONNOUSERSITE=1 "$python_bin" - "$BASHRC" "$1" "$MARK_BEGIN" "$MARK_END" \
+        "$V1_BEGIN" "$V1_MANUAL" <<'PYEOF'
+import re, sys, shutil, time
+from pathlib import Path
+path, action, b2, e2, b1, manual = sys.argv[1:7]
+p = Path(path)
+if not p.exists():
+    print("absent"); sys.exit(0)
+lines = p.read_text().splitlines(keepends=True)
 
-[[ -d "$PROJ" ]] || die "Cannot see $PROJ.
-  You are probably not in the brunk_ecdna_cv_project group yet.
-  Request access at https://help.rc.unc.edu"
-ok "Lab storage reachable"
+def span(begin, end):
+    try:
+        i = next(k for k, l in enumerate(lines) if l.strip() == begin)
+        j = next(k for k in range(i, len(lines)) if lines[k].strip() == end)
+        return i, j
+    except StopIteration:
+        return None
 
-[[ -r "$SOURCE_REPO" ]] && ok "Source repository readable" \
-    || warn "Cannot read $SOURCE_REPO — the clone will come from GitHub instead"
+KNOWN = re.compile(
+    r"^\s*(#.*|export (ONYEN|PROJ|MYDIR|REPO|ENV_CANONICAL|DATA|SOURCE_REPO|PIP_CACHE_DIR|"
+    r"XDG_CACHE_HOME|CONDA_PKGS_DIRS|ECDNA_PYTHON)=.*|alias ecdna=.*|)\s*$")
 
-[[ -r "$DATA" ]] && ok "Image data readable" \
-    || warn "Cannot read $DATA — ask about group permissions"
+def manual_span():
+    for i, l in enumerate(lines):
+        if l.strip().startswith(manual):
+            start = i - 1 if i > 0 and lines[i - 1].strip().startswith("# ====") else i
+            for j in range(i + 1, len(lines)):
+                if not KNOWN.match(lines[j]):
+                    return ("unexpected", j + 1)
+                if lines[j].strip().startswith("alias ecdna="):
+                    return (start, j)
+            return ("unterminated", i + 1)
+    return None
 
-[[ -x "$ENV_CANONICAL/bin/python" ]] || die "Environment not found at $ENV_CANONICAL"
-ok "Environment found"
+def backup():
+    dest = p.with_name(p.name + ".backup-" + time.strftime("%Y%m%d-%H%M%S"))
+    shutil.copy2(p, dest)
+    return dest
 
-# -----------------------------------------------------------------------------
-# 3. Home directory space
-# -----------------------------------------------------------------------------
-step "Step 3 of 9 — checking your home directory"
+if action == "detect-v1":
+    found = []
+    if any(l.strip() == b1 for l in lines):
+        found.append("v1-script")
+    m = manual_span()
+    if m:
+        found.append("v1-manual" if isinstance(m[0], int) else f"v1-manual-{m[0]}-line{m[1]}")
+    print(",".join(found) or "none")
+elif action in ("remove-v1", "remove-v2"):
+    spans = []
+    if action == "remove-v2":
+        s = span(b2, e2)
+        if s: spans.append(s)
+    else:
+        s = span(b1, "# <<< ecdna-bench settings <<<")
+        if s: spans.append(s)
+        m = manual_span()
+        if m and not isinstance(m[0], int):
+            print(f"refused: the hand-added block has an unexpected line near line {m[1]}; edit ~/.bashrc by hand")
+            sys.exit(3)
+        if m: spans.append(m)
+    if not spans:
+        print("nothing-to-remove"); sys.exit(0)
+    b = backup()
+    for i, j in sorted(spans, reverse=True):
+        # also drop one blank line left before the block
+        if i > 0 and not lines[i - 1].strip():
+            i -= 1
+        del lines[i:j + 1]
+    p.write_text("".join(lines))
+    print(f"removed {len(spans)} block(s); backup {b}")
+PYEOF
+}
 
-# df reports the whole shared filesystem, not your personal quota, so it is
-# useless here. Test what actually matters: can you write to your home?
-if echo test > "$HOME/.ecdna_write_test" 2>/dev/null; then
-    rm -f "$HOME/.ecdna_write_test"
-    ok "Home directory is writable"
-else
-    warn "Cannot write to your home directory — it is probably at its quota."
-    warn "Jupyter will not start until this is cleared. Try:"
-    warn "    conda clean --all --yes && rm -rf ~/.cache/pip"
+# ---------------------------------------------------------------------------
+# Uninstall
+# ---------------------------------------------------------------------------
+if [[ "$MODE" == "uninstall" ]]; then
+    step "Removing the ecdna-bench shortcut and kernel"
+    res="$(edit_bashrc remove-v2)"; ok "~/.bashrc: $res"
+    if [[ -f "$KERNEL_DIR/kernel.json" ]] && grep -q "$ENV_CANONICAL" "$KERNEL_DIR/kernel.json"; then
+        rm -rf "$KERNEL_DIR" && ok "Jupyter kernel 'ecdna-bench' removed"
+    else
+        warn "no ecdna-bench kernel of ours to remove"
+    fi
+    warn "Your folder $MYDIR (clone, runs, $ENVFILE) was left in place."
+    exit 0
 fi
 
-if command -v quota >/dev/null 2>&1; then
-    QUOTA_OUT=$(quota -s 2>/dev/null | tail -n +2)
-    [[ -n "$QUOTA_OUT" ]] && { echo "     your quota:"; sed 's/^/       /' <<<"$QUOTA_OUT"; }
+# ---------------------------------------------------------------------------
+# 2. Shared storage
+# ---------------------------------------------------------------------------
+step "2. Access to the lab storage"
+[[ -d "$PROJ" ]] || die "Cannot see $PROJ. Ask Research Computing (https://help.rc.unc.edu) to add you to the brunk_ecdna_cv_project group."
+ok "lab storage reachable"
+[[ -x "$PY" ]] || die "shared environment not found at $ENV_CANONICAL"
+ok "shared environment: $ENV_CANONICAL"
+[[ -r "$DATA" ]] && ok "image data readable" || warn "cannot read $DATA (ask about group permissions)"
+[[ -r "$SOURCE_REPO" ]] && ok "shared repository readable" || warn "cannot read $SOURCE_REPO; the code will come from GitHub"
+
+# ---------------------------------------------------------------------------
+# 3. Old (version 1) settings
+# ---------------------------------------------------------------------------
+step "3. Settings left by the old setup"
+V1_STATE="$(edit_bashrc detect-v1)"
+case "$V1_STATE" in
+    none|absent) ok "no old settings in ~/.bashrc" ;;
+    *)
+        warn "found old ecdna-bench settings in ~/.bashrc ($V1_STATE)."
+        warn "They change conda/pip cache locations for all your environments."
+        if [[ "$MIGRATE" -eq 1 ]] || ask "Remove them now? (a backup of ~/.bashrc is kept)"; then
+            res="$(edit_bashrc remove-v1)"
+            if [[ "$res" == refused* ]]; then
+                fail "$res"
+            else
+                ok "$res"
+                warn "Open a NEW terminal after setup so the old values are gone."
+            fi
+        else
+            warn "left in place; re-run with --migrate to remove them"
+        fi
+        ;;
+esac
+if [[ -n "${XDG_CACHE_HOME:-}" && "${XDG_CACHE_HOME}" == "$MYDIR"* ]]; then
+    warn "this shell still has XDG_CACHE_HOME=$XDG_CACHE_HOME from the old settings (open a new terminal)"
 fi
 
-# -----------------------------------------------------------------------------
-# 4. Shell settings
-# -----------------------------------------------------------------------------
-step "Step 4 of 9 — adding your shell settings"
+[[ "$MODE" == "check" ]] || {
+# ---------------------------------------------------------------------------
+# 4. Workspace
+# ---------------------------------------------------------------------------
+step "4. Your workspace"
+mkdir -p "$MYDIR"/{repos,runs,logs} || die "could not create $MYDIR"
+ok "$MYDIR/{repos,runs,logs}"
 
-MARKER="# >>> ecdna-bench settings >>>"
-
-if grep -qF "$MARKER" "$HOME/.bashrc" 2>/dev/null; then
-    ok "Settings already present in ~/.bashrc — leaving them alone"
-else
-    BACKUP="$HOME/.bashrc.backup-$(date +%Y%m%d-%H%M%S)"
-    cp "$HOME/.bashrc" "$BACKUP" 2>/dev/null && ok "Backed up ~/.bashrc to $(basename "$BACKUP")"
-
-    cat >> "$HOME/.bashrc" <<BASHRC_END
-
-$MARKER
-# Added by setup_new_user.sh on $(date +%Y-%m-%d)
-# To remove: delete from this marker down to the matching <<< line.
-
-export ONYEN="$ONYEN"
-export PROJ="$PROJ"
-export MYDIR="$MYDIR"
-export REPO="$REPO"
-export ENV_CANONICAL="$ENV_CANONICAL"
-export DATA="$DATA"
-export SOURCE_REPO="$SOURCE_REPO"
-
-# Required by every SLURM job script — without this, jobs use the wrong Python
-export ECDNA_PYTHON="$ENV_CANONICAL/bin/python"
-
-# Keep downloaded package caches off the 50 GB home quota
-export PIP_CACHE_DIR="$MYDIR/.cache/pip"
-export XDG_CACHE_HOME="$MYDIR/.cache"
-export CONDA_PKGS_DIRS="$MYDIR/.cache/conda/pkgs"
-
-# One word to start a working session
-alias ecdna='module load anaconda >/dev/null 2>&1 && conda activate "\$ENV_CANONICAL" && cd "\$REPO"'
-# <<< ecdna-bench settings <<<
-BASHRC_END
-    ok "Settings written to ~/.bashrc"
-fi
-
-export ONYEN PROJ MYDIR REPO ENV_CANONICAL DATA SOURCE_REPO
-export ECDNA_PYTHON="$ENV_CANONICAL/bin/python"
-export PIP_CACHE_DIR="$MYDIR/.cache/pip"
-export XDG_CACHE_HOME="$MYDIR/.cache"
-export CONDA_PKGS_DIRS="$MYDIR/.cache/conda/pkgs"
-
-# -----------------------------------------------------------------------------
-# 5. Workspace
-# -----------------------------------------------------------------------------
-step "Step 5 of 9 — creating your workspace"
-
-mkdir -p "$MYDIR"/{repos,runs,logs,envs,.cache} || die "Could not create $MYDIR"
-mkdir -p "$PIP_CACHE_DIR" "$XDG_CACHE_HOME" "$CONDA_PKGS_DIRS"
-ok "Workspace ready at $MYDIR"
-
-# -----------------------------------------------------------------------------
-# 6. The code
-# -----------------------------------------------------------------------------
-step "Step 6 of 9 — getting the code"
-
-# Never hang waiting for a username and password. The repository is private,
-# so an HTTPS clone would prompt — and GitHub no longer accepts passwords.
+# ---------------------------------------------------------------------------
+# 5. The code (your own clone)
+# ---------------------------------------------------------------------------
+step "5. Your copy of the code"
 export GIT_TERMINAL_PROMPT=0
-export GIT_SSH_COMMAND="ssh -oBatchMode=yes -oStrictHostKeyChecking=accept-new"
-
-GITHUB_SSH="git@github.com:PooryaBehnamie/ecdna-bench.git"
-
 if [[ -d "$REPO/.git" ]]; then
-    ok "Repository already present at $REPO"
-
+    ok "already present: $REPO"
 elif [[ -d "$SOURCE_REPO/.git" ]] && git clone --quiet "$SOURCE_REPO" "$REPO" 2>/dev/null; then
-    # Preferred route: the full repository is already on this filesystem.
-    # A local clone copies the entire history and needs no GitHub account.
-    ok "Cloned from the shared repository — full history, no login required"
-    echo "     'git pull' will fetch updates from $SOURCE_REPO"
-
-elif git clone --quiet "$GITHUB_SSH" "$REPO" 2>/dev/null; then
-    ok "Cloned from GitHub over SSH"
-
-elif [[ -d "$SOURCE_REPO" ]]; then
-    warn "Git clone unavailable — copying the folder instead"
-    cp -r "$SOURCE_REPO" "$REPO" || die "Copy failed"
-    ok "Copied from $SOURCE_REPO"
-
+    ok "cloned from the shared repository (full history)"
+elif git clone --quiet "$GITHUB_HTTPS" "$REPO" 2>/dev/null; then
+    ok "cloned from GitHub"
 else
-    die "Could not obtain the code.
-  Tried: a local clone of $SOURCE_REPO, then GitHub over SSH.
-  The repository is private, so an HTTPS clone needs a personal access token.
-  Easiest fix: ask for read access to $SOURCE_REPO on this filesystem."
+    die "could not obtain the code from $SOURCE_REPO or $GITHUB_HTTPS"
 fi
+mkdir -p "$REPO/logs"
 
-cd "$REPO" || die "Cannot enter $REPO"
-mkdir -p logs
-ok "logs/ created (SLURM will not create it for you)"
-
-# -----------------------------------------------------------------------------
-# 7. Local paths file
-# -----------------------------------------------------------------------------
-step "Step 7 of 9 — writing your paths file"
-
-if [[ -f configs/paths.local.yaml ]]; then
-    warn "configs/paths.local.yaml already exists — keeping yours"
-    warn "Delete it and re-run this script if you want it regenerated"
+# ---------------------------------------------------------------------------
+# 6. Local paths file (outputs go to your folder)
+# ---------------------------------------------------------------------------
+step "6. configs/paths.local.yaml in your copy"
+if [[ -f "$REPO/configs/paths.local.yaml" ]]; then
+    ok "already present (kept as is)"
 else
-    cat > configs/paths.local.yaml <<YAML_END
-# Local paths, generated $(date +%Y-%m-%d) for $ONYEN
-# INPUTS point at the shared data and are never written to.
-# OUTPUTS point at this user's own folder.
+    cat > "$REPO/configs/paths.local.yaml" <<YAML_END
+# Local paths for $ONYEN, written by setup_new_user.sh v$VERSION on $(date +%Y-%m-%d).
+# Inputs are shared and read-only. Outputs go to your own folder.
 paths:
   data_root:       $DATA
   metadata_csv:    $SOURCE_REPO/release/manifests/metadata.csv
-  consistency_csv: $SOURCE_REPO/release/manifests/dl_master_metadata_stage1_step3_consistency.csv
-
+  consistency_csv: $CONS_DEFAULT
   splits:
     train: release/split_files/train_ids.csv
     val:   release/split_files/val_ids.csv
     test:  release/split_files/test_ids.csv
-
-  results_root:    $MYDIR/runs/results
-  logs_root:       $MYDIR/runs/logs
-  eccount_out_dir: $MYDIR/runs/eccount_training
+  results_root:       $MYDIR/runs/results
+  logs_root:          $MYDIR/runs/logs
+  frozen_results_dir: $MYDIR/runs/benchmark
+  eccount_out_dir:    $MYDIR/runs/eccount_training
 YAML_END
-    ok "Written to configs/paths.local.yaml"
+    CKPT_REL="release/model_checkpoints/eccount_best.pt"
+    if [[ ! -f "$REPO/$CKPT_REL" && -f "$SOURCE_REPO/$CKPT_REL" ]]; then
+        echo "  eccount_checkpoint: $SOURCE_REPO/$CKPT_REL" >> "$REPO/configs/paths.local.yaml"
+    fi
+    ok "written"
 fi
 
-# -----------------------------------------------------------------------------
-# 8. Jupyter kernel
-# -----------------------------------------------------------------------------
-step "Step 8 of 9 — registering the Jupyter kernel"
+# ---------------------------------------------------------------------------
+# 7. The session file and the `ecdna` shortcut
+# ---------------------------------------------------------------------------
+step "7. Session settings (applied only when you type 'ecdna')"
+cat > "$ENVFILE" <<ENV_END
+# ecdna-bench session settings for $ONYEN (setup_new_user.sh v$VERSION).
+# Use:  source $ENVFILE     (the 'ecdna' shortcut does this)
+# Undo: ecdna_off
+# Nothing here is applied unless you source this file.
 
-PY="$ENV_CANONICAL/bin/python"
+if [[ -n "\${ECDNA_ACTIVE:-}" ]]; then
+    echo "ecdna-bench session already active (type ecdna_off to leave)"
+    cd "\$ECDNA_REPO" 2>/dev/null
+    return 0 2>/dev/null || exit 0
+fi
 
+export ECDNA_ONYEN="$ONYEN"
+export ECDNA_PROJ="$PROJ"
+export ECDNA_MYDIR="$MYDIR"
+export ECDNA_REPO="$REPO"
+export ECDNA_ENV="$ENV_CANONICAL"
+export ECDNA_DATA="$DATA"
+export ECDNA_SOURCE_REPO="$SOURCE_REPO"
+
+# Remember what we change so ecdna_off can put it back.
+_ECDNA_OLD_PATH="\$PATH"
+_ECDNA_OLD_PYTHONPATH="\${PYTHONPATH-__unset__}"
+_ECDNA_OLD_PYTHONNOUSERSITE="\${PYTHONNOUSERSITE-__unset__}"
+_ECDNA_OLD_PWD="\$PWD"
+_ECDNA_CONDA=0
+
+if ! command -v conda >/dev/null 2>&1 && command -v module >/dev/null 2>&1; then
+    module load anaconda >/dev/null 2>&1
+fi
+if command -v conda >/dev/null 2>&1; then
+    eval "\$(conda shell.bash hook 2>/dev/null)" >/dev/null 2>&1
+    if conda activate "\$ECDNA_ENV" >/dev/null 2>&1; then
+        _ECDNA_CONDA=1
+    fi
+fi
+if [[ "\$_ECDNA_CONDA" -ne 1 ]]; then
+    export PATH="\$ECDNA_ENV/bin:\$PATH"   # fallback when conda cannot activate
+fi
+
+# Your own copy of the code wins over the shared installation, and packages
+# in ~/.local never shadow the shared environment (and pip cannot fall back
+# to installing into ~/.local, which would affect your other environments).
+export PYTHONPATH="\$ECDNA_REPO/src\${PYTHONPATH:+:\$PYTHONPATH}"
+export PYTHONNOUSERSITE=1
+
+# Used by the SLURM scripts in slurm/ (sbatch passes these to the job).
+export ECDNA_PYTHON="\$ECDNA_ENV/bin/python"
+export ECDNA_PROJECT_ROOT="\$ECDNA_REPO"
+export ECDNA_ACTIVE=1
+
+ecdna_off() {
+    if [[ "\$_ECDNA_CONDA" -eq 1 ]]; then conda deactivate >/dev/null 2>&1; fi
+    export PATH="\$_ECDNA_OLD_PATH"
+    if [[ "\$_ECDNA_OLD_PYTHONPATH" == "__unset__" ]]; then unset PYTHONPATH; else export PYTHONPATH="\$_ECDNA_OLD_PYTHONPATH"; fi
+    if [[ "\$_ECDNA_OLD_PYTHONNOUSERSITE" == "__unset__" ]]; then unset PYTHONNOUSERSITE; else export PYTHONNOUSERSITE="\$_ECDNA_OLD_PYTHONNOUSERSITE"; fi
+    unset ECDNA_PYTHON ECDNA_PROJECT_ROOT ECDNA_ACTIVE ECDNA_ONYEN ECDNA_PROJ ECDNA_MYDIR ECDNA_REPO ECDNA_ENV ECDNA_DATA ECDNA_SOURCE_REPO
+    cd "\$_ECDNA_OLD_PWD" 2>/dev/null
+    unset -f ecdna_off
+    echo "ecdna-bench session closed"
+}
+
+cd "\$ECDNA_REPO" && echo "ecdna-bench session: \$(python --version 2>&1) from \$ECDNA_ENV; code from \$ECDNA_REPO (ecdna_off to leave)"
+ENV_END
+ok "written: $ENVFILE"
+
+if [[ "$DO_BASHRC" -eq 1 ]]; then
+    edit_bashrc remove-v2 >/dev/null
+    {
+        echo ""
+        echo "$MARK_BEGIN"
+        echo "# One shortcut only; it changes nothing until you type 'ecdna'."
+        echo "alias ecdna='source \"$ENVFILE\"'"
+        echo "$MARK_END"
+    } >> "$BASHRC"
+    ok "added the 'ecdna' shortcut to ~/.bashrc (nothing else)"
+else
+    warn "--no-bashrc: start a session with   source $ENVFILE"
+fi
+
+# ---------------------------------------------------------------------------
+# 8. Jupyter kernel with its own settings
+# ---------------------------------------------------------------------------
+step "8. Jupyter kernel 'ecdna-bench (canonical)'"
 if ! PYTHONNOUSERSITE=1 "$PY" -c "import ipykernel" 2>/dev/null; then
-    warn "ipykernel not installed in the shared environment."
-    warn "Ask the environment owner to run:"
-    warn "  PYTHONNOUSERSITE=1 $PY -m pip install 'ipykernel<7'"
-elif PYTHONNOUSERSITE=1 "$PY" -m ipykernel install --user \
-        --name ecdna-bench --display-name "ecdna-bench (canonical)" >/dev/null 2>&1; then
-    ok "Kernel registered as 'ecdna-bench (canonical)'"
+    warn "ipykernel is not installed in the shared environment; ask the environment owner"
+elif PYTHONNOUSERSITE=1 "$PY" -m ipykernel install --user --name ecdna-bench \
+        --display-name "ecdna-bench (canonical)" >/dev/null 2>&1; then
+    PYTHONNOUSERSITE=1 "$PY" - "$KERNEL_DIR/kernel.json" "$REPO/src" <<'PYEOF'
+import json, sys
+path, src = sys.argv[1], sys.argv[2]
+with open(path) as fh:
+    spec = json.load(fh)
+env = spec.setdefault("env", {})
+env["PYTHONNOUSERSITE"] = "1"
+env["PYTHONPATH"] = src
+with open(path, "w") as fh:
+    json.dump(spec, fh, indent=1)
+PYEOF
+    ok "kernel registered (settings stored in the kernel only): $KERNEL_DIR"
 else
-    warn "Kernel registration failed — you can retry it later"
+    warn "kernel registration failed; re-run this script later"
 fi
+}
 
-# -----------------------------------------------------------------------------
-# 9. Verify
-# -----------------------------------------------------------------------------
-step "Step 9 of 9 — checking that everything works"
-
+# ---------------------------------------------------------------------------
+# 9. Checks (run in a clean sub-shell, exactly as an 'ecdna' session)
+# ---------------------------------------------------------------------------
+step "9. Checks"
+[[ -f "$ENVFILE" ]] || die "$ENVFILE is missing; run without --check first"
+CHECK_OUT="$(env -i HOME="$HOME" USER="${USER:-$ONYEN}" PATH="/usr/bin:/bin" TERM=dumb \
+    ECDNA_PROJ_ROOT="${ECDNA_PROJ_ROOT:-}" bash --noprofile --norc -c "
+source '$ENVFILE' >/dev/null 2>&1
+echo \"PY=\$(command -v python)\"
+python - <<'PYEOF'
+import sys, os
+print('SITE_OK=%s' % (not any('.local' in p for p in sys.path)))
+try:
+    import ecdna_bench
+    print('IMPORT_FROM=%s' % os.path.dirname(ecdna_bench.__file__))
+except Exception as exc:
+    print('IMPORT_FAIL=%s' % exc)
+try:
+    from ecdna_bench.eccount.model import build_model, ModelConfig
+    m = build_model(ModelConfig())
+    print('NPARAM=%d' % sum(p.numel() for p in m.parameters() if p.requires_grad))
+except Exception as exc:
+    print('NPARAM_FAIL=%s' % exc)
+try:
+    from ecdna_bench.cli._common import load_config
+    p = load_config('configs/default.yaml').get('paths', {})
+    for k in ('results_root', 'logs_root', 'frozen_results_dir', 'eccount_out_dir', 'consistency_csv'):
+        print('CFG_%s=%s' % (k, p.get(k) or ''))
+    ck = p.get('eccount_checkpoint') or ''
+    print('CKPT=%s' % (os.path.abspath(ck) if ck else ''))
+    print('CKPT_OK=%s' % bool(ck and os.path.isfile(ck)))
+    # Can this account read the image files the benchmark table points at?
+    import csv
+    checked = readable = 0
+    first_bad = ''
+    with open(p.get('consistency_csv') or '', newline='') as fh:
+        for i, row in enumerate(csv.DictReader(fh)):
+            if i >= 5:
+                break
+            for col in ('rgb_fullpath', 'gt_fullpath', 'roi_fullpath'):
+                path = (row.get(col) or '').strip()
+                if not path:
+                    continue
+                checked += 1
+                if os.access(path, os.R_OK):
+                    readable += 1
+                elif not first_bad:
+                    first_bad = path
+    print('IMG_CHECKED=%d' % checked)
+    print('IMG_READABLE=%d' % readable)
+    print('IMG_FIRST_BAD=%s' % first_bad)
+except Exception as exc:
+    print('CFG_FAIL=%s' % exc)
+PYEOF
+" 2>&1)"
 FAILED=0
-
-if PYTHONNOUSERSITE=1 "$PY" -c "import ecdna_bench" 2>/dev/null; then
-    ok "Project code imports"
-else
-    fail "Project code does not import"; FAILED=1
-fi
-
-NPARAM=$(PYTHONNOUSERSITE=1 "$PY" -c "
-from ecdna_bench.eccount.model import build_model, ModelConfig
-m = build_model(ModelConfig())
-print(sum(p.numel() for p in m.parameters() if p.requires_grad))
-" 2>/dev/null)
-if [[ "$NPARAM" == "7849601" ]]; then
-    ok "Model matches the published architecture (7,849,601 parameters)"
-else
-    fail "Model parameter count is '$NPARAM', expected 7849601"; FAILED=1
-fi
-
-# NOTE: there are two functions called load_config.
-#   ecdna_bench.config.load_config      -> typed Config object, strict
-#   ecdna_bench.cli._common.load_config -> plain dict, keeps every key
-# The command-line tools use the dict one, so that is what we verify here.
-CFG_CHECK=$(cd "$REPO" && PYTHONNOUSERSITE=1 "$PY" -c "
-from ecdna_bench.cli._common import load_config as cli_load
-from ecdna_bench.config import load_config as typed_load
-
-cfg = cli_load('configs/default.yaml')
-p = cfg.get('paths', {})
-for k in ('results_root', 'logs_root', 'consistency_csv', 'eccount_out_dir'):
-    print('CLI_%s=%s' % (k.upper(), p.get(k) or ''))
-
-t = typed_load('configs/default.yaml')
-print('OVERRIDE=%s' % (t.local_override_yaml or 'NONE'))
-print('TYPED_RESULTS=%s' % (t.paths.results_root or ''))
-" 2>&1)
-
-if [[ "$CFG_CHECK" != *"OVERRIDE="* ]]; then
-    fail "Could not read the configuration:"
-    echo "$CFG_CHECK" | sed 's/^/      /'
-    FAILED=1
-else
-    [[ "$(sed -n 's/^OVERRIDE=//p' <<<"$CFG_CHECK")" == "NONE" ]] \
-        && { fail "configs/paths.local.yaml was not merged — your settings are ignored"; FAILED=1; } \
-        || ok "Your paths file is being used"
-
-    # Every writable location must sit inside this user's own space.
-    BAD=0
-    for KEY in CLI_RESULTS_ROOT CLI_LOGS_ROOT CLI_ECCOUNT_OUT_DIR TYPED_RESULTS; do
-        VAL=$(sed -n "s/^${KEY}=//p" <<<"$CFG_CHECK")
-        [[ -z "$VAL" ]] && continue
-        # A relative path resolves inside this repository, which is yours.
-        [[ "$VAL" != /* ]] && continue
-        if [[ "$VAL" != *"/$ONYEN/"* && "$VAL" != *"/$ONYEN" ]]; then
-            fail "$KEY would write to '$VAL' — that is outside your space"
-            BAD=1; FAILED=1
+PY_USED="$(sed -n 's/^PY=//p' <<<"$CHECK_OUT")"
+if [[ "$PY_USED" == "$ENV_CANONICAL/bin/python"* ]]; then ok "session uses the shared environment"; else fail "session python is '$PY_USED'"; FAILED=1; fi
+grep -q '^SITE_OK=True' <<<"$CHECK_OUT" && ok "~/.local packages are ignored in the session" || { fail "~/.local is on sys.path"; FAILED=1; }
+FROM="$(sed -n 's/^IMPORT_FROM=//p' <<<"$CHECK_OUT")"
+if [[ "$FROM" == "$REPO/src/"* ]]; then ok "code is imported from your copy ($FROM)"
+elif [[ -n "$FROM" ]]; then fail "code is imported from $FROM, not from your copy"; FAILED=1
+else fail "project code does not import: $(sed -n 's/^IMPORT_FAIL=//p' <<<"$CHECK_OUT")"; FAILED=1; fi
+NPARAM="$(sed -n 's/^NPARAM=//p' <<<"$CHECK_OUT")"
+[[ "$NPARAM" == "7849601" ]] && ok "ecCount builds with 7,849,601 parameters" || { fail "ecCount parameter count '$NPARAM'"; FAILED=1; }
+BAD=0
+for KEY in results_root logs_root frozen_results_dir eccount_out_dir; do
+    VAL="$(sed -n "s/^CFG_${KEY}=//p" <<<"$CHECK_OUT")"
+    [[ -z "$VAL" || "$VAL" != /* ]] && continue
+    if [[ "$VAL" != "$MYDIR"* ]]; then fail "paths.$KEY writes to $VAL (outside your folder)"; BAD=1; FAILED=1; fi
+done
+[[ "$BAD" -eq 0 ]] && ok "every output path is inside $MYDIR"
+CONS="$(sed -n 's/^CFG_consistency_csv=//p' <<<"$CHECK_OUT")"
+[[ -n "$CONS" && -r "$CONS" ]] && ok "benchmark table readable" || warn "benchmark table not readable: '$CONS'"
+IMG_CHECKED="$(sed -n 's/^IMG_CHECKED=//p' <<<"$CHECK_OUT")"
+IMG_READABLE="$(sed -n 's/^IMG_READABLE=//p' <<<"$CHECK_OUT")"
+if [[ -n "$IMG_CHECKED" && "$IMG_CHECKED" -gt 0 ]]; then
+    if [[ "$IMG_READABLE" == "$IMG_CHECKED" ]]; then
+        ok "image files listed in the benchmark table are readable (sample of $IMG_CHECKED)"
+    else
+        warn "only $IMG_READABLE of $IMG_CHECKED sampled image paths are readable, e.g. $(sed -n 's/^IMG_FIRST_BAD=//p' <<<"$CHECK_OUT")"
+        warn "benchmark and training jobs will fail until these paths are readable"
+        if [[ -f "$CONS_LAB" && "$CONS" != "$CONS_LAB" ]]; then
+            warn "fix: in $REPO/configs/paths.local.yaml set   consistency_csv: $CONS_LAB"
+        else
+            warn "fix: ask the data owner (see scripts/rewrite_manifest_paths.py)"
         fi
-    done
-    [[ "$BAD" -eq 0 ]] && ok "Every output location is inside your own folder"
-
-    # Inputs are expected to be shared and read-only; just report them.
-    CONS=$(sed -n 's/^CLI_CONSISTENCY_CSV=//p' <<<"$CFG_CHECK")
-    if [[ -n "$CONS" && -r "$CONS" ]]; then
-        ok "Metadata table readable"
-    elif [[ -n "$CONS" ]]; then
-        fail "Cannot read the metadata table at '$CONS'"; FAILED=1
+    fi
+fi
+CKPT_PATH="$(sed -n 's/^CKPT=//p' <<<"$CHECK_OUT")"
+if grep -q '^CKPT_OK=True' <<<"$CHECK_OUT"; then
+    ok "ecCount weights found: $CKPT_PATH"
+else
+    warn "ecCount weights not found at '$CKPT_PATH' (needed only to run ecCount);"
+    warn "add 'eccount_checkpoint: <path to eccount_best.pt>' under paths: in $REPO/configs/paths.local.yaml"
+fi
+CFG_ERR="$(sed -n 's/^CFG_FAIL=//p' <<<"$CHECK_OUT")"
+[[ -z "$CFG_ERR" ]] || warn "configuration check: $CFG_ERR"
+if [[ -f "$KERNEL_DIR/kernel.json" ]] && grep -q PYTHONNOUSERSITE "$KERNEL_DIR/kernel.json"; then
+    ok "Jupyter kernel carries its own settings"
+else
+    warn "Jupyter kernel not registered with settings"
+fi
+if [[ "$RUN_TESTS" -eq 1 && "$MODE" != "check" ]]; then
+    TLOG="$MYDIR/logs/setup_pytest_$(date +%Y%m%d-%H%M%S).log"
+    if (cd "$REPO" && env -i HOME="$HOME" PATH="/usr/bin:/bin" ECDNA_PROJ_ROOT="${ECDNA_PROJ_ROOT:-}" \
+            bash --noprofile --norc -c "source '$ENVFILE' >/dev/null 2>&1 && python -m pytest -q" >"$TLOG" 2>&1); then
+        ok "test suite: $(tail -1 "$TLOG")"
+    else
+        fail "test suite failed; see $TLOG"; FAILED=1
     fi
 fi
 
-echo "  … running the test suite (about 30 seconds)"
-if PYTHONNOUSERSITE=1 "$PY" -m pytest -q >/tmp/ecdna_pytest_$$.log 2>&1; then
-    ok "$(tail -1 /tmp/ecdna_pytest_$$.log | tr -d '\n')"
-else
-    fail "Tests failed — see /tmp/ecdna_pytest_$$.log"; FAILED=1
-fi
-
-# -----------------------------------------------------------------------------
 echo
-echo "${BOLD}=============================================${NC}"
 if [[ "$FAILED" -eq 0 ]]; then
-    echo "${GREEN}${BOLD}  Setup complete.${NC}"
+    echo "${GREEN}${BOLD}Setup complete.${NC}"
 else
-    echo "${YELLOW}${BOLD}  Setup finished with warnings above.${NC}"
+    echo "${YELLOW}${BOLD}Setup finished with problems (see FAIL lines above).${NC}"
 fi
-echo "${BOLD}=============================================${NC}"
 cat <<SUMMARY
 
-  Your workspace : $MYDIR
-  Your code      : $REPO
-  Code came from : $(git -C "$REPO" remote get-url origin 2>/dev/null || echo "a direct copy")
-  Environment    : $ENV_CANONICAL
+  Your folder : $MYDIR
+  Your code   : $REPO
+  Session file: $ENVFILE
 
-  Load your new settings once:
-
-      source ~/.bashrc
-
-  After that, every session starts with a single word:
+  Open a NEW terminal, then start every working session with:
 
       ecdna
 
-  Your first job:
+  and leave it with:
 
-      cd \$REPO
-      sbatch slurm/submit_benchmark.sh
-      squeue -u \$USER
+      ecdna_off
 
-  Read Part 4 of the tutorial before submitting anything, so you know
-  where the output lands.
-
+  Nothing else in your account was changed.
 SUMMARY
+exit "$FAILED"

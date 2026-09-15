@@ -1,0 +1,41 @@
+# ecdna-bench: pip requirements for a CPU-only installation (Python 3.10)
+#
+# Same versions as env/environment.yml, with the CPU build of PyTorch.
+# Use this file when conda is not available:
+#
+#   python3.10 -m venv ~/venvs/ecdna-bench
+#   source ~/venvs/ecdna-bench/bin/activate        # Windows: ~\venvs\ecdna-bench\Scripts\activate
+#   python -m pip install --upgrade pip
+#   python -m pip install -r env/requirements-cpu.txt
+#   python -m pip install -e . --no-deps
+#
+# The extra index supplies the CPU-only PyTorch wheels on Linux and Windows
+# (about 200 MB instead of several GB of CUDA libraries). On macOS the
+# standard wheels are used. PyTorch 2.8 has no wheels for Intel macOS.
+
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+numpy==2.2.5
+pandas==2.2.3
+scipy==1.15.3
+scikit-learn==1.6.1
+scikit-image==0.25.2
+opencv-python-headless==4.10.0.84
+pillow==11.1.0
+pyyaml>=6.0,<7.0
+tqdm>=4.65,<5.0
+
+torch==2.8.0
+torchvision==0.23.0
+
+bayesian-optimization==3.1.0
+
+matplotlib==3.10.0
+seaborn==0.13.2
+statsmodels==0.14.4
+scikit-posthocs==0.11.4
+statannotations==0.7.2
+
+pytest>=7.4,<9.0
+jupyterlab>=4.0,<5.0
+ipykernel>=6.29
