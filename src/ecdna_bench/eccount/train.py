@@ -7,7 +7,7 @@ Frozen defaults (from §2 of REWRITE_PLAN.md)
 --------------------------------------------
 * Adam lr=1e-4, weight_decay=0, batch_size=2, epochs=70
 * ReduceLROnPlateau(patience=5, factor=0.5)
-* Best checkpoint: epoch 58, val_loss 0.6415
+* Best checkpoint of the released model: epoch 49, val_loss 0.6421
 * Augmentation: hflip 0.5, vflip 0.5, brightness [0.9,1.1] @ p=0.2
 
 Design rules

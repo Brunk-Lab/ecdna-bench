@@ -209,14 +209,14 @@ def peaks_to_mask(
 ) -> np.ndarray:
     """Render peaks as filled diamonds on a binary mask.
 
-    Uses an L1-norm (Manhattan distance) criterion so the rendered shape
-    matches the 7×7 diamond used for GS annotation (point_disk_radius=3
-    in GS; use point_disk_radius=2 here for a 5×5 diamond).
+    Uses an L1-norm (Manhattan distance) criterion, the shape used to render
+    the gold-standard points: a 5×5 diamond (13 pixels) for the published
+    point_disk_radius=2.
 
     A diamond of radius r has tip-to-tip span (2r+1) in both axes:
-        r=1 → 3×3 diamond  (13 pixels)  — very small
-        r=2 → 5×5 diamond  (13 pixels)  — matches GS 7×7 style at half size
-        r=3 → 7×7 diamond  (25 pixels)  — identical to GS diamond shape
+        r=1 → 3×3 diamond  (5 pixels)
+        r=2 → 5×5 diamond  (13 pixels)  — published setting, gold-standard footprint
+        r=3 → 7×7 diamond  (25 pixels)
 
     Parameters
     ----------

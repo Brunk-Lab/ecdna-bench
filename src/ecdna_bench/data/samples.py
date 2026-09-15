@@ -62,8 +62,8 @@ class Sample:
         Path to the manual ROI mask (only present for the 1,145-image
         benchmark subset).
     gt_mask_path
-        Path to the rendered gold-standard binary mask (7 × 7 diamonds at
-        each annotated centroid).
+        Path to the rendered gold-standard binary mask (5 × 5 diamonds, 13 px, at
+        each annotated point).
     cell_line
         Canonical cell-line name, e.g. ``"NCIH2170"``. See
         `ecdna_bench.data.ids.KNOWN_CELL_LINES`.
@@ -72,7 +72,7 @@ class Sample:
         for images that are in the full resource but not the benchmark
         subset.
     ecdna_gt
-        Gold-standard ecDNA count (number of annotated centroids).
+        Gold-standard ecDNA count: 8-connected components of at least 3 px in the rendered mask (at most the number of annotated points).
     extra
         Any additional per-sample metadata (e.g. the `count_mask_consistent`
         flag from QC, or `original_rgb_name` for dataset auditing).

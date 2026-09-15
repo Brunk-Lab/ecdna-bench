@@ -198,7 +198,7 @@ def main() -> None:
 
             # Upsample threshold mask to original resolution (INTER_NEAREST
             # preserves binary values exactly).
-            # For peaks mask, scale COORDINATES then re-render disks at
+            # For peaks mask, scale COORDINATES then re-render diamonds at
             # original resolution — naive upsampling doubles disk radius.
             if (orig_h, orig_w) != (image_h, image_w):
                 thr_mask = cv2.resize(result.threshold_mask,

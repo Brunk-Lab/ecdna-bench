@@ -73,7 +73,7 @@ paths:
 # dataset — which images are in play for any given run.
 # ------------------------------------------------------------------------------
 dataset:
-  # Five cell lines are present in the full resource (n = 2,984). Four are in
+  # Five cell lines are present in the full resource (n = 2,986). Four are in
   # the benchmark subset (n = 1,145); SUM159PT has no manual ROI masks.
   cell_lines_full:      [NCI-H2170, SUM159PT, SNU16, COLO320DM, NCI-H716]
   cell_lines_benchmark: [NCI-H2170, SNU16, COLO320DM, NCI-H716]
@@ -203,12 +203,13 @@ classical_opt:
     init_points:  20
     seed:         42
 
-  # Final selection policy: highest F1 on the held-out test split.
-  selection_metric: test_f1
+  # Final selection policy: highest F1 on the validation split. The test F1 of
+  # the selected configuration is recorded for reporting only.
+  selection_metric: val_f1
 
 
 # ------------------------------------------------------------------------------
-# eccount — novel deep-learning model (paper §5, Supp §10).
+# eccount — probabilistic-localization model (paper §5, Supp §10).
 # ------------------------------------------------------------------------------
 eccount:
   # Training / inference input resolution. Preserved across all stages of
@@ -279,7 +280,7 @@ eccount:
     peak_min_distance: 2
     nms_min_distance:  2
     exclude_border:    0
-    # Fixed-radius disks rendered at peak coordinates for the "peaks"
+    # Fixed-radius diamonds (5 x 5, 13 px, for radius 2) drawn at peak coordinates for the "peaks"
     # output mode (object-level and count-level comparison in Fig 6).
     # Supp §10.8.
     point_disk_radius: 2
@@ -293,6 +294,9 @@ eccount:
 # ------------------------------------------------------------------------------
 benchmark:
   # Models in the main benchmark (Figure 6). Order matches paper figure.
+  # These labels are descriptive. The command-line tools use the registry keys
+  # classical, classical_before_opt, label_engine, ecseg, mia, eccount_mask and
+  # eccount_peaks (for example --models eccount_peaks eccount_mask).
   models:
     - classic_post_opt
     - label_engine

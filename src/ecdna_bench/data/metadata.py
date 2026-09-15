@@ -28,7 +28,7 @@ columns (at a minimum):
                                      Released for transparency.  Always >= ecDNA_gt;
                                      differences arise from the diamond-merge
                                      effect (two close annotation points whose
-                                     7×7 diamonds overlap become a single CC).
+                                     5×5 diamonds overlap become a single CC).
     split_from_id_csv        str     redundant 'split' computed from split files
     split_consistent         bool    True iff split == split_from_id_csv
     in_train_ids / in_val_ids / in_test_ids : bool
@@ -97,14 +97,14 @@ PREFERRED_COLUMN_ORDER: tuple[str, ...] = (
     "gt_mask_relpath",
     "mia_mask_relpath",
     # ecDNA_gt is the CANONICAL evaluation count: connected components of the
-    # rendered 7×7-diamond GS mask under 8-connectivity with min_area=3 px.
+    # rendered 5×5-diamond GS mask under 8-connectivity with min_area=3 px.
     # This is what every model in the benchmark predicts and is compared against.
     # See PROJECT_RULES.md §2 and §7.
     "ecDNA_gt",
     # coord_count_npy is the annotation-point count from NPY/NPZ files.
     # Released for transparency but NOT used for model evaluation.
     # coord_count_npy >= ecDNA_gt always; differences arise when adjacent
-    # annotation points are close enough that their 7×7 diamonds merge into
+    # annotation points are close enough that their 5×5 diamonds merge into
     # a single connected component (the "diamond-merge" effect).
     "coord_count_npy",
     "has_rgb_relpath",
