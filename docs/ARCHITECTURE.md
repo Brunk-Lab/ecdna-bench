@@ -165,8 +165,8 @@ sensitivity analysis.
 
 ### 3. "Ignored" is a first-class bucket
 A prediction that had a valid candidate in the cost matrix but was outcompeted
-in the Hungarian assignment is labelled "ignored", not FP. This prevents
-penalising a model for predictions that were plausible but redundant.
+in the Hungarian assignment is labeled "ignored", not FP. This prevents
+penalizing a model for predictions that were plausible but redundant.
 
 ### 4. ecCount post-processing order is strict
 Post-processing follows the exact order: Gaussian smooth → re-apply ROI →
@@ -200,7 +200,7 @@ An architectural change fails loudly rather than silently producing results
 that do not match the published checkpoint.
 
 ### 9. Classical params are data, not code
-Per-cell-line optimised parameters live in
+Per-cell-line optimized parameters live in
 `configs/classical/stage3_frozen_params.json`, which is version-controlled.
 The inference code reads this JSON; it never contains hard-coded numbers.
 
@@ -215,11 +215,11 @@ reconciled.
 `benchmark/registry.py` contains `classical`, `label_engine`, `ecseg`, `mia`,
 `eccount_mask` and `eccount_peaks` — the six models reported in the paper —
 plus `classical_before_opt`, which exists solely for the before/after
-Bayesian-optimisation comparison in Figure 3 and is never reported as a
+Bayesian-optimization comparison in Figure 3 and is never reported as a
 benchmark entry. `MODEL_ORDER` fixes the display order for all tables and
 figures.
 
 ### 12. Baselines ship prediction masks only
-`src/ecdna_bench/baselines/` contains harmonisation adapters that normalise
+`src/ecdna_bench/baselines/` contains harmonization adapters that normalize
 pre-computed prediction files. The baseline models themselves are not included;
 see `docs/EXTERNAL_BASELINES.md` for provenance and download instructions.

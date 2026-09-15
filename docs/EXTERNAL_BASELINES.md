@@ -15,12 +15,12 @@ instructions for anyone wishing to reproduce the prediction masks.
 | MIA | Counting baseline from MIA authors | ✅ |
 
 All prediction masks are released as binary uint8 PNGs (values {0, 255})
-in the harmonised format used by the evaluation framework. The raw
-(pre-harmonisation) masks are included in the data release for provenance.
+in the harmonized format used by the evaluation framework. The raw
+(pre-harmonization) masks are included in the data release for provenance.
 
 ### Integrity
 
-Per-file SHA256 checksums for every raw and harmonised prediction directory
+Per-file SHA256 checksums for every raw and harmonized prediction directory
 are recorded in `release/manifests/manifest_v1.0.csv`, which is the
 authoritative integrity record for the deposition. Verify a downloaded
 directory against that manifest rather than against a hash pasted into this
@@ -32,7 +32,7 @@ document.
 
 ### What it is
 Label Engine is a supervised segmentation model trained by a former lab
-member on the same labelled dataset and the same train/val/test splits used
+member on the same labeled dataset and the same train/val/test splits used
 for ecCount. It was trained prior to the ecCount project and its
 architecture details are described in the companion publication.
 
@@ -46,7 +46,7 @@ on the test split using the best checkpoint from their final training run.
 - Inference: no test-time augmentation
 - Output: single-channel probability map, thresholded at 0.5
 
-### Harmonisation
+### Harmonization
 ```python
 from ecdna_bench.baselines.label_engine import harmonize_label_engine
 results = harmonize_label_engine(
@@ -86,7 +86,7 @@ images using the default pre-trained weights.
 - Output: multi-channel PNG, channel 3 = ecDNA class
 - No retraining; no fine-tuning
 
-### Harmonisation
+### Harmonization
 ```python
 from ecdna_bench.baselines.ecseg import harmonize_ecseg
 results = harmonize_ecseg(
@@ -122,7 +122,7 @@ top-performing configuration.
 
 > **Provenance note.** MIA is prior work from the Brunk laboratory and shares
 > a senior author with ecdna-bench. It is included here as a published
-> baseline, evaluated through the same harmonisation and matching pipeline as
+> baseline, evaluated through the same harmonization and matching pipeline as
 > every other model, with no retraining and no parameter tuning on this
 > benchmark.
 
@@ -136,7 +136,7 @@ supplied the prediction files.
 - Output: binary or near-binary prediction masks
 - No retraining on our dataset
 
-### Harmonisation
+### Harmonization
 ```python
 from ecdna_bench.baselines.mia import harmonize_mia
 results = harmonize_mia(
@@ -150,9 +150,9 @@ results = harmonize_mia(
 
 ---
 
-## Harmonised mask format
+## Harmonized mask format
 
-All harmonised masks (and all ecCount output masks) conform to:
+All harmonized masks (and all ecCount output masks) conform to:
 
 | Property | Value |
 |---|---|
@@ -166,7 +166,7 @@ All harmonised masks (and all ecCount output masks) conform to:
 
 ---
 
-## Reproducing the harmonised masks from scratch
+## Reproducing the harmonized masks from scratch
 
 ```bash
 # 1. Install the package

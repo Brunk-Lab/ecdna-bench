@@ -97,3 +97,12 @@ scripts/audit_metadata_inputs.py
 
 configs/paths.local.yaml.*
 configs/paths_local.yaml.*
+
+# ── 2026-09-08: large run trees and audit output, kept local ───────────────
+release/river_roi_run/
+release/roi_validation/
+results/
+audit_report.md
+audit_findings.json
+outputs/audit_report.md
+outputs/audit_findings.json

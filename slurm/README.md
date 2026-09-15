@@ -48,10 +48,10 @@ N_WORKERS=8 SEED=1234 sbatch slurm/submit_optimize_classical.sh
 
 | Script | Partition | Notes |
 |---|---|---|
-| `submit_classical_default.sh` | `general` | Classical inference, pre-optimisation parameters |
-| `submit_optimize_classical.sh` | `general` | 3-stage Bayesian optimisation; job array, one task per cell line |
+| `submit_classical_default.sh` | `general` | Classical inference, pre-optimization parameters |
+| `submit_optimize_classical.sh` | `general` | 3-stage Bayesian optimization; job array, one task per cell line |
 | `submit_optimize_classical_h2170_recovery.sh` | `general` | NCI-H2170 re-run |
-| `submit_classical_optimized.sh` | `general` | Classical inference, frozen post-optimisation parameters |
+| `submit_classical_optimized.sh` | `general` | Classical inference, frozen post-optimization parameters |
 | `submit_eccount_train.sh` | `a100-gpu,l40-gpu` | ecCount training, ~12 h, needs `--qos=gpu_access` |
 | `submit_eccount_infer.sh` | `a100-gpu,l40-gpu` | ecCount inference → threshold + peaks masks |
 | `submit_benchmark.sh` | `general` | Cross-model benchmark evaluation |

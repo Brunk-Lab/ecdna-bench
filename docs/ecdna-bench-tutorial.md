@@ -321,17 +321,17 @@ break away and form small circles that float free in the nucleus. These are
 They matter for three reasons:
 
 **They carry oncogenes.** The circles frequently contain the genes driving the
-cancer. A cell with fifty copies of a growth-signalling gene grows far more
+cancer. A cell with fifty copies of a growth-signaling gene grows far more
 aggressively than one with two.
 
 **They are inherited unevenly.** Chromosomes are shared out precisely when a
 cell divides. ecDNA circles are not — they scatter more or less at random. One
 daughter cell may get sixty copies and the other ten. Over many divisions this
-generates enormous diversity within a single tumour.
+generates enormous diversity within a single tumor.
 
 **That diversity causes drug resistance.** When a drug is applied, most cells
 die, but a few happened to inherit a copy number that lets them survive. They
-repopulate the tumour. ecDNA is one of the main reasons cancers come back.
+repopulate the tumor. ecDNA is one of the main reasons cancers come back.
 
 So the biologically meaningful quantity is **how many ecDNA copies are in each
 individual cell** — not an average across a population. That means counting
@@ -361,7 +361,7 @@ Images are 2,448 × 2,048 pixels. A single image may contain anywhere from zero
 to more than 1,600 ecDNA dots.
 
 **Why this is hard to automate.** The dots are small, sometimes only a few
-pixels. They vary in brightness. They overlap. Debris and neighbouring cells
+pixels. They vary in brightness. They overlap. Debris and neighboring cells
 appear in the same field. And in a dense image, hundreds of dots may be packed
 close together. Counting by eye is slow, tiring and inconsistent between
 observers, which is exactly why automated methods exist — and exactly why they
@@ -379,7 +379,7 @@ a human marked the position of every dot.
 **The benchmark: 1,145 of those images**
 These carry one extra thing: a hand-drawn **ROI mask**. ROI means Region Of
 Interest — an outline around the single metaphase spread that should be
-analysed, excluding neighbouring cells and debris. Drawing them is slow, which
+analyzed, excluding neighboring cells and debris. Drawing them is slow, which
 is why only a subset has them. SUM159PT has none, which makes it a genuinely
 unseen cell line for testing.
 
@@ -622,7 +622,7 @@ echo "My folder     : $MYDIR"
 echo "Jobs will use : $ECDNA_PYTHON"
 ```
 
-Three ways this goes wrong, and how to recognise each:
+Three ways this goes wrong, and how to recognize each:
 
 | What you see | What happened | Fix |
 |---|---|---|
@@ -838,7 +838,7 @@ cd $REPO
 **What this does.** `git clone` downloads the complete project — every file
 plus its entire history — into a new folder called `ecdna-bench`.
 
-*(The repository will move to the `brunklab` organisation. After that, use
+*(The repository will move to the `brunklab` organization. After that, use
 `https://github.com/brunklab/ecdna-bench.git`. Same contents, same history.)*
 
 **If GitHub access is not set up yet**, copy from the cluster instead:
@@ -990,7 +990,7 @@ Three things to confirm:
 > **A trap worth knowing about.** There are two functions called
 > `load_config`, and they behave differently:
 >
-> | Import from | Returns | Behaviour |
+> | Import from | Returns | Behavior |
 > |---|---|---|
 > | `ecdna_bench.config` | a typed object | Strict. Read values with a dot: `c.paths.results_root`. Any `paths` key it does not declare is silently dropped, so `consistency_csv` and `eccount_out_dir` do not appear |
 > | `ecdna_bench.cli._common` | a plain dictionary | Merges your paths file and keeps every key: `cfg["paths"]["results_root"]` |
@@ -1065,7 +1065,7 @@ Expected: `True` and a card name such as `NVIDIA A100`. The `exit` returns you
 to the login node and releases the node for someone else.
 
 If check 3 says `False` while you are still on a login node, that is correct
-behaviour, not a fault.
+behavior, not a fault.
 
 ---
 
@@ -1271,7 +1271,7 @@ reproduced the paper's headline result on your own account.
 
 ## 4.6 Changing how a job runs
 
-The scripts read settings from the environment, so you can change behaviour
+The scripts read settings from the environment, so you can change behavior
 without editing any file. Put the setting in front of `sbatch`:
 
 ```bash
@@ -1290,8 +1290,8 @@ Settings you can override:
 | `ECDNA_PROJECT_ROOT` | all | Where the project lives |
 | `MODEL` | sensitivity | Which method, or `all` |
 | `SPLIT` | sensitivity | `train`, `val`, `test`, `all` |
-| `N_WORKERS` | optimisation, benchmark | Parallel workers |
-| `SEED` | optimisation | Random seed, for reproducibility |
+| `N_WORKERS` | optimization, benchmark | Parallel workers |
+| `SEED` | optimization | Random seed, for reproducibility |
 | `LOG_LEVEL` | most | `INFO` or `DEBUG` |
 | `FORCE` | sensitivity | `1` recomputes instead of reusing |
 
@@ -1630,7 +1630,7 @@ experiment is about one day of waiting, not four.
 ## 6.2 "Does it work on a cell line you never touched?"
 
 SUM159PT is in the full resource but not in the benchmark, because nobody drew
-ROI outlines for it. That makes it the strongest generalisation test available:
+ROI outlines for it. That makes it the strongest generalization test available:
 a completely unseen cell line, with real expert annotations to check against.
 
 There is one extra step, because ecCount needs an ROI outline to work inside
@@ -1660,7 +1660,7 @@ paper.
    number.
 2. When ecCount is evaluated inside a *predicted* outline, the ground truth has
    been filtered by the same model being evaluated. The result is conditional
-   on the outline rather than end to end, and must be labelled that way. A
+   on the outline rather than end to end, and must be labeled that way. A
    reviewer will notice if it is not.
 
 ---
@@ -1917,9 +1917,9 @@ git restore path/to/the/file
 | **Git commit** | A permanent snapshot of the project |
 | **YAML** | A human-readable settings file format |
 | **ecDNA** | Circles of DNA outside the chromosomes, carrying oncogenes |
-| **FISH** | Fluorescence In Situ Hybridisation — makes chosen DNA glow |
+| **FISH** | Fluorescence In Situ Hybridization — makes chosen DNA glow |
 | **Metaphase spread** | One cell's DNA, arrested mid-division and spread flat |
-| **ROI mask** | An outline marking which spread to analyse |
+| **ROI mask** | An outline marking which spread to analyze |
 | **Ground truth** | Where a human said each ecDNA is |
 | **Object F1** | Detection accuracy after matching predictions to truth |
 | **Precision** | Of what you reported, how much was real |
@@ -1971,9 +1971,9 @@ Method names, spelled exactly this way everywhere:
 
 ## 8.3 Environment provenance
 
-Which environment produced which artefact:
+Which environment produced which artifact:
 
-| Artefact | Produced by | Environment |
+| Artifact | Produced by | Environment |
 |---|---|---|
 | Every published metric | Cluster jobs | **`ecdna-bench`** |
 | Trained model, training history | Cluster job | **`ecdna-bench`** |
