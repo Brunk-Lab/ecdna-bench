@@ -1,0 +1,29 @@
+row,column,mean_count,count_MAE,n_images,column_by,colour_metric,subset
+Ground truth,NCI-H2170 · control,290.0344827586207,0.0,29,cell_line_arm,count_MAE,test
+ecCount (peaks),NCI-H2170 · control,292.7931034482759,9.379310344827585,29,cell_line_arm,count_MAE,test
+ecCount (threshold mask),NCI-H2170 · control,275.6551724137931,16.448275862068964,29,cell_line_arm,count_MAE,test
+Label Engine,NCI-H2170 · control,282.41379310344826,13.620689655172415,29,cell_line_arm,count_MAE,test
+MIA,NCI-H2170 · control,281.1034482758621,13.0,29,cell_line_arm,count_MAE,test
+Classic (after opt),NCI-H2170 · control,254.24137931034483,49.310344827586206,29,cell_line_arm,count_MAE,test
+ecSeg,NCI-H2170 · control,191.86206896551724,102.65517241379311,29,cell_line_arm,count_MAE,test
+Ground truth,NCI-H2170 · treated,179.62,0.0,50,cell_line_arm,count_MAE,test
+ecCount (peaks),NCI-H2170 · treated,180.3,11.16,50,cell_line_arm,count_MAE,test
+ecCount (threshold mask),NCI-H2170 · treated,167.04,18.9,50,cell_line_arm,count_MAE,test
+Label Engine,NCI-H2170 · treated,166.98,21.36,50,cell_line_arm,count_MAE,test
+MIA,NCI-H2170 · treated,157.5,26.48,50,cell_line_arm,count_MAE,test
+Classic (after opt),NCI-H2170 · treated,176.86,42.8,50,cell_line_arm,count_MAE,test
+ecSeg,NCI-H2170 · treated,115.62,70.24,50,cell_line_arm,count_MAE,test
+Ground truth,SNU16 · control,278.1666666666667,0.0,12,cell_line_arm,count_MAE,test
+ecCount (peaks),SNU16 · control,262.8333333333333,15.333333333333334,12,cell_line_arm,count_MAE,test
+ecCount (threshold mask),SNU16 · control,252.08333333333334,26.083333333333332,12,cell_line_arm,count_MAE,test
+Label Engine,SNU16 · control,220.25,90.58333333333333,12,cell_line_arm,count_MAE,test
+MIA,SNU16 · control,141.66666666666666,136.5,12,cell_line_arm,count_MAE,test
+Classic (after opt),SNU16 · control,293.5,73.83333333333333,12,cell_line_arm,count_MAE,test
+ecSeg,SNU16 · control,45.5,232.66666666666666,12,cell_line_arm,count_MAE,test
+Ground truth,SNU16 · treated,240.85714285714286,0.0,7,cell_line_arm,count_MAE,test
+ecCount (peaks),SNU16 · treated,253.0,20.428571428571427,7,cell_line_arm,count_MAE,test
+ecCount (threshold mask),SNU16 · treated,243.71428571428572,16.285714285714285,7,cell_line_arm,count_MAE,test
+Label Engine,SNU16 · treated,106.85714285714286,134.0,7,cell_line_arm,count_MAE,test
+MIA,SNU16 · treated,87.71428571428571,153.14285714285714,7,cell_line_arm,count_MAE,test
+Classic (after opt),SNU16 · treated,241.85714285714286,17.285714285714285,7,cell_line_arm,count_MAE,test
+ecSeg,SNU16 · treated,21.571428571428573,219.28571428571428,7,cell_line_arm,count_MAE,test

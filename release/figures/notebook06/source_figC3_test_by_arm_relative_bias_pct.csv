@@ -1,0 +1,15 @@
+row,column,mean_count,relative_bias_pct,n_images,column_by,colour_metric,subset
+Ground truth,control,226.43333333333334,0.0,60,arm,relative_bias_pct,test
+ecCount (peaks),control,225.53333333333333,-0.3974679817459149,60,arm,relative_bias_pct,test
+ecCount (threshold mask),control,213.91666666666666,-5.52774915354041,60,arm,relative_bias_pct,test
+Label Engine,control,201.13333333333333,-11.173266597968496,60,arm,relative_bias_pct,test
+MIA,control,185.31666666666666,-18.158398351243928,60,arm,relative_bias_pct,test
+Classic (after opt),control,213.36666666666667,-5.770646253496246,60,arm,relative_bias_pct,test
+ecSeg,control,107.7,-52.43633151773885,60,arm,relative_bias_pct,test
+Ground truth,treated,187.140350877193,0.0,57,arm,relative_bias_pct,test
+ecCount (peaks),treated,189.2280701754386,1.1155901378081934,57,arm,relative_bias_pct,test
+ecCount (threshold mask),treated,176.4561403508772,-5.7091965876066375,57,arm,relative_bias_pct,test
+Label Engine,treated,159.59649122807016,-14.718290053435831,57,arm,relative_bias_pct,test
+MIA,treated,148.9298245614035,-20.41811193400206,57,arm,relative_bias_pct,test
+Classic (after opt),treated,184.8421052631579,-1.2280866222930533,57,arm,relative_bias_pct,test
+ecSeg,treated,104.0701754385965,-44.38923783631761,57,arm,relative_bias_pct,test

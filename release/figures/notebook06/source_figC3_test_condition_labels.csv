@@ -1,0 +1,118 @@
+uid,split,cond,group_label,cell_line_display,arm,agent,timepoint_h,density_bin,gt_count
+colo320dm_qpcr_jq1_24h_ctrl_114,test,colo320dm_qpcr_jq1_24h_ctrl,COLO320DM · JQ1 24 h,COLO320DM,control,JQ1,24.0,50-149,107
+colo320dm_qpcr_jq1_24h_ctrl_23,test,colo320dm_qpcr_jq1_24h_ctrl,COLO320DM · JQ1 24 h,COLO320DM,control,JQ1,24.0,50-149,57
+colo320dm_qpcr_jq1_24h_ctrl_33,test,colo320dm_qpcr_jq1_24h_ctrl,COLO320DM · JQ1 24 h,COLO320DM,control,JQ1,24.0,10-49,24
+colo320dm_qpcr_jq1_24h_ctrl_39,test,colo320dm_qpcr_jq1_24h_ctrl,COLO320DM · JQ1 24 h,COLO320DM,control,JQ1,24.0,10-49,41
+colo320dm_qpcr_jq1_24h_ctrl_47,test,colo320dm_qpcr_jq1_24h_ctrl,COLO320DM · JQ1 24 h,COLO320DM,control,JQ1,24.0,10-49,22
+colo320dm_qpcr_jq1_24h_ctrl_48,test,colo320dm_qpcr_jq1_24h_ctrl,COLO320DM · JQ1 24 h,COLO320DM,control,JQ1,24.0,10-49,32
+colo320dm_qpcr_jq1_24h_ctrl_67,test,colo320dm_qpcr_jq1_24h_ctrl,COLO320DM · JQ1 24 h,COLO320DM,control,JQ1,24.0,50-149,91
+colo320dm_qpcr_jq1_24h_ctrl_69,test,colo320dm_qpcr_jq1_24h_ctrl,COLO320DM · JQ1 24 h,COLO320DM,control,JQ1,24.0,50-149,54
+colo320dm_qpcr_jq1_24h_ctrl_87_a,test,colo320dm_qpcr_jq1_24h_ctrl,COLO320DM · JQ1 24 h,COLO320DM,control,JQ1,24.0,10-49,31
+colo320dm_qpcr_jq1_24h_ctrl_96,test,colo320dm_qpcr_jq1_24h_ctrl,COLO320DM · JQ1 24 h,COLO320DM,control,JQ1,24.0,10-49,49
+ncih2170_antibiotics_blank_ctrl_100,test,ncih2170_antibiotics_blank_ctrl,NCI-H2170 · control,NCI-H2170,control,control,,50-149,102
+ncih2170_antibiotics_blank_ctrl_104,test,ncih2170_antibiotics_blank_ctrl,NCI-H2170 · control,NCI-H2170,control,control,,300+,316
+ncih2170_antibiotics_blank_ctrl_105,test,ncih2170_antibiotics_blank_ctrl,NCI-H2170 · control,NCI-H2170,control,control,,150-299,175
+ncih2170_antibiotics_blank_ctrl_107,test,ncih2170_antibiotics_blank_ctrl,NCI-H2170 · control,NCI-H2170,control,control,,300+,559
+ncih2170_antibiotics_blank_ctrl_109,test,ncih2170_antibiotics_blank_ctrl,NCI-H2170 · control,NCI-H2170,control,control,,150-299,182
+ncih2170_antibiotics_blank_ctrl_110,test,ncih2170_antibiotics_blank_ctrl,NCI-H2170 · control,NCI-H2170,control,control,,300+,411
+ncih2170_antibiotics_blank_ctrl_113,test,ncih2170_antibiotics_blank_ctrl,NCI-H2170 · control,NCI-H2170,control,control,,300+,341
+ncih2170_antibiotics_blank_ctrl_35,test,ncih2170_antibiotics_blank_ctrl,NCI-H2170 · control,NCI-H2170,control,control,,50-149,84
+ncih2170_antibiotics_blank_ctrl_37,test,ncih2170_antibiotics_blank_ctrl,NCI-H2170 · control,NCI-H2170,control,control,,300+,539
+ncih2170_antibiotics_blank_ctrl_40,test,ncih2170_antibiotics_blank_ctrl,NCI-H2170 · control,NCI-H2170,control,control,,150-299,248
+ncih2170_antibiotics_blank_ctrl_43,test,ncih2170_antibiotics_blank_ctrl,NCI-H2170 · control,NCI-H2170,control,control,,150-299,239
+ncih2170_antibiotics_blank_ctrl_47,test,ncih2170_antibiotics_blank_ctrl,NCI-H2170 · control,NCI-H2170,control,control,,150-299,296
+ncih2170_antibiotics_blank_ctrl_53,test,ncih2170_antibiotics_blank_ctrl,NCI-H2170 · control,NCI-H2170,control,control,,300+,302
+ncih2170_antibiotics_blank_ctrl_70,test,ncih2170_antibiotics_blank_ctrl,NCI-H2170 · control,NCI-H2170,control,control,,300+,446
+ncih2170_antibiotics_blank_ctrl_71,test,ncih2170_antibiotics_blank_ctrl,NCI-H2170 · control,NCI-H2170,control,control,,300+,330
+ncih2170_antibiotics_blank_ctrl_78,test,ncih2170_antibiotics_blank_ctrl,NCI-H2170 · control,NCI-H2170,control,control,,300+,300
+ncih2170_ctrl_1_30,test,ncih2170_ctrl_1,NCI-H2170 · control,NCI-H2170,control,control,,150-299,229
+ncih2170_ctrl_1_54,test,ncih2170_ctrl_1,NCI-H2170 · control,NCI-H2170,control,control,,150-299,235
+ncih2170_ctrl_1_58,test,ncih2170_ctrl_1,NCI-H2170 · control,NCI-H2170,control,control,,150-299,179
+ncih2170_ctrl_1_61,test,ncih2170_ctrl_1,NCI-H2170 · control,NCI-H2170,control,control,,150-299,251
+ncih2170_ctrl_1_62,test,ncih2170_ctrl_1,NCI-H2170 · control,NCI-H2170,control,control,,300+,478
+ncih2170_ctrl_1_88,test,ncih2170_ctrl_1,NCI-H2170 · control,NCI-H2170,control,control,,300+,341
+ncih2170_ctrl_1_90,test,ncih2170_ctrl_1,NCI-H2170 · control,NCI-H2170,control,control,,50-149,87
+ncih2170_ctrl_1_94,test,ncih2170_ctrl_1,NCI-H2170 · control,NCI-H2170,control,control,,150-299,299
+ncih2170_ctrl_2_105,test,ncih2170_ctrl_2,NCI-H2170 · control,NCI-H2170,control,control,,150-299,184
+ncih2170_ctrl_2_132,test,ncih2170_ctrl_2,NCI-H2170 · control,NCI-H2170,control,control,,150-299,274
+ncih2170_ctrl_2_139,test,ncih2170_ctrl_2,NCI-H2170 · control,NCI-H2170,control,control,,150-299,246
+ncih2170_ctrl_2_24,test,ncih2170_ctrl_2,NCI-H2170 · control,NCI-H2170,control,control,,300+,642
+ncih2170_ctrl_2_96,test,ncih2170_ctrl_2,NCI-H2170 · control,NCI-H2170,control,control,,50-149,96
+ncih2170_antibiotics_ps_102_b,test,ncih2170_antibiotics_ps,NCI-H2170 · P/S,NCI-H2170,treated,P/S,,150-299,252
+ncih2170_antibiotics_ps_105,test,ncih2170_antibiotics_ps,NCI-H2170 · P/S,NCI-H2170,treated,P/S,,150-299,237
+ncih2170_antibiotics_ps_107_a,test,ncih2170_antibiotics_ps,NCI-H2170 · P/S,NCI-H2170,treated,P/S,,150-299,246
+ncih2170_antibiotics_ps_112,test,ncih2170_antibiotics_ps,NCI-H2170 · P/S,NCI-H2170,treated,P/S,,50-149,79
+ncih2170_antibiotics_ps_25,test,ncih2170_antibiotics_ps,NCI-H2170 · P/S,NCI-H2170,treated,P/S,,150-299,284
+ncih2170_antibiotics_ps_32,test,ncih2170_antibiotics_ps,NCI-H2170 · P/S,NCI-H2170,treated,P/S,,50-149,67
+ncih2170_antibiotics_ps_36,test,ncih2170_antibiotics_ps,NCI-H2170 · P/S,NCI-H2170,treated,P/S,,50-149,142
+ncih2170_antibiotics_ps_4,test,ncih2170_antibiotics_ps,NCI-H2170 · P/S,NCI-H2170,treated,P/S,,50-149,148
+ncih2170_antibiotics_ps_56_a,test,ncih2170_antibiotics_ps,NCI-H2170 · P/S,NCI-H2170,treated,P/S,,150-299,233
+ncih2170_antibiotics_ps_78,test,ncih2170_antibiotics_ps,NCI-H2170 · P/S,NCI-H2170,treated,P/S,,150-299,164
+ncih2170_antibiotics_ps_84,test,ncih2170_antibiotics_ps,NCI-H2170 · P/S,NCI-H2170,treated,P/S,,50-149,124
+ncih2170_antibiotics_ps_90,test,ncih2170_antibiotics_ps,NCI-H2170 · P/S,NCI-H2170,treated,P/S,,150-299,159
+ncih2170_antibiotics_ps_99,test,ncih2170_antibiotics_ps,NCI-H2170 · P/S,NCI-H2170,treated,P/S,,50-149,83
+ncih2170_antibiotics_ps_g_102,test,ncih2170_antibiotics_ps_g,NCI-H2170 · P/S+G,NCI-H2170,treated,P/S+G,,150-299,217
+ncih2170_antibiotics_ps_g_107_a,test,ncih2170_antibiotics_ps_g,NCI-H2170 · P/S+G,NCI-H2170,treated,P/S+G,,50-149,103
+ncih2170_antibiotics_ps_g_114,test,ncih2170_antibiotics_ps_g,NCI-H2170 · P/S+G,NCI-H2170,treated,P/S+G,,150-299,202
+ncih2170_antibiotics_ps_g_115,test,ncih2170_antibiotics_ps_g,NCI-H2170 · P/S+G,NCI-H2170,treated,P/S+G,,150-299,296
+ncih2170_antibiotics_ps_g_36,test,ncih2170_antibiotics_ps_g,NCI-H2170 · P/S+G,NCI-H2170,treated,P/S+G,,300+,912
+ncih2170_antibiotics_ps_g_42,test,ncih2170_antibiotics_ps_g,NCI-H2170 · P/S+G,NCI-H2170,treated,P/S+G,,150-299,245
+ncih2170_antibiotics_ps_g_44_a,test,ncih2170_antibiotics_ps_g,NCI-H2170 · P/S+G,NCI-H2170,treated,P/S+G,,50-149,52
+ncih2170_antibiotics_ps_g_54,test,ncih2170_antibiotics_ps_g,NCI-H2170 · P/S+G,NCI-H2170,treated,P/S+G,,150-299,182
+ncih2170_antibiotics_ps_g_56,test,ncih2170_antibiotics_ps_g,NCI-H2170 · P/S+G,NCI-H2170,treated,P/S+G,,150-299,174
+ncih2170_antibiotics_ps_g_64,test,ncih2170_antibiotics_ps_g,NCI-H2170 · P/S+G,NCI-H2170,treated,P/S+G,,300+,340
+ncih2170_antibiotics_ps_g_65,test,ncih2170_antibiotics_ps_g,NCI-H2170 · P/S+G,NCI-H2170,treated,P/S+G,,150-299,192
+ncih2170_antibiotics_ps_g_67,test,ncih2170_antibiotics_ps_g,NCI-H2170 · P/S+G,NCI-H2170,treated,P/S+G,,50-149,90
+ncih2170_antibiotics_ps_g_68,test,ncih2170_antibiotics_ps_g,NCI-H2170 · P/S+G,NCI-H2170,treated,P/S+G,,50-149,78
+ncih2170_antibiotics_ps_g_69,test,ncih2170_antibiotics_ps_g,NCI-H2170 · P/S+G,NCI-H2170,treated,P/S+G,,10-49,46
+ncih2170_antibiotics_ps_g_72,test,ncih2170_antibiotics_ps_g,NCI-H2170 · P/S+G,NCI-H2170,treated,P/S+G,,50-149,138
+ncih2170_antibiotics_ps_g_76,test,ncih2170_antibiotics_ps_g,NCI-H2170 · P/S+G,NCI-H2170,treated,P/S+G,,50-149,90
+ncih2170_antibiotics_ps_g_96,test,ncih2170_antibiotics_ps_g,NCI-H2170 · P/S+G,NCI-H2170,treated,P/S+G,,300+,521
+ncih2170_jc_jq1_ic50_24h_100,test,ncih2170_jc_jq1_ic50_24h,NCI-H2170 · JQ1 IC50 24 h,NCI-H2170,treated,JQ1,24.0,10-49,38
+ncih2170_jc_jq1_ic50_24h_38,test,ncih2170_jc_jq1_ic50_24h,NCI-H2170 · JQ1 IC50 24 h,NCI-H2170,treated,JQ1,24.0,50-149,59
+ncih2170_jc_jq1_ic50_24h_48,test,ncih2170_jc_jq1_ic50_24h,NCI-H2170 · JQ1 IC50 24 h,NCI-H2170,treated,JQ1,24.0,150-299,223
+ncih2170_jc_jq1_ic50_24h_50,test,ncih2170_jc_jq1_ic50_24h,NCI-H2170 · JQ1 IC50 24 h,NCI-H2170,treated,JQ1,24.0,50-149,72
+ncih2170_jc_jq1_ic50_24h_7,test,ncih2170_jc_jq1_ic50_24h,NCI-H2170 · JQ1 IC50 24 h,NCI-H2170,treated,JQ1,24.0,300+,328
+ncih2170_jc_jq1_ic50_24h_84,test,ncih2170_jc_jq1_ic50_24h,NCI-H2170 · JQ1 IC50 24 h,NCI-H2170,treated,JQ1,24.0,50-149,64
+ncih2170_jc_jq1_ic50_24h_86,test,ncih2170_jc_jq1_ic50_24h,NCI-H2170 · JQ1 IC50 24 h,NCI-H2170,treated,JQ1,24.0,150-299,193
+ncih2170_jc_jq1_ic50_24h_98,test,ncih2170_jc_jq1_ic50_24h,NCI-H2170 · JQ1 IC50 24 h,NCI-H2170,treated,JQ1,24.0,50-149,97
+ncih2170_jc_lap_ic50_24h_11,test,ncih2170_jc_lap_ic50_24h,NCI-H2170 · lapatinib IC50 24 h,NCI-H2170,treated,lapatinib,24.0,50-149,89
+ncih2170_jc_lap_ic50_24h_12,test,ncih2170_jc_lap_ic50_24h,NCI-H2170 · lapatinib IC50 24 h,NCI-H2170,treated,lapatinib,24.0,300+,445
+ncih2170_jc_lap_ic50_24h_15,test,ncih2170_jc_lap_ic50_24h,NCI-H2170 · lapatinib IC50 24 h,NCI-H2170,treated,lapatinib,24.0,50-149,84
+ncih2170_jc_lap_ic50_24h_18,test,ncih2170_jc_lap_ic50_24h,NCI-H2170 · lapatinib IC50 24 h,NCI-H2170,treated,lapatinib,24.0,50-149,107
+ncih2170_jc_lap_ic50_24h_35,test,ncih2170_jc_lap_ic50_24h,NCI-H2170 · lapatinib IC50 24 h,NCI-H2170,treated,lapatinib,24.0,50-149,135
+ncih2170_jc_lap_ic50_24h_46,test,ncih2170_jc_lap_ic50_24h,NCI-H2170 · lapatinib IC50 24 h,NCI-H2170,treated,lapatinib,24.0,150-299,151
+ncih2170_jc_lap_ic50_24h_47,test,ncih2170_jc_lap_ic50_24h,NCI-H2170 · lapatinib IC50 24 h,NCI-H2170,treated,lapatinib,24.0,150-299,175
+ncih2170_jc_lap_ic50_24h_55,test,ncih2170_jc_lap_ic50_24h,NCI-H2170 · lapatinib IC50 24 h,NCI-H2170,treated,lapatinib,24.0,50-149,55
+ncih2170_jc_lap_ic50_24h_65,test,ncih2170_jc_lap_ic50_24h,NCI-H2170 · lapatinib IC50 24 h,NCI-H2170,treated,lapatinib,24.0,300+,318
+ncih2170_jc_ner_ic50_24h_1,test,ncih2170_jc_ner_ic50_24h,NCI-H2170 · neratinib IC50 24 h,NCI-H2170,treated,neratinib,24.0,50-149,61
+ncih2170_jc_ner_ic50_24h_50,test,ncih2170_jc_ner_ic50_24h,NCI-H2170 · neratinib IC50 24 h,NCI-H2170,treated,neratinib,24.0,50-149,105
+ncih2170_jc_ner_ic50_24h_54,test,ncih2170_jc_ner_ic50_24h,NCI-H2170 · neratinib IC50 24 h,NCI-H2170,treated,neratinib,24.0,50-149,86
+ncih716_jc_ctrl_1_23,test,ncih716_jc_ctrl_1,NCI-H716 · control,NCI-H716,control,control,,150-299,185
+ncih716_jc_ctrl_1_45,test,ncih716_jc_ctrl_1,NCI-H716 · control,NCI-H716,control,control,,50-149,101
+ncih716_jc_ctrl_1_66,test,ncih716_jc_ctrl_1,NCI-H716 · control,NCI-H716,control,control,,150-299,236
+ncih716_jc_ctrl_1_72,test,ncih716_jc_ctrl_1,NCI-H716 · control,NCI-H716,control,control,,150-299,150
+ncih716_jc_ctrl_2_11,test,ncih716_jc_ctrl_2,NCI-H716 · control,NCI-H716,control,control,,50-149,139
+ncih716_jc_ctrl_2_25,test,ncih716_jc_ctrl_2,NCI-H716 · control,NCI-H716,control,control,,150-299,171
+ncih716_jc_ctrl_2_30,test,ncih716_jc_ctrl_2,NCI-H716 · control,NCI-H716,control,control,,50-149,71
+ncih716_jc_ctrl_2_58,test,ncih716_jc_ctrl_2,NCI-H716 · control,NCI-H716,control,control,,150-299,166
+ncih716_jc_ctrl_2_8,test,ncih716_jc_ctrl_2,NCI-H716 · control,NCI-H716,control,control,,50-149,110
+snu16_jc_ctrl_114,test,snu16_jc_ctrl,SNU16 · control,SNU16,control,control,,300+,670
+snu16_jc_ctrl_124,test,snu16_jc_ctrl,SNU16 · control,SNU16,control,control,,150-299,191
+snu16_jc_ctrl_35,test,snu16_jc_ctrl,SNU16 · control,SNU16,control,control,,300+,324
+snu16_jc_ctrl_40,test,snu16_jc_ctrl,SNU16 · control,SNU16,control,control,,150-299,270
+snu16_jc_ctrl_45,test,snu16_jc_ctrl,SNU16 · control,SNU16,control,control,,50-149,125
+snu16_jc_ctrl_46,test,snu16_jc_ctrl,SNU16 · control,SNU16,control,control,,300+,309
+snu16_jc_ctrl_50,test,snu16_jc_ctrl,SNU16 · control,SNU16,control,control,,150-299,158
+snu16_jc_ctrl_69,test,snu16_jc_ctrl,SNU16 · control,SNU16,control,control,,300+,325
+snu16_jc_ctrl_70,test,snu16_jc_ctrl,SNU16 · control,SNU16,control,control,,150-299,238
+snu16_jc_ctrl_72,test,snu16_jc_ctrl,SNU16 · control,SNU16,control,control,,150-299,166
+snu16_jc_ctrl_83,test,snu16_jc_ctrl,SNU16 · control,SNU16,control,control,,50-149,140
+snu16_jc_ctrl_91,test,snu16_jc_ctrl,SNU16 · control,SNU16,control,control,,300+,422
+snu16_jc_jq1_ic50_24h_102,test,snu16_jc_jq1_ic50_24h,SNU16 · JQ1 IC50 24 h,SNU16,treated,JQ1,24.0,150-299,177
+snu16_jc_jq1_ic50_24h_120,test,snu16_jc_jq1_ic50_24h,SNU16 · JQ1 IC50 24 h,SNU16,treated,JQ1,24.0,150-299,193
+snu16_jc_jq1_ic50_24h_19,test,snu16_jc_jq1_ic50_24h,SNU16 · JQ1 IC50 24 h,SNU16,treated,JQ1,24.0,150-299,271
+snu16_jc_jq1_ic50_24h_40,test,snu16_jc_jq1_ic50_24h,SNU16 · JQ1 IC50 24 h,SNU16,treated,JQ1,24.0,150-299,183
+snu16_jc_jq1_ic50_24h_51,test,snu16_jc_jq1_ic50_24h,SNU16 · JQ1 IC50 24 h,SNU16,treated,JQ1,24.0,300+,499
+snu16_jc_jq1_ic50_24h_56,test,snu16_jc_jq1_ic50_24h,SNU16 · JQ1 IC50 24 h,SNU16,treated,JQ1,24.0,150-299,150
+snu16_jc_jq1_ic50_24h_67,test,snu16_jc_jq1_ic50_24h,SNU16 · JQ1 IC50 24 h,SNU16,treated,JQ1,24.0,150-299,213

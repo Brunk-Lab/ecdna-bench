@@ -1,0 +1,15 @@
+row,column,mean_count,count_MAE,n_images,column_by,colour_metric,subset
+Ground truth,control,226.43333333333334,0.0,60,arm,count_MAE,test
+ecCount (peaks),control,225.53333333333333,10.566666666666666,60,arm,count_MAE,test
+ecCount (threshold mask),control,213.91666666666666,15.916666666666666,60,arm,count_MAE,test
+Label Engine,control,201.13333333333333,34.96666666666667,60,arm,count_MAE,test
+MIA,control,185.31666666666666,43.416666666666664,60,arm,count_MAE,test
+Classic (after opt),control,213.36666666666667,42.0,60,arm,count_MAE,test
+ecSeg,control,107.7,121.46666666666667,60,arm,count_MAE,test
+Ground truth,treated,187.140350877193,0.0,57,arm,count_MAE,test
+ecCount (peaks),treated,189.2280701754386,12.298245614035087,57,arm,count_MAE,test
+ecCount (threshold mask),treated,176.4561403508772,18.57894736842105,57,arm,count_MAE,test
+Label Engine,treated,159.59649122807016,35.19298245614035,57,arm,count_MAE,test
+MIA,treated,148.9298245614035,42.03508771929825,57,arm,count_MAE,test
+Classic (after opt),treated,184.8421052631579,39.666666666666664,57,arm,count_MAE,test
+ecSeg,treated,104.0701754385965,88.54385964912281,57,arm,count_MAE,test

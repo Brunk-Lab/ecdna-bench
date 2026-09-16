@@ -1,0 +1,29 @@
+row,column,mean_count,relative_bias_pct,n_images,column_by,colour_metric,subset
+Ground truth,NCI-H2170 · control,290.0344827586207,0.0,29,cell_line_arm,relative_bias_pct,test
+ecCount (peaks),NCI-H2170 · control,292.7931034482759,0.9511354179051243,29,cell_line_arm,relative_bias_pct,test
+ecCount (threshold mask),NCI-H2170 · control,275.6551724137931,-4.95779336583046,29,cell_line_arm,relative_bias_pct,test
+Label Engine,NCI-H2170 · control,282.41379310344826,-2.6275115919629055,29,cell_line_arm,relative_bias_pct,test
+MIA,NCI-H2170 · control,281.1034482758621,-3.0793009154678397,29,cell_line_arm,relative_bias_pct,test
+Classic (after opt),NCI-H2170 · control,254.24137931034483,-12.340982047318988,29,cell_line_arm,relative_bias_pct,test
+ecSeg,NCI-H2170 · control,191.86206896551724,-33.84853168469861,29,cell_line_arm,relative_bias_pct,test
+Ground truth,NCI-H2170 · treated,179.62,0.0,50,cell_line_arm,relative_bias_pct,test
+ecCount (peaks),NCI-H2170 · treated,180.3,0.3785769958801915,50,cell_line_arm,relative_bias_pct,test
+ecCount (threshold mask),NCI-H2170 · treated,167.04,-7.003674423783543,50,cell_line_arm,relative_bias_pct,test
+Label Engine,NCI-H2170 · treated,166.98,-7.037078276361207,50,cell_line_arm,relative_bias_pct,test
+MIA,NCI-H2170 · treated,157.5,-12.314886983632112,50,cell_line_arm,relative_bias_pct,test
+Classic (after opt),NCI-H2170 · treated,176.86,-1.536577218572542,50,cell_line_arm,relative_bias_pct,test
+ecSeg,NCI-H2170 · treated,115.62,-35.63077608284156,50,cell_line_arm,relative_bias_pct,test
+Ground truth,SNU16 · control,278.1666666666667,0.0,12,cell_line_arm,relative_bias_pct,test
+ecCount (peaks),SNU16 · control,262.8333333333333,-5.512282804074296,12,cell_line_arm,relative_bias_pct,test
+ecCount (threshold mask),SNU16 · control,252.08333333333334,-9.37687237866986,12,cell_line_arm,relative_bias_pct,test
+Label Engine,SNU16 · control,220.25,-20.820850808867583,12,cell_line_arm,relative_bias_pct,test
+MIA,SNU16 · control,141.66666666666666,-49.07130017974835,12,cell_line_arm,relative_bias_pct,test
+Classic (after opt),SNU16 · control,293.5,5.512282804074296,12,cell_line_arm,relative_bias_pct,test
+ecSeg,SNU16 · control,45.5,-83.64289994008386,12,cell_line_arm,relative_bias_pct,test
+Ground truth,SNU16 · treated,240.85714285714286,0.0,7,cell_line_arm,relative_bias_pct,test
+ecCount (peaks),SNU16 · treated,253.0,5.041518386714116,7,cell_line_arm,relative_bias_pct,test
+ecCount (threshold mask),SNU16 · treated,243.71428571428572,1.1862396204033214,7,cell_line_arm,relative_bias_pct,test
+Label Engine,SNU16 · treated,106.85714285714286,-55.63463819691577,7,cell_line_arm,relative_bias_pct,test
+MIA,SNU16 · treated,87.71428571428571,-63.58244365361803,7,cell_line_arm,relative_bias_pct,test
+Classic (after opt),SNU16 · treated,241.85714285714286,0.4151838671411625,7,cell_line_arm,relative_bias_pct,test
+ecSeg,SNU16 · treated,21.571428571428573,-91.04389086595492,7,cell_line_arm,relative_bias_pct,test

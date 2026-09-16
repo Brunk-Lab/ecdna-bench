@@ -1,0 +1,4 @@
+,n_images,dice_median,dice_mean,dice_p10,iou_median,recall_median,precision_median,area_ratio_median,retention_median,retention_mean,retention_p10,ecdna_in_manual,ecdna_in_pred,ecdna_lost_total,ecdna_gained_total,pct_ecdna_lost,net_delta_per_image
+"all 1,145 (INFLATED)",1145,0.9017,0.8783,0.7943,0.821,0.9263,0.8974,1.0359,0.9974,0.9848,0.9609,230589,227158,3661,230,1.5877,-2.9965
+train (SEEN by ROI model),800,0.9046,0.8876,0.8177,0.8258,0.9278,0.8998,1.0334,0.9993,0.9914,0.9647,163857,162120,1945,208,1.187,-2.1712
+val+test (held out),345,0.8883,0.8569,0.7517,0.799,0.925,0.893,1.0512,0.9952,0.9696,0.943,66732,65038,1716,22,2.5715,-4.9101

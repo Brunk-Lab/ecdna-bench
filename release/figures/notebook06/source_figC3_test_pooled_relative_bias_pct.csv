@@ -1,0 +1,8 @@
+row,column,mean_count,relative_bias_pct,n_images,column_by,colour_metric,subset
+Ground truth,All images,192.16,0.0,175,all,relative_bias_pct,test
+ecCount (peaks),All images,194.04,0.9783513738551207,175,all,relative_bias_pct,test
+ecCount (threshold mask),All images,183.05714285714285,-4.737123825383609,175,all,relative_bias_pct,test
+Label Engine,All images,165.29142857142858,-13.982395622695373,175,all,relative_bias_pct,test
+MIA,All images,156.41714285714286,-18.600570952777446,175,all,relative_bias_pct,test
+Classic (after opt),All images,174.8057142857143,-9.031164505769002,175,all,relative_bias_pct,test
+ecSeg,All images,84.74285714285715,-55.899845366956114,175,all,relative_bias_pct,test

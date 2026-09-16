@@ -1,0 +1,36 @@
+token,cell_line,experiment,agent,dose,timepoint_h,arm,batch_group,confirmed
+snu16_jc_ctrl,SNU16,drug,control,,,control,snu16_jc,True
+snu16_jc_jq1_ic50_24h,SNU16,drug,JQ1,IC50,24.0,treated,snu16_jc,True
+snu16_jc_arv771_800picom_24h,SNU16,drug,ARV-771,800 pM,24.0,treated,snu16_jc,True
+ncih2170_ctrl_1,NCI-H2170,drug,control,,,control,h2170_ctrl,False
+ncih2170_ctrl_2,NCI-H2170,drug,control,,,control,h2170_ctrl,False
+ncih2170_jc_jq1_ic50_24h,NCI-H2170,drug,JQ1,IC50,24.0,treated,h2170_jc,True
+ncih2170_jc_lap_ic50_24h,NCI-H2170,drug,lapatinib,IC50,24.0,treated,h2170_jc,False
+ncih2170_jc_lap_ic50_24h_29f,NCI-H2170,drug,lapatinib,IC50,24.0,treated,h2170_jc,False
+ncih2170_jc_ner_ic50_24h,NCI-H2170,drug,neratinib,IC50,24.0,treated,h2170_jc,False
+ncih2170_jc_ner_ic50_72h,NCI-H2170,drug,neratinib,IC50,72.0,treated,h2170_jc,False
+ncih2170_antibiotics_blank_ctrl,NCI-H2170,antibiotic,control,,,control,h2170_abx,True
+ncih2170_antibiotics_ps,NCI-H2170,antibiotic,P/S,,,treated,h2170_abx,False
+ncih2170_antibiotics_ps_g,NCI-H2170,antibiotic,P/S+G,,,treated,h2170_abx,False
+ncih716_jc_ctrl_1,NCI-H716,drug,control,,,control,h716_jc,True
+ncih716_jc_ctrl_2,NCI-H716,drug,control,,,control,h716_jc,True
+ncih716_jc_alo_8nm_24h,NCI-H716,drug,ALO,8 nM,24.0,treated,h716_jc,False
+colo320dm_qpcr_jq1_24h_ctrl,COLO320DM,drug,JQ1,,24.0,control,colo_jq1,True
+colo320dm_qpcr_jq1_24h_dmso,COLO320DM,drug,JQ1,,24.0,DMSO,colo_jq1,True
+sum159pt_dc_ctrl,SUM159PT,drug,control,,,control,sum159_dc,True
+sum159pt_dc_dmso_72hr,SUM159PT,drug,DMSO,,72.0,DMSO,sum159_dc,True
+sum159pt_dc_jq1_24hr,SUM159PT,drug,JQ1,,24.0,treated,sum159_dc,True
+sum159pt_dc_jq1_72hr,SUM159PT,drug,JQ1,,72.0,treated,sum159_dc,True
+ncih2170_facs_fish_0223_high_her2,NCI-H2170,facs_sort,—,,,—,facs,True
+ncih2170_facs_fish_0223_low_her2,NCI-H2170,facs_sort,—,,,—,facs,True
+ncih2170_facs_fish_0423_high_her2,NCI-H2170,facs_sort,—,,,—,facs,True
+ncih2170_facs_fish_0423_low_her2,NCI-H2170,facs_sort,—,,,—,facs,True
+ncih2170_facs_fish_0723_high_her2,NCI-H2170,facs_sort,—,,,—,facs,True
+ncih2170_facs_fish_0723_low_her2,NCI-H2170,facs_sort,—,,,—,facs,True
+ncih2170_facs_fish_0723_sorted_ctrl,NCI-H2170,facs_sort,—,,,—,facs,True
+ncih2170_facs_fish_0723_pre_sort_ctrl,NCI-H2170,facs_sort,—,,,—,facs,True
+ncih2170_post_facs_fish_high_her2_g3,NCI-H2170,facs_sort,—,,,—,facs,True
+ncih2170_post_facs_fish_low_her2_g3,NCI-H2170,facs_sort,—,,,—,facs,True
+ncih2170_cart_72h_cart,NCI-H2170,cart,—,,,—,cart,True
+ncih2170_cart_72h_nt_ctrl,NCI-H2170,cart,—,,,—,cart,True
+ncih2170_cart_72h_blank_ctrl,NCI-H2170,cart,—,,,—,cart,True

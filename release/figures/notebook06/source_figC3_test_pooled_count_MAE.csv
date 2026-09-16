@@ -1,0 +1,8 @@
+row,column,mean_count,count_MAE,n_images,column_by,colour_metric,subset
+Ground truth,All images,192.16,0.0,175,all,count_MAE,test
+ecCount (peaks),All images,194.04,13.308571428571428,175,all,count_MAE,test
+ecCount (threshold mask),All images,183.05714285714285,17.617142857142856,175,all,count_MAE,test
+Label Engine,All images,165.29142857142858,34.36571428571428,175,all,count_MAE,test
+MIA,All images,156.41714285714286,40.394285714285715,175,all,count_MAE,test
+Classic (after opt),All images,174.8057142857143,40.94285714285714,175,all,count_MAE,test
+ecSeg,All images,84.74285714285715,110.27428571428571,175,all,count_MAE,test

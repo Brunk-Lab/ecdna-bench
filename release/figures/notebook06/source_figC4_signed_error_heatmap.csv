@@ -1,0 +1,99 @@
+row,column,count_bias,colour_relative_bias_pct,n_images,grouping
+Ground truth,ncih2170_ctrl_2,0.0,0.0,44.0,cond
+ecCount (peaks),ncih2170_ctrl_2,-3.772727272727273,-1.1389365351629503,44.0,cond
+ecCount (threshold mask),ncih2170_ctrl_2,-26.113636363636363,-7.88336192109777,44.0,cond
+Label Engine,ncih2170_ctrl_2,-17.795454545454547,-5.372212692967411,44.0,cond
+MIA,ncih2170_ctrl_2,-37.81818181818182,-11.41680960548885,44.0,cond
+Classic (after opt),ncih2170_ctrl_2,-85.45454545454545,-25.79759862778731,44.0,cond
+ecSeg,ncih2170_ctrl_2,-254.8181818181818,-76.92624356775299,44.0,cond
+Ground truth,ncih2170_ctrl_1,0.0,0.0,33.0,cond
+ecCount (peaks),ncih2170_ctrl_1,5.363636363636363,1.6734423749645455,33.0,cond
+ecCount (threshold mask),ncih2170_ctrl_1,-12.909090909090908,-4.027607071948568,33.0,cond
+Label Engine,ncih2170_ctrl_1,0.8484848484848485,0.2647253474520185,33.0,cond
+MIA,ncih2170_ctrl_1,-10.545454545454543,-3.2901578897608017,33.0,cond
+Classic (after opt),ncih2170_ctrl_1,-64.06060606060606,-19.9867637326274,33.0,cond
+ecSeg,ncih2170_ctrl_1,-196.12121212121207,-61.18937316819514,33.0,cond
+Ground truth,ncih2170_antibiotics_blank_ctrl,0.0,0.0,94.0,cond
+ecCount (peaks),ncih2170_antibiotics_blank_ctrl,8.51063829787234,3.341129301703976,94.0,cond
+ecCount (threshold mask),ncih2170_antibiotics_blank_ctrl,-6.425531914893617,-2.5225526227865016,94.0,cond
+Label Engine,ncih2170_antibiotics_blank_ctrl,-2.5319148936170213,-0.9939859672569328,94.0,cond
+MIA,ncih2170_antibiotics_blank_ctrl,3.25531914893617,1.2779819579017708,94.0,cond
+Classic (after opt),ncih2170_antibiotics_blank_ctrl,5.968085106382978,2.342966922819913,94.0,cond
+ecSeg,ncih2170_antibiotics_blank_ctrl,-23.77659574468085,-9.334279986635485,94.0,cond
+Ground truth,ncih2170_jc_ner_ic50_72h,0.0,0.0,8.0,cond
+ecCount (peaks),ncih2170_jc_ner_ic50_72h,4.75,1.1286011286011286,8.0,cond
+ecCount (threshold mask),ncih2170_jc_ner_ic50_72h,-52.125,-12.384912384912385,8.0,cond
+Label Engine,ncih2170_jc_ner_ic50_72h,-34.0,-8.078408078408078,8.0,cond
+MIA,ncih2170_jc_ner_ic50_72h,-102.5,-24.354024354024357,8.0,cond
+Classic (after opt),ncih2170_jc_ner_ic50_72h,-147.75,-35.105435105435106,8.0,cond
+ecSeg,ncih2170_jc_ner_ic50_72h,-322.75,-76.68547668547669,8.0,cond
+Ground truth,ncih2170_antibiotics_ps_g,0.0,0.0,64.0,cond
+ecCount (peaks),ncih2170_antibiotics_ps_g,3.53125,1.5918856096358385,64.0,cond
+ecCount (threshold mask),ncih2170_antibiotics_ps_g,-11.265625,-5.078537719236459,64.0,cond
+Label Engine,ncih2170_antibiotics_ps_g,-4.4375,-2.0004226244981336,64.0,cond
+MIA,ncih2170_antibiotics_ps_g,-5.234375,-2.3596534479115308,64.0,cond
+Classic (after opt),ncih2170_antibiotics_ps_g,-21.9375,-9.889413256321758,64.0,cond
+ecSeg,ncih2170_antibiotics_ps_g,-42.65625,-19.229414665070085,64.0,cond
+Ground truth,ncih2170_antibiotics_ps,0.0,0.0,95.0,cond
+ecCount (peaks),ncih2170_antibiotics_ps,2.073684210526316,1.078152364273205,95.0,cond
+ecCount (threshold mask),ncih2170_antibiotics_ps,-10.642105263157896,-5.533056042031523,95.0,cond
+Label Engine,ncih2170_antibiotics_ps,-1.4842105263157894,-0.7716725043782837,95.0,cond
+MIA,ncih2170_antibiotics_ps,-5.347368421052631,-2.780210157618214,95.0,cond
+Classic (after opt),ncih2170_antibiotics_ps,-12.547368421052632,-6.523642732049037,95.0,cond
+ecSeg,ncih2170_antibiotics_ps,-25.32631578947369,-13.167688266199653,95.0,cond
+Ground truth,ncih2170_jc_ner_ic50_24h,0.0,0.0,16.0,cond
+ecCount (peaks),ncih2170_jc_ner_ic50_24h,2.75,1.466177940686438,16.0,cond
+ecCount (threshold mask),ncih2170_jc_ner_ic50_24h,-15.3125,-8.163945351549483,16.0,cond
+Label Engine,ncih2170_jc_ner_ic50_24h,-32.1875,-17.16094635121626,16.0,cond
+MIA,ncih2170_jc_ner_ic50_24h,-58.0625,-30.956347884038653,16.0,cond
+Classic (after opt),ncih2170_jc_ner_ic50_24h,-32.25,-17.194268577140953,16.0,cond
+ecSeg,ncih2170_jc_ner_ic50_24h,-156.1875,-83.27224258580473,16.0,cond
+Ground truth,ncih2170_jc_jq1_ic50_24h,0.0,0.0,66.0,cond
+ecCount (peaks),ncih2170_jc_jq1_ic50_24h,-11.681818181818182,-7.055270863836019,66.0,cond
+ecCount (threshold mask),ncih2170_jc_jq1_ic50_24h,-24.454545454545453,-14.769399707174232,66.0,cond
+Label Engine,ncih2170_jc_jq1_ic50_24h,-30.818181818181817,-18.612737920937043,66.0,cond
+MIA,ncih2170_jc_jq1_ic50_24h,-48.621212121212125,-29.36493411420205,66.0,cond
+Classic (after opt),ncih2170_jc_jq1_ic50_24h,-22.484848484848484,-13.579795021961932,66.0,cond
+ecSeg,ncih2170_jc_jq1_ic50_24h,-126.0,-76.09809663250367,66.0,cond
+Ground truth,ncih2170_jc_lap_ic50_24h,0.0,0.0,72.0,cond
+ecCount (peaks),ncih2170_jc_lap_ic50_24h,-8.680555555555555,-5.80477384601096,72.0,cond
+ecCount (threshold mask),ncih2170_jc_lap_ic50_24h,-21.86111111111111,-14.618742453794,72.0,cond
+Label Engine,ncih2170_jc_lap_ic50_24h,-29.65277777777778,-19.82910745797344,72.0,cond
+MIA,ncih2170_jc_lap_ic50_24h,-57.263888888888886,-38.2929321073651,72.0,cond
+Classic (after opt),ncih2170_jc_lap_ic50_24h,-33.361111111111114,-22.308906844989323,72.0,cond
+ecSeg,ncih2170_jc_lap_ic50_24h,-120.72222222222224,-80.72815083124362,72.0,cond
+Ground truth,snu16_jc_ctrl,0.0,0.0,72.0,cond
+ecCount (peaks),snu16_jc_ctrl,-12.569444444444445,-4.165899466028356,72.0,cond
+ecCount (threshold mask),snu16_jc_ctrl,-25.09722222222222,-8.317989320567115,72.0,cond
+Label Engine,snu16_jc_ctrl,-76.58333333333333,-25.38206591787884,72.0,cond
+MIA,snu16_jc_ctrl,-162.55555555555554,-53.87589762474682,72.0,cond
+Classic (after opt),snu16_jc_ctrl,-0.1527777777777778,-0.0506352421285214,72.0,cond
+ecSeg,snu16_jc_ctrl,-263.5,-87.33198306020991,72.0,cond
+Ground truth,snu16_jc_jq1_ic50_24h,0.0,0.0,50.0,cond
+ecCount (peaks),snu16_jc_jq1_ic50_24h,5.18,1.9884836852207293,50.0,cond
+ecCount (threshold mask),snu16_jc_jq1_ic50_24h,-8.02,-3.078694817658349,50.0,cond
+Label Engine,snu16_jc_jq1_ic50_24h,-134.14,-51.49328214971209,50.0,cond
+MIA,snu16_jc_jq1_ic50_24h,-158.72,-60.92898272552783,50.0,cond
+Classic (after opt),snu16_jc_jq1_ic50_24h,-3.78,-1.4510556621881,50.0,cond
+ecSeg,snu16_jc_jq1_ic50_24h,-241.82,-92.82917466410748,50.0,cond
+Ground truth,colo320dm_qpcr_jq1_24h_ctrl,0.0,0.0,59.0,cond
+ecCount (peaks),colo320dm_qpcr_jq1_24h_ctrl,-0.8305084745762712,-1.6746411483253587,59.0,cond
+ecCount (threshold mask),colo320dm_qpcr_jq1_24h_ctrl,-2.067796610169492,-4.169514695830485,59.0,cond
+Label Engine,colo320dm_qpcr_jq1_24h_ctrl,-8.135593220338983,-16.40464798359535,59.0,cond
+MIA,colo320dm_qpcr_jq1_24h_ctrl,-8.389830508474576,-16.917293233082706,59.0,cond
+Classic (after opt),colo320dm_qpcr_jq1_24h_ctrl,2.796610169491525,5.639097744360902,59.0,cond
+ecSeg,colo320dm_qpcr_jq1_24h_ctrl,-39.05084745762712,-78.74231032125769,59.0,cond
+Ground truth,ncih716_jc_ctrl_1,0.0,0.0,29.0,cond
+ecCount (peaks),ncih716_jc_ctrl_1,12.310344827586206,6.38412017167382,29.0,cond
+ecCount (threshold mask),ncih716_jc_ctrl_1,3.034482758620689,1.5736766809728184,29.0,cond
+Label Engine,ncih716_jc_ctrl_1,-64.65517241379311,-33.53004291845494,29.0,cond
+MIA,ncih716_jc_ctrl_1,-63.62068965517241,-32.993562231759654,29.0,cond
+Classic (after opt),ncih716_jc_ctrl_1,21.86206896551724,11.337625178826896,29.0,cond
+ecSeg,ncih716_jc_ctrl_1,-141.41379310344828,-73.33690987124464,29.0,cond
+Ground truth,ncih716_jc_ctrl_2,0.0,0.0,35.0,cond
+ecCount (peaks),ncih716_jc_ctrl_2,7.0,3.671512063539637,35.0,cond
+ecCount (threshold mask),ncih716_jc_ctrl_2,-0.4285714285714285,-0.2247864528697737,35.0,cond
+Label Engine,ncih716_jc_ctrl_2,-67.85714285714286,-35.59118837104751,35.0,cond
+MIA,ncih716_jc_ctrl_2,-60.08571428571429,-31.51506069234228,35.0,cond
+Classic (after opt),ncih716_jc_ctrl_2,0.0285714285714285,0.0149857635246515,35.0,cond
+ecSeg,ncih716_jc_ctrl_2,-127.6,-66.92641990109396,35.0,cond

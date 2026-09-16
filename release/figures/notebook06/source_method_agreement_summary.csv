@@ -1,0 +1,13 @@
+subset,model,n_contrasts,sig_calls_correct,direction_correct,median_abs_log2fc_error
+"all 1,145 benchmark images",ecCount (peaks),9,9,9,0.06779924227546053
+"all 1,145 benchmark images",ecCount (threshold mask),9,9,9,0.07707622301864081
+"all 1,145 benchmark images",Classic (after opt),9,9,9,0.17021173403609913
+"all 1,145 benchmark images",Label Engine,9,8,8,0.24993316495270013
+"all 1,145 benchmark images",MIA,9,8,9,0.09575369695935765
+"all 1,145 benchmark images",ecSeg,9,8,8,0.165374672741605
+held-out val+test only,ecCount (peaks),9,9,9,0.12429493551316795
+held-out val+test only,ecCount (threshold mask),9,9,8,0.07922660421203509
+held-out val+test only,Classic (after opt),9,9,9,0.3119947982698573
+held-out val+test only,Label Engine,9,8,8,0.19614353846175603
+held-out val+test only,MIA,9,8,9,0.06103296006310255
+held-out val+test only,ecSeg,9,7,9,0.6393243921444008

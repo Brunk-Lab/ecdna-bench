@@ -1,0 +1,29 @@
+row,column,mean_count,count_MAE,n_images,column_by,colour_metric,subset
+Ground truth,NCI-H2170,196.9402985074627,0.0,134,cell_line_display,count_MAE,test
+ecCount (peaks),NCI-H2170,199.2089552238806,13.059701492537313,134,cell_line_display,count_MAE,test
+ecCount (threshold mask),NCI-H2170,186.90298507462686,18.097014925373134,134,cell_line_display,count_MAE,test
+Label Engine,NCI-H2170,179.82835820895522,23.455223880597014,134,cell_line_display,count_MAE,test
+MIA,NCI-H2170,176.37313432835822,26.074626865671643,134,cell_line_display,count_MAE,test
+Classic (after opt),NCI-H2170,171.8955223880597,44.0,134,cell_line_display,count_MAE,test
+ecSeg,NCI-H2170,102.22388059701493,98.01492537313433,134,cell_line_display,count_MAE,test
+Ground truth,SNU16,264.42105263157896,0.0,19,cell_line_display,count_MAE,test
+ecCount (peaks),SNU16,259.2105263157895,17.210526315789473,19,cell_line_display,count_MAE,test
+ecCount (threshold mask),SNU16,249.0,22.473684210526315,19,cell_line_display,count_MAE,test
+Label Engine,SNU16,178.47368421052633,106.57894736842105,19,cell_line_display,count_MAE,test
+MIA,SNU16,121.78947368421052,142.6315789473684,19,cell_line_display,count_MAE,test
+Classic (after opt),SNU16,274.4736842105263,53.0,19,cell_line_display,count_MAE,test
+ecSeg,SNU16,36.68421052631579,227.73684210526315,19,cell_line_display,count_MAE,test
+Ground truth,COLO320DM,46.54545454545455,0.0,11,cell_line_display,count_MAE,test
+ecCount (peaks),COLO320DM,48.18181818181818,7.636363636363637,11,cell_line_display,count_MAE,test
+ecCount (threshold mask),COLO320DM,46.81818181818182,8.454545454545455,11,cell_line_display,count_MAE,test
+Label Engine,COLO320DM,40.54545454545455,12.363636363636363,11,cell_line_display,count_MAE,test
+MIA,COLO320DM,41.54545454545455,11.909090909090908,11,cell_line_display,count_MAE,test
+Classic (after opt),COLO320DM,48.90909090909091,10.181818181818182,11,cell_line_display,count_MAE,test
+ecSeg,COLO320DM,9.636363636363637,42.18181818181818,11,cell_line_display,count_MAE,test
+Ground truth,NCI-H716,154.72727272727272,0.0,11,cell_line_display,count_MAE,test
+ecCount (peaks),NCI-H716,164.36363636363637,15.272727272727273,11,cell_line_display,count_MAE,test
+ecCount (threshold mask),NCI-H716,158.54545454545453,12.545454545454545,11,cell_line_display,count_MAE,test
+Label Engine,NCI-H716,90.18181818181819,64.54545454545455,11,cell_line_display,count_MAE,test
+MIA,NCI-H716,88.0,66.72727272727273,11,cell_line_display,count_MAE,test
+Classic (after opt),NCI-H716,164.0,13.636363636363637,11,cell_line_display,count_MAE,test
+ecSeg,NCI-H716,29.90909090909091,124.81818181818181,11,cell_line_display,count_MAE,test

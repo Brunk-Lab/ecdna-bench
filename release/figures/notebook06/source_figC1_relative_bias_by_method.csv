@@ -1,0 +1,67 @@
+model,condition,relative_bias_pct,n_images,grouping,value_source
+ecCount (peaks),COLO320DM · JQ1 24 h,-1.6746411483253587,59.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+ecCount (peaks),NCI-H2170 · JQ1 IC50 24 h,-7.055270863836019,66.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+ecCount (peaks),NCI-H2170 · P/S,1.078152364273205,95.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+ecCount (peaks),NCI-H2170 · P/S+G,1.5918856096358385,64.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+ecCount (peaks),NCI-H2170 · control,1.2918783805018572,171.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+ecCount (peaks),NCI-H2170 · lapatinib IC50 24 h,-5.80477384601096,72.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+ecCount (peaks),NCI-H2170 · neratinib IC50 24 h,1.466177940686438,16.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+ecCount (peaks),NCI-H2170 · neratinib IC50 72 h,1.1286011286011286,8.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+ecCount (peaks),NCI-H716 · control,5.027816117606729,64.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+ecCount (peaks),SNU16 · JQ1 IC50 24 h,1.9884836852207293,50.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+ecCount (peaks),SNU16 · control,-4.165899466028356,72.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+ecCount (threshold mask),COLO320DM · JQ1 24 h,-4.169514695830485,59.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+ecCount (threshold mask),NCI-H2170 · JQ1 IC50 24 h,-14.769399707174232,66.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+ecCount (threshold mask),NCI-H2170 · P/S,-5.533056042031523,95.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+ecCount (threshold mask),NCI-H2170 · P/S+G,-5.078537719236459,64.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+ecCount (threshold mask),NCI-H2170 · control,-4.81117387194428,171.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+ecCount (threshold mask),NCI-H2170 · lapatinib IC50 24 h,-14.618742453794,72.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+ecCount (threshold mask),NCI-H2170 · neratinib IC50 24 h,-8.163945351549483,16.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+ecCount (threshold mask),NCI-H2170 · neratinib IC50 72 h,-12.384912384912385,8.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+ecCount (threshold mask),NCI-H716 · control,0.6744451140515224,64.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+ecCount (threshold mask),SNU16 · JQ1 IC50 24 h,-3.078694817658349,50.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+ecCount (threshold mask),SNU16 · control,-8.317989320567115,72.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+Label Engine,COLO320DM · JQ1 24 h,-16.40464798359535,59.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+Label Engine,NCI-H2170 · JQ1 IC50 24 h,-18.612737920937043,66.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+Label Engine,NCI-H2170 · P/S,-0.7716725043782837,95.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+Label Engine,NCI-H2170 · P/S+G,-2.0004226244981336,64.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+Label Engine,NCI-H2170 · control,-2.033824437590775,171.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+Label Engine,NCI-H2170 · lapatinib IC50 24 h,-19.82910745797344,72.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+Label Engine,NCI-H2170 · neratinib IC50 24 h,-17.16094635121626,16.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+Label Engine,NCI-H2170 · neratinib IC50 72 h,-8.078408078408078,8.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+Label Engine,NCI-H716 · control,-34.56061564475122,64.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+Label Engine,SNU16 · JQ1 IC50 24 h,-51.49328214971209,50.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+Label Engine,SNU16 · control,-25.38206591787884,72.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+MIA,COLO320DM · JQ1 24 h,-16.917293233082706,59.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+MIA,NCI-H2170 · JQ1 IC50 24 h,-29.36493411420205,66.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+MIA,NCI-H2170 · P/S,-2.780210157618214,95.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+MIA,NCI-H2170 · P/S+G,-2.3596534479115308,64.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+MIA,NCI-H2170 · control,-4.476328512449293,171.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+MIA,NCI-H2170 · lapatinib IC50 24 h,-38.2929321073651,72.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+MIA,NCI-H2170 · neratinib IC50 24 h,-30.956347884038653,16.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+MIA,NCI-H2170 · neratinib IC50 72 h,-24.354024354024357,8.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+MIA,NCI-H716 · control,-32.254311462050964,64.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+MIA,SNU16 · JQ1 IC50 24 h,-60.92898272552783,50.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+MIA,SNU16 · control,-53.87589762474682,72.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+Classic (after opt),COLO320DM · JQ1 24 h,5.639097744360902,59.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+Classic (after opt),NCI-H2170 · JQ1 IC50 24 h,-13.579795021961932,66.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+Classic (after opt),NCI-H2170 · P/S,-6.523642732049037,95.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+Classic (after opt),NCI-H2170 · P/S+G,-9.889413256321758,64.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+Classic (after opt),NCI-H2170 · control,-14.480465145864931,171.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+Classic (after opt),NCI-H2170 · lapatinib IC50 24 h,-22.308906844989323,72.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+Classic (after opt),NCI-H2170 · neratinib IC50 24 h,-17.194268577140953,16.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+Classic (after opt),NCI-H2170 · neratinib IC50 72 h,-35.105435105435106,8.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+Classic (after opt),NCI-H716 · control,5.676305471175773,64.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+Classic (after opt),SNU16 · JQ1 IC50 24 h,-1.4510556621881,50.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+Classic (after opt),SNU16 · control,-0.0506352421285214,72.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+ecSeg,COLO320DM · JQ1 24 h,-78.74231032125769,59.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+ecSeg,NCI-H2170 · JQ1 IC50 24 h,-76.09809663250367,66.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+ecSeg,NCI-H2170 · P/S,-13.167688266199653,95.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+ecSeg,NCI-H2170 · P/S+G,-19.229414665070085,64.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+ecSeg,NCI-H2170 · control,-49.14996557419454,171.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+ecSeg,NCI-H2170 · lapatinib IC50 24 h,-80.72815083124362,72.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+ecSeg,NCI-H2170 · neratinib IC50 24 h,-83.27224258580473,16.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+ecSeg,NCI-H2170 · neratinib IC50 72 h,-76.68547668547669,8.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+ecSeg,NCI-H716 · control,-70.1316648861693,64.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+ecSeg,SNU16 · JQ1 IC50 24 h,-92.82917466410748,50.0,group_label,heatmap_relative_bias_pct_by_condition.csv
+ecSeg,SNU16 · control,-87.33198306020991,72.0,group_label,heatmap_relative_bias_pct_by_condition.csv

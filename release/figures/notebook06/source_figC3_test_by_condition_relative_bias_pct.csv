@@ -1,0 +1,78 @@
+row,column,mean_count,relative_bias_pct,n_images,column_by,colour_metric,subset
+Ground truth,ncih2170_antibiotics_blank_ctrl,304.375,0.0,16,cond,relative_bias_pct,test
+ecCount (peaks),ncih2170_antibiotics_blank_ctrl,310.0,1.8480492813141685,16,cond,relative_bias_pct,test
+ecCount (threshold mask),ncih2170_antibiotics_blank_ctrl,293.1875,-3.675564681724846,16,cond,relative_bias_pct,test
+Label Engine,ncih2170_antibiotics_blank_ctrl,300.625,-1.2320328542094456,16,cond,relative_bias_pct,test
+MIA,ncih2170_antibiotics_blank_ctrl,300.9375,-1.1293634496919918,16,cond,relative_bias_pct,test
+Classic (after opt),ncih2170_antibiotics_blank_ctrl,285.25,-6.283367556468172,16,cond,relative_bias_pct,test
+ecSeg,ncih2170_antibiotics_blank_ctrl,265.9375,-12.628336755646817,16,cond,relative_bias_pct,test
+Ground truth,ncih2170_ctrl_2,288.4,0.0,5,cond,relative_bias_pct,test
+ecCount (peaks),ncih2170_ctrl_2,290.2,0.6241331484049931,5,cond,relative_bias_pct,test
+ecCount (threshold mask),ncih2170_ctrl_2,267.4,-7.281553398058253,5,cond,relative_bias_pct,test
+Label Engine,ncih2170_ctrl_2,273.8,-5.0624133148405,5,cond,relative_bias_pct,test
+MIA,ncih2170_ctrl_2,269.8,-6.449375866851597,5,cond,relative_bias_pct,test
+Classic (after opt),ncih2170_ctrl_2,226.2,-21.56726768377254,5,cond,relative_bias_pct,test
+ecSeg,ncih2170_ctrl_2,99.0,-65.67267683772539,5,cond,relative_bias_pct,test
+Ground truth,ncih2170_ctrl_1,262.375,0.0,8,cond,relative_bias_pct,test
+ecCount (peaks),ncih2170_ctrl_1,260.0,-0.9051929490233445,8,cond,relative_bias_pct,test
+ecCount (threshold mask),ncih2170_ctrl_1,245.75,-6.336350643163411,8,cond,relative_bias_pct,test
+Label Engine,ncih2170_ctrl_1,251.375,-4.192472606002858,8,cond,relative_bias_pct,test
+MIA,ncih2170_ctrl_1,248.5,-5.288232491662696,8,cond,relative_bias_pct,test
+Classic (after opt),ncih2170_ctrl_1,209.75,-20.057170080990947,8,cond,relative_bias_pct,test
+ecSeg,ncih2170_ctrl_1,101.75,-61.21962839447356,8,cond,relative_bias_pct,test
+Ground truth,ncih2170_antibiotics_ps_g,228.11764705882354,0.0,17,cond,relative_bias_pct,test
+ecCount (peaks),ncih2170_antibiotics_ps_g,236.23529411764707,3.558535327488396,17,cond,relative_bias_pct,test
+ecCount (threshold mask),ncih2170_antibiotics_ps_g,218.0,-4.43527591542032,17,cond,relative_bias_pct,test
+Label Engine,ncih2170_antibiotics_ps_g,227.88235294117646,-0.10314595152140277,17,cond,relative_bias_pct,test
+MIA,ncih2170_antibiotics_ps_g,223.94117647058823,-1.8308406395048995,17,cond,relative_bias_pct,test
+Classic (after opt),ncih2170_antibiotics_ps_g,217.58823529411765,-4.615781330582775,17,cond,relative_bias_pct,test
+ecSeg,ncih2170_antibiotics_ps_g,194.58823529411765,-14.698298091799897,17,cond,relative_bias_pct,test
+Ground truth,ncih2170_jc_lap_ic50_24h,173.22222222222223,0.0,9,cond,relative_bias_pct,test
+ecCount (peaks),ncih2170_jc_lap_ic50_24h,169.33333333333334,-2.245028864656831,9,cond,relative_bias_pct,test
+ecCount (threshold mask),ncih2170_jc_lap_ic50_24h,153.88888888888889,-11.161000641436818,9,cond,relative_bias_pct,test
+Label Engine,ncih2170_jc_lap_ic50_24h,141.22222222222223,-18.473380372033354,9,cond,relative_bias_pct,test
+MIA,ncih2170_jc_lap_ic50_24h,111.0,-35.9204618345093,9,cond,relative_bias_pct,test
+Classic (after opt),ncih2170_jc_lap_ic50_24h,150.33333333333334,-13.213598460551637,9,cond,relative_bias_pct,test
+ecSeg,ncih2170_jc_lap_ic50_24h,28.666666666666668,-83.45093008338678,9,cond,relative_bias_pct,test
+Ground truth,ncih2170_antibiotics_ps,170.6153846153846,0.0,13,cond,relative_bias_pct,test
+ecCount (peaks),ncih2170_antibiotics_ps,169.3846153846154,-0.721370604147881,13,cond,relative_bias_pct,test
+ecCount (threshold mask),ncih2170_antibiotics_ps,161.6153846153846,-5.27502254283138,13,cond,relative_bias_pct,test
+Label Engine,ncih2170_antibiotics_ps,163.76923076923077,-4.012623985572588,13,cond,relative_bias_pct,test
+MIA,ncih2170_antibiotics_ps,164.07692307692307,-3.8322813345356175,13,cond,relative_bias_pct,test
+Classic (after opt),ncih2170_antibiotics_ps,184.53846153846155,8.160504959422903,13,cond,relative_bias_pct,test
+ecSeg,ncih2170_antibiotics_ps,153.92307692307693,-9.783588818755636,13,cond,relative_bias_pct,test
+Ground truth,ncih2170_jc_jq1_ic50_24h,134.25,0.0,8,cond,relative_bias_pct,test
+ecCount (peaks),ncih2170_jc_jq1_ic50_24h,126.625,-5.679702048417132,8,cond,relative_bias_pct,test
+ecCount (threshold mask),ncih2170_jc_jq1_ic50_24h,114.0,-15.083798882681565,8,cond,relative_bias_pct,test
+Label Engine,ncih2170_jc_jq1_ic50_24h,107.625,-19.83240223463687,8,cond,relative_bias_pct,test
+MIA,ncih2170_jc_jq1_ic50_24h,91.875,-31.564245810055866,8,cond,relative_bias_pct,test
+Classic (after opt),ncih2170_jc_jq1_ic50_24h,123.875,-7.728119180633147,8,cond,relative_bias_pct,test
+ecSeg,ncih2170_jc_jq1_ic50_24h,21.625,-83.89199255121042,8,cond,relative_bias_pct,test
+Ground truth,snu16_jc_ctrl,278.1666666666667,0.0,12,cond,relative_bias_pct,test
+ecCount (peaks),snu16_jc_ctrl,262.8333333333333,-5.512282804074296,12,cond,relative_bias_pct,test
+ecCount (threshold mask),snu16_jc_ctrl,252.08333333333334,-9.37687237866986,12,cond,relative_bias_pct,test
+Label Engine,snu16_jc_ctrl,220.25,-20.820850808867583,12,cond,relative_bias_pct,test
+MIA,snu16_jc_ctrl,141.66666666666666,-49.07130017974835,12,cond,relative_bias_pct,test
+Classic (after opt),snu16_jc_ctrl,293.5,5.512282804074296,12,cond,relative_bias_pct,test
+ecSeg,snu16_jc_ctrl,45.5,-83.64289994008386,12,cond,relative_bias_pct,test
+Ground truth,snu16_jc_jq1_ic50_24h,240.85714285714286,0.0,7,cond,relative_bias_pct,test
+ecCount (peaks),snu16_jc_jq1_ic50_24h,253.0,5.041518386714116,7,cond,relative_bias_pct,test
+ecCount (threshold mask),snu16_jc_jq1_ic50_24h,243.71428571428572,1.1862396204033214,7,cond,relative_bias_pct,test
+Label Engine,snu16_jc_jq1_ic50_24h,106.85714285714286,-55.63463819691577,7,cond,relative_bias_pct,test
+MIA,snu16_jc_jq1_ic50_24h,87.71428571428571,-63.58244365361803,7,cond,relative_bias_pct,test
+Classic (after opt),snu16_jc_jq1_ic50_24h,241.85714285714286,0.4151838671411625,7,cond,relative_bias_pct,test
+ecSeg,snu16_jc_jq1_ic50_24h,21.571428571428573,-91.04389086595492,7,cond,relative_bias_pct,test
+Ground truth,colo320dm_qpcr_jq1_24h_ctrl,50.8,0.0,10,cond,relative_bias_pct,test
+ecCount (peaks),colo320dm_qpcr_jq1_24h_ctrl,48.9,-3.7401574803149606,10,cond,relative_bias_pct,test
+ecCount (threshold mask),colo320dm_qpcr_jq1_24h_ctrl,47.5,-6.496062992125984,10,cond,relative_bias_pct,test
+Label Engine,colo320dm_qpcr_jq1_24h_ctrl,41.4,-18.50393700787402,10,cond,relative_bias_pct,test
+MIA,colo320dm_qpcr_jq1_24h_ctrl,42.5,-16.33858267716536,10,cond,relative_bias_pct,test
+Classic (after opt),colo320dm_qpcr_jq1_24h_ctrl,50.2,-1.1811023622047245,10,cond,relative_bias_pct,test
+ecSeg,colo320dm_qpcr_jq1_24h_ctrl,9.0,-82.28346456692914,10,cond,relative_bias_pct,test
+Ground truth,ncih716_jc_ctrl_2,131.4,0.0,5,cond,relative_bias_pct,test
+ecCount (peaks),ncih716_jc_ctrl_2,128.8,-1.97869101978691,5,cond,relative_bias_pct,test
+ecCount (threshold mask),ncih716_jc_ctrl_2,123.6,-5.93607305936073,5,cond,relative_bias_pct,test
+Label Engine,ncih716_jc_ctrl_2,71.6,-45.50989345509893,5,cond,relative_bias_pct,test
+MIA,ncih716_jc_ctrl_2,85.2,-35.15981735159817,5,cond,relative_bias_pct,test
+Classic (after opt),ncih716_jc_ctrl_2,135.0,2.73972602739726,5,cond,relative_bias_pct,test
+ecSeg,ncih716_jc_ctrl_2,28.0,-78.69101978691019,5,cond,relative_bias_pct,test
