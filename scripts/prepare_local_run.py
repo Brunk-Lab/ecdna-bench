@@ -166,6 +166,30 @@ def write_binary_png(mask, dst: Path) -> None:
     os.replace(tmp, dst)
 
 
+# Archive folders that hold raw tool output rather than binary masks, with the
+# benchmark's harmonization rule (threshold, minimum component area). Label
+# Engine is stored as RGB; ecdna_bench.baselines.label_engine converts it to
+# grayscale, keeps values above 0.5 and drops 8-connected components smaller
+# than 3 px. The same rule here gives the masks behind the published results.
+RAW_TOOL_OUTPUT: Dict[str, Tuple[float, int]] = {"label_engine": (0.5, 3)}
+
+
+def harmonize_raw_mask(path: Path, threshold: float, min_area: int):
+    import cv2
+    import numpy as np
+
+    img = cv2.imread(str(path), cv2.IMREAD_UNCHANGED)
+    if img is None:
+        raise IOError(f"cannot read {path}")
+    if img.ndim == 3:
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) if img.shape[2] == 3 else img[:, :, 0]
+    fg = (img.astype(np.float32) > threshold).astype(np.uint8)
+    n, lab, stats, _ = cv2.connectedComponentsWithStats(fg, connectivity=8)
+    keep = np.zeros(n, dtype=bool)
+    keep[1:] = stats[1:, cv2.CC_STAT_AREA] >= min_area
+    return keep[lab]
+
+
 def check_config_dir(out_dir: Path) -> None:
     stray = out_dir / "paths.local.yaml"
     if stray.exists():
@@ -174,7 +198,7 @@ def check_config_dir(out_dir: Path) -> None:
 
 
 def write_run_config(base_config: Path, out_dir: Path, paths: Dict[str, str],
-                     device: Optional[str]) -> Path:
+                     device: Optional[str], n_workers: int = 1) -> Path:
     import yaml
 
     if not base_config.is_file():
@@ -185,6 +209,8 @@ def write_run_config(base_config: Path, out_dir: Path, paths: Dict[str, str],
     cfg.setdefault("paths", {}).update(paths)
     if device:
         cfg.setdefault("eccount", {}).setdefault("train", {})["device"] = device
+    # scoring memory: about 9 GB per worker; the CLI default (8) needs ~70 GB
+    cfg.setdefault("benchmark", {})["n_workers"] = n_workers
     check_config_dir(out_dir)
     dest = out_dir / "run_config.yaml"
     with open(dest, "w", encoding="utf-8") as fh:
@@ -321,7 +347,10 @@ def cmd_bia(args) -> int:
             if src is None:
                 missing += 1
                 continue
-            mask = read_gray(src)
+            if folder in RAW_TOOL_OUTPUT:
+                mask = harmonize_raw_mask(src, *RAW_TOOL_OUTPUT[folder])
+            else:
+                mask = read_gray(src)
             if mask.shape[:2] != shapes[uid]:
                 bad_shape += 1
                 continue
@@ -338,7 +367,8 @@ def cmd_bia(args) -> int:
         if not ck.is_file():
             _die(f"checkpoint not found: {ck}")
         paths["eccount_checkpoint"] = str(ck)
-    cfg_path = write_run_config(Path(args.base_config), out, paths, args.device)
+    cfg_path = write_run_config(Path(args.base_config), out, paths, args.device,
+                                args.n_workers)
 
     bench_keys = [registry[d][0] for f, d in ARCHIVE_METHODS.items()
                   if d in registry and index_folder(root / "predictions" / f)
@@ -353,8 +383,10 @@ def cmd_bia(args) -> int:
         "# score the prepared predictions (writes <out-dir>/results/).",
         "# --skip-harmonize: the masks written here are already binary 0/255 PNGs;",
         "# harmonizing them again would treat them as raw tool output.",
+        f"# memory: about 9 GB per scoring worker; --n-workers {args.n_workers} is also the",
+        "# default in run_config.yaml. Raise it only if the computer has the memory.",
         f"python -m ecdna_bench.cli.benchmark --config {cfg_path} --models {' '.join(k for k in bench_keys)} "
-        f"--skip-harmonize --output-dir {out / 'results'} --n-workers 4",
+        f"--skip-harmonize --output-dir {out / 'results'} --n-workers {args.n_workers}",
         f"python scripts/verify_headline_numbers.py --results {out / 'results'}",
     ]
     if args.own_eccount:
@@ -365,7 +397,7 @@ def cmd_bia(args) -> int:
             f"python -m ecdna_bench.cli.run_eccount --config {cfg_path} --split {split_word}"
             + (f" --device {args.device}" if args.device else ""),
             f"python -m ecdna_bench.cli.benchmark --config {cfg_path} --models {' '.join(eccount_keys)} "
-            f"--skip-harmonize --output-dir {out / 'results_own_eccount'} --n-workers 4",
+            f"--skip-harmonize --output-dir {out / 'results_own_eccount'} --n-workers {args.n_workers}",
             f"python scripts/verify_headline_numbers.py --results {out / 'results_own_eccount'}",
         ]
     (out / "NEXT_STEPS.txt").write_text("\n".join(lines) + "\n", encoding="utf-8")
@@ -496,6 +528,9 @@ def main(argv: Optional[List[str]] = None) -> int:
     b.add_argument("--device", default=None, help="cpu, cuda or cuda:N (written into the config)")
     b.add_argument("--strict", action="store_true",
                    help="fail if any selected row lacks its files")
+    b.add_argument("--n-workers", type=int, default=1,
+                   help="scoring workers for run_config.yaml and NEXT_STEPS.txt; "
+                        "each needs about 9 GB of memory (default 1)")
     b.set_defaults(func=cmd_bia)
 
     i = sub.add_parser("images", help="run ecCount on your own images")

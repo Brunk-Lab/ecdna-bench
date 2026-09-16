@@ -263,11 +263,16 @@ Copy the scoring command from `NEXT_STEPS.txt`; it has this form:
 ```bash
 python -m ecdna_bench.cli.benchmark --config runs/bia_test/run_config.yaml \
     --models eccount_peaks eccount_mask label_engine mia classical ecseg classical_before_opt \
-    --skip-harmonize --output-dir runs/bia_test/results --n-workers 4
+    --skip-harmonize --output-dir runs/bia_test/results --n-workers 1
 ```
 
-`--skip-harmonize` is deliberate: the masks were already converted in step 3.2.
-Lower `--n-workers` on a computer with little memory.
+`--skip-harmonize` is deliberate: the masks were already converted in step 3.2,
+Label Engine's raw output with the benchmark's own rule.
+
+Scoring needs about 9 GB of memory per worker: four workers peaked at 35 GB on
+the 175 test images. Raise `--n-workers` only if the computer has that much
+memory; `prepare_local_run.py bia --n-workers N` writes the matching command and
+configuration.
 
 ### 3.4 Compare with the paper
 
@@ -328,7 +333,7 @@ python -m ecdna_bench.cli.run_eccount --config runs/own_test/run_config.yaml \
 
 python -m ecdna_bench.cli.benchmark --config runs/own_test/run_config.yaml \
     --models eccount_peaks eccount_mask --skip-harmonize \
-    --output-dir runs/own_test/results_own_eccount --n-workers 4
+    --output-dir runs/own_test/results_own_eccount --n-workers 1
 
 python scripts/verify_headline_numbers.py --results runs/own_test/results_own_eccount
 ```
@@ -592,7 +597,8 @@ partial download; for a complete run, download the missing sections.
 **The kernel is not listed in Jupyter.** Register it (section 7) with the
 environment active, then reload the Jupyter page.
 
-**Out of memory while scoring.** Lower `--n-workers`.
+**Out of memory while scoring.** Lower `--n-workers`; each worker needs about
+9 GB.
 
 ---
 
