@@ -20,7 +20,7 @@
 set -euo pipefail
 
 PYTHON="${ECDNA_PYTHON:-/proj/brunk_ecdna_cv_project/Poorya/envs/ecdna-bench/bin/python}"
-PROJECT_ROOT="${PROJECT_ROOT:-${SLURM_SUBMIT_DIR:-/proj/brunk_ecdna_cv_project/Poorya/ecdna-bench}}"
+PROJECT_ROOT="${ECDNA_PROJECT_ROOT:-${PROJECT_ROOT:-${SLURM_SUBMIT_DIR:-$PWD}}}"
 
 # WORKERS must match --cpus-per-task above. SLURM allocates the cores you asked
 # for, not the node's, so oversubscribing here is what crashes the job.
