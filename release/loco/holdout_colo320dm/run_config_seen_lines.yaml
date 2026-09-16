@@ -1,0 +1,229 @@
+paths:
+  data_root: /proj/brunk_ecdna_cv_project/Poorya/ecDNA_Data/bioimage_archive
+  metadata_csv: /proj/brunk_ecdna_cv_project/Poorya/ecdna-bench/release/manifests/metadata.csv
+  consistency_csv: /proj/brunk_ecdna_cv_project/Poorya/ecdna-bench/outputs/eccount_loco/holdout_colo320dm/eval_metadata_seen_lines.csv
+  splits:
+    train: release/split_files/train_ids.csv
+    val: release/split_files/val_ids.csv
+    test: release/split_files/test_ids.csv
+  results_root: /proj/brunk_ecdna_cv_project/Poorya/ecdna-bench/release
+  logs_root: /proj/brunk_ecdna_cv_project/Poorya/ecdna-bench/logs
+  eccount_out_dir: /proj/brunk_ecdna_cv_project/Poorya/ecdna-bench/outputs/eccount_training
+  eccount_checkpoint: /proj/brunk_ecdna_cv_project/Poorya/ecdna-bench/outputs/eccount_loco/holdout_colo320dm/best_model.pt
+  baseline_predictions_root: release/baseline_predictions
+  fig1_anchor_uid: ncih2170_facs_fish_0723_low_her2_52
+  fig1_inset_bbox:
+  - 1247
+  - 1225
+  - 1458
+  - 1353
+  fig1_um_per_px: 0.065
+  rgb_dir: /proj/brunk_ecdna_cv_project/Poorya/ecDNA_Data/bioimage_archive/rgb
+  dapi_dir: /proj/brunk_ecdna_cv_project/Poorya/ecDNA_Data/bioimage_archive/dapi
+  gt_mask_dir: /proj/brunk_ecdna_cv_project/Poorya/ecDNA_Data/bioimage_archive/gt_image
+  roi_mask_dir: /proj/brunk_ecdna_cv_project/Poorya/ecDNA_Data/bioimage_archive/roi_mask
+  gt_npz_dir: /proj/brunk_ecdna_cv_project/Poorya/ecDNA_Data/bioimage_archive/gt_npz
+  gt_coords_dir: /proj/brunk_ecdna_cv_project/Poorya/ecDNA_Data/bioimage_archive/gt_coords
+  counts_csv: /proj/brunk_ecdna_cv_project/Poorya/ecdna-bench/release/manifests/counts_master.csv
+  frozen_params_json: /proj/brunk_ecdna_cv_project/Poorya/ecdna-bench/configs/classical/stage3_frozen_params.json
+  frozen_results_dir: /proj/brunk_ecdna_cv_project/Poorya/ecdna-bench/outputs/eccount_loco/holdout_colo320dm/results_seen_lines
+  split_dir: release/split_files
+  mia_raw_masks: /proj/brunk_ecdna_cv_project/Poorya/ecDNA_Data/benchmark/predictions/mia
+  label_engine_raw_masks: /proj/brunk_ecdna_cv_project/Poorya/ecDNA_Data/benchmark/predictions/label_engine
+  ecseg_raw_masks: /proj/brunk_ecdna_cv_project/Poorya/ecDNA_Data/benchmark/predictions/ecseg
+  ecseg_masks: /proj/brunk_ecdna_cv_project/Poorya/ecdna-bench/release/harmonized_masks/ecseg
+  mia_masks: /proj/brunk_ecdna_cv_project/Poorya/ecdna-bench/release/harmonized_masks/mia
+  label_engine_masks: /proj/brunk_ecdna_cv_project/Poorya/ecdna-bench/release/harmonized_masks/label_engine
+  classical_masks: /proj/brunk_ecdna_cv_project/Poorya/ecdna-bench/release/harmonized_masks/classical
+  classical_default_masks: /proj/brunk_ecdna_cv_project/Poorya/ecDNA_Data/benchmark/predictions/classical_default
+  classical_optimised_masks: /proj/brunk_ecdna_cv_project/Poorya/ecDNA_Data/benchmark/predictions/classical_optimised
+  eccount_threshold_masks: /proj/brunk_ecdna_cv_project/Poorya/ecdna-bench/outputs/eccount_loco/holdout_colo320dm/masks_seen_lines/eccount_threshold
+  eccount_peaks_masks: /proj/brunk_ecdna_cv_project/Poorya/ecdna-bench/outputs/eccount_loco/holdout_colo320dm/masks_seen_lines/eccount_peaks
+  harmonized_masks_dir: /proj/brunk_ecdna_cv_project/Poorya/ecdna-bench/outputs/eccount_loco/holdout_colo320dm/masks_seen_lines
+dataset:
+  cell_lines_full:
+  - NCI-H2170
+  - SUM159PT
+  - SNU16
+  - COLO320DM
+  - NCI-H716
+  cell_lines_benchmark:
+  - NCI-H2170
+  - SNU16
+  - COLO320DM
+  - NCI-H716
+  benchmark_only: true
+  use_roi_mask: true
+  require_count_mask_consistent: true
+evaluation:
+  matching:
+    policy: OR
+    d_max: 20
+    iou_min: 0.1
+    alpha: 0.5
+    big_cost: 1.0e6
+    min_component_area: 3
+    connectivity: 8
+  density_bins:
+    edges:
+    - 0
+    - 10
+    - 50
+    - 150
+    - 300
+    labels:
+    - 0-9
+    - 10-49
+    - 50-149
+    - 150-299
+    - 300+
+  sensitivity:
+    d_max_grid:
+    - 5
+    - 10
+    - 15
+    - 20
+    - 25
+    - 30
+    - 40
+    - 50
+    - 75
+    - 100
+    iou_min_grid:
+    - 0.0
+    - 0.05
+    - 0.1
+    - 0.2
+    - 0.3
+    - 0.4
+    - 0.5
+    policies:
+    - OR
+    - AND
+classical:
+  frozen_params_json: configs/classical/stage3_frozen_params.json
+  defaults:
+    preprocessing_sequence:
+    - background_suppress
+    - tophat
+    - gamma
+    - unsharp
+    preprocessing_params:
+      background_suppress:
+        kernel: 15
+      tophat:
+        kernel: 9
+      gamma:
+        gamma: 0.8
+      unsharp:
+        radius: 2.0
+        amount: 1.5
+    detection:
+      threshold_scale: 1.0
+      morph_close_kernel: 3
+      min_area: 3
+      max_area: 500
+      merge_radius: 3.0
+    classification:
+      hsv_value_threshold: 170
+      hsv_saturation_threshold: 50
+  infer:
+    save_masks: true
+    save_centroids_csv: true
+    save_overlays: false
+classical_opt:
+  stage1:
+    min_sequence_length: 3
+    max_sequence_length: 4
+    max_images_per_cell_line: 100
+    stage1_d_max: 20
+    seed: 42
+  stage2:
+    n_iter: 100
+    init_points: 20
+    seed: 42
+  stage3:
+    n_iter: 100
+    init_points: 20
+    seed: 42
+  selection_metric: test_f1
+eccount:
+  input_size:
+  - 1024
+  - 1224
+  targets:
+    sigma: 1.0
+    combine: max
+    normalize: true
+  model:
+    in_channels: 3
+    out_channels: 1
+    base_channels: 32
+    bilinear: true
+    norm_type: group
+    num_groups: 8
+    dropout_p: 0.0
+    expected_param_count: 7849601
+  loss:
+    pos_weight: 20.0
+    bce_weight: 1.0
+    dice_weight: 1.0
+    dice_smooth: 1.0e-06
+  train:
+    batch_size: 2
+    num_workers: 4
+    optimizer: adam
+    lr: 0.0001
+    weight_decay: 0.0
+    epochs: 70
+    scheduler: plateau
+    scheduler_patience: 5
+    scheduler_factor: 0.5
+    seed: 42
+    amp: false
+    best_checkpoint_metric: val_loss
+    best_checkpoint_mode: min
+  augmentation:
+    hflip_p: 0.5
+    vflip_p: 0.5
+    brightness_p: 0.2
+    brightness_range:
+    - 0.9
+    - 1.1
+  postprocess:
+    smooth_sigma: 0.5
+    reapply_roi: true
+    threshold_abs: 0.35
+    peak_min_distance: 2
+    nms_min_distance: 2
+    exclude_border: 0
+    point_disk_radius: 2
+  point_eval_match_radius: 5
+benchmark:
+  models:
+  - classic_post_opt
+  - label_engine
+  - ecseg
+  - mia
+  - eccount_threshold
+  - eccount_peaks
+  supplementary_models:
+  - classic_pre_opt
+  matching_modes:
+  - OR
+  - AND
+  subset_for_main_aggregate: test
+  subset_for_stratified: all
+figures:
+  output_formats:
+  - pdf
+  - png
+  dpi: 300
+  style: nature
+  font_family: Arial
+  font_size_pt: 7
+  max_height_mm: 210
+logging:
+  level: INFO
+  format: '%(asctime)s | %(levelname)-7s | %(name)s | %(message)s'
+  datefmt: '%Y-%m-%d %H:%M:%S'

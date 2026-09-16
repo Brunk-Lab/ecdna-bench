@@ -1,0 +1,8 @@
+role,cell_line,n_images,gt_objects
+train,COLO320DM,44,1952
+train,NCI-H716,49,9938
+train,SNU16,86,24637
+val,COLO320DM,9,479
+val,NCI-H716,10,1700
+val,SNU16,18,5212
+eval,NCI-H2170,888,176883

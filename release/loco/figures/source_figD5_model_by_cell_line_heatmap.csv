@@ -1,0 +1,29 @@
+model,cell_line,obj_f1,condition,scope,n_images
+ecCount (peaks),COLO320DM,0.9151442718115076,trained on this cell line,all rows of the cell line,64
+ecCount (peaks),NCI-H2170,0.9435473898827582,trained on this cell line,all rows of the cell line,888
+ecCount (peaks),NCI-H716,0.951735500056165,trained on this cell line,all rows of the cell line,70
+ecCount (peaks),SNU16,0.9324924289200552,trained on this cell line,all rows of the cell line,123
+ecCount (threshold mask),COLO320DM,0.9069007055584236,trained on this cell line,all rows of the cell line,64
+ecCount (threshold mask),NCI-H2170,0.9168383459756204,trained on this cell line,all rows of the cell line,888
+ecCount (threshold mask),NCI-H716,0.9391469194312796,trained on this cell line,all rows of the cell line,70
+ecCount (threshold mask),SNU16,0.9128234307618592,trained on this cell line,all rows of the cell line,123
+Classic (after opt),COLO320DM,0.8248626373626373,trained on this cell line,all rows of the cell line,64
+Classic (after opt),NCI-H2170,0.7500995000124375,trained on this cell line,all rows of the cell line,888
+Classic (after opt),NCI-H716,0.9012384633588388,trained on this cell line,all rows of the cell line,70
+Classic (after opt),SNU16,0.857661838108467,trained on this cell line,all rows of the cell line,123
+Label Engine,COLO320DM,0.6924351187189398,trained on this cell line,all rows of the cell line,64
+Label Engine,NCI-H2170,0.8776354892096451,trained on this cell line,all rows of the cell line,888
+Label Engine,NCI-H716,0.7103085714285714,trained on this cell line,all rows of the cell line,70
+Label Engine,SNU16,0.5685408347174612,trained on this cell line,all rows of the cell line,123
+MIA,COLO320DM,0.7662552956345552,trained on this cell line,all rows of the cell line,64
+MIA,NCI-H2170,0.8519189026642692,trained on this cell line,all rows of the cell line,888
+MIA,NCI-H716,0.7235827974643134,trained on this cell line,all rows of the cell line,70
+MIA,SNU16,0.4972286606872921,trained on this cell line,all rows of the cell line,123
+ecSeg,COLO320DM,0.2242677824267782,trained on this cell line,all rows of the cell line,64
+ecSeg,NCI-H2170,0.5288988097536862,trained on this cell line,all rows of the cell line,888
+ecSeg,NCI-H716,0.3159983657269596,trained on this cell line,all rows of the cell line,70
+ecSeg,SNU16,0.1124759277572477,trained on this cell line,all rows of the cell line,123
+ecCount (peaks) — line unseen,COLO320DM,0.8703406456215446,never trained on this line,"held-out line, all rows",64
+ecCount (peaks) — line unseen,NCI-H2170,0.8482771396813634,never trained on this line,"held-out line, all rows",888
+ecCount (peaks) — line unseen,NCI-H716,0.9470019628902634,never trained on this line,"held-out line, all rows",70
+ecCount (peaks) — line unseen,SNU16,0.8976380335608044,never trained on this line,"held-out line, all rows",123

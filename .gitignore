@@ -106,3 +106,4 @@ audit_report.md
 audit_findings.json
 outputs/audit_report.md
 outputs/audit_findings.json
+!release/loco/**/*.png

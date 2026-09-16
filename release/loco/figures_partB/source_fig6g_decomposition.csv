@@ -1,0 +1,4 @@
+condition,n_train_images,sees_nci_h2170,n_eval_images,scope,obj_f1,model,step_full_precision,step_as_printed,attributable_to
+full training set,800,True,134,test rows,0.941018406556496,ecCount (peaks),,,
+size-matched control,179,True,134,test rows,0.929164081885856,ecCount (peaks),0.01185432467064007,0.0119999999999999,training-set size
+leave-one-out,179,False,134,test rows,0.8328943764353891,ecCount (peaks),0.09626970545046687,0.09600000000000009,cellular novelty

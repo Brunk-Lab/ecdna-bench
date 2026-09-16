@@ -1,0 +1,25 @@
+cell_line,model,obj_f1,condition
+COLO320DM,Classic (after opt),0.8248626373626373,in-distribution
+COLO320DM,Label Engine,0.6924351187189398,in-distribution
+COLO320DM,MIA,0.7662552956345552,in-distribution
+COLO320DM,ecSeg,0.2242677824267782,in-distribution
+COLO320DM,ecCount (peaks),0.9151442718115076,in-distribution
+COLO320DM,ecCount (peaks),0.8703406456215446,leave-one-out
+NCI-H2170,Classic (after opt),0.7500995000124375,in-distribution
+NCI-H2170,Label Engine,0.8776354892096451,in-distribution
+NCI-H2170,MIA,0.8519189026642692,in-distribution
+NCI-H2170,ecSeg,0.5288988097536862,in-distribution
+NCI-H2170,ecCount (peaks),0.9435473898827582,in-distribution
+NCI-H2170,ecCount (peaks),0.8482771396813634,leave-one-out
+NCI-H716,Classic (after opt),0.9012384633588388,in-distribution
+NCI-H716,Label Engine,0.7103085714285714,in-distribution
+NCI-H716,MIA,0.7235827974643134,in-distribution
+NCI-H716,ecSeg,0.3159983657269596,in-distribution
+NCI-H716,ecCount (peaks),0.951735500056165,in-distribution
+NCI-H716,ecCount (peaks),0.9470019628902634,leave-one-out
+SNU16,Classic (after opt),0.857661838108467,in-distribution
+SNU16,Label Engine,0.5685408347174612,in-distribution
+SNU16,MIA,0.4972286606872921,in-distribution
+SNU16,ecSeg,0.1124759277572477,in-distribution
+SNU16,ecCount (peaks),0.9324924289200552,in-distribution
+SNU16,ecCount (peaks),0.8976380335608044,leave-one-out

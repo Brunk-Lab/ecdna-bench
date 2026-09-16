@@ -1,0 +1,21 @@
+run,cell_line,train_images,val_images,images_scored,role
+holdout_colo320dm,COLO320DM,0,0,64,held out
+holdout_colo320dm,NCI-H2170,621,133,0,in training
+holdout_colo320dm,NCI-H716,49,10,0,in training
+holdout_colo320dm,SNU16,86,18,0,in training
+holdout_nci_h2170,COLO320DM,44,9,0,in training
+holdout_nci_h2170,NCI-H2170,0,0,888,held out
+holdout_nci_h2170,NCI-H716,49,10,0,in training
+holdout_nci_h2170,SNU16,86,18,0,in training
+holdout_nci_h716,COLO320DM,44,9,0,in training
+holdout_nci_h716,NCI-H2170,621,133,0,in training
+holdout_nci_h716,NCI-H716,0,0,70,held out
+holdout_nci_h716,SNU16,86,18,0,in training
+holdout_snu16,COLO320DM,44,9,0,in training
+holdout_snu16,NCI-H2170,621,133,0,in training
+holdout_snu16,NCI-H716,49,10,0,in training
+holdout_snu16,SNU16,0,0,123,held out
+holdout_nci_h2170_control,COLO320DM,10,2,0,sampled into training
+holdout_nci_h2170_control,NCI-H2170,139,29,134,sampled into training
+holdout_nci_h2170_control,NCI-H716,11,2,0,sampled into training
+holdout_nci_h2170_control,SNU16,19,4,0,sampled into training

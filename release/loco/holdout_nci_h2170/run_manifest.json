@@ -1,0 +1,30 @@
+{
+  "run_id": "holdout_nci_h2170",
+  "hold_out": "NCI-H2170",
+  "size_matched_control": false,
+  "control_seed": null,
+  "n_train": 179,
+  "n_val": 37,
+  "n_eval": 888,
+  "eval_scope": "all rows of the held-out line",
+  "train_gt_objects": 36527,
+  "val_gt_objects": 7391,
+  "eval_gt_objects": 176883,
+  "train_cell_lines": [
+    "COLO320DM",
+    "NCI-H716",
+    "SNU16"
+  ],
+  "best_epoch": 67,
+  "best_val_loss": 0.6499797513610438,
+  "best_ckpt": "/proj/brunk_ecdna_cv_project/Poorya/ecdna-bench/outputs/eccount_loco/holdout_nci_h2170/best_model.pt",
+  "n_reference_images": 41,
+  "reference_gt_objects": 7238,
+  "started_utc": "2026-09-03T16:29:52.825144+00:00",
+  "finished_utc": "2026-09-03T16:50:55.189233+00:00",
+  "consistency_csv": "/proj/brunk_ecdna_cv_project/Poorya/ecdna-bench/release/manifests/dl_master_metadata_stage1_step3_consistency.csv",
+  "base_config": "configs/default.yaml",
+  "run_config": "/proj/brunk_ecdna_cv_project/Poorya/ecdna-bench/outputs/eccount_loco/holdout_nci_h2170/run_config.yaml",
+  "run_config_seen_lines": "/proj/brunk_ecdna_cv_project/Poorya/ecdna-bench/outputs/eccount_loco/holdout_nci_h2170/run_config_seen_lines.yaml",
+  "invariants": "passed"
+}
