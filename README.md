@@ -234,9 +234,14 @@ panel together with a `source_*.csv` of the plotted values to
 
 Set the output folder in the first cell before re-running a notebook, so that the
 released files are not overwritten. See [`docs/REPRODUCTION.md`](docs/REPRODUCTION.md)
-for the figure-to-file mapping. The figure notebooks were written on the Brunk Lab
-cluster and contain paths from that system; to run them elsewhere, point those paths
-at your copy of the data. For a first run outside UNC, start with the tutorial
+for the figure-to-file mapping. Notebooks 01–05 read the archive through `ECDNA_DATA_ROOT`
+(the folder that contains `images/` and `predictions/`). Before the first run,
+rebuild the harmonized baseline masks with `python scripts/build_harmonized_masks.py`
+and place the released `eccount_best.pt` in `release/model_checkpoints/`. The live
+ecCount step in notebook 03 runs only on a GPU and is skipped otherwise; on another
+GPU model its illustrative counts can differ slightly. Notebooks 06 and 07 read
+folders that exist only on the Brunk Lab cluster and are kept as a record of how
+those figures were made. For a first run outside UNC, start with the tutorial
 notebooks in [`notebooks/tutorials/`](notebooks/tutorials/), which need only the
 archive files.
 

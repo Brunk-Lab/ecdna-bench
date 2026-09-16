@@ -524,9 +524,19 @@ Other settings the notebooks read: `ECCOUNT_WEIGHTS` (checkpoint path, if not in
 `MY_IMAGES` and `MY_ROIS` (your folders, notebook 2).
 
 The figure notebooks in `notebooks/` (01 to 05) regenerate the paper's figures
-from the frozen tables. Before running one, set its output folder in the first
-cell to a folder of your own; panels that show microscopy also need the
-corresponding images.
+and their source tables. They read the archive through `ECDNA_DATA_ROOT` (set
+above) and need the full archive, not only the test split. Before the first run:
+
+```bash
+python scripts/build_harmonized_masks.py   # baseline masks from predictions/
+```
+
+and place the released checkpoint at `release/model_checkpoints/eccount_best.pt`.
+The notebooks write into `release/figures/notebookNN/`; in a clone of the
+repository, `git diff release/figures` shows whether anything changed and
+`git checkout -- release/figures` restores the released files. Alternatively, set
+the output folder in the first cell to a folder of your own. The live ecCount
+step in notebook 03 needs a GPU and is skipped without one.
 
 ---
 
