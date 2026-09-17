@@ -32,16 +32,19 @@ Typical selections
 
 Where the files come from
 -------------------------
-``--base-url`` is the URL of the study's ``Files`` folder.  If it is not
-given, the script uses ``$ECDNA_BIA_BASE_URL``, then asks the BioStudies API
-for the study's public location, then falls back to
+``--base-url`` (or ``$ECDNA_BIA_BASE_URL``) is either the URL of the study's
+``Files`` folder or the study's share link
+(``https://www.ebi.ac.uk/biostudies/bioimages/studies/S-BIAD4097?key=...``).
+For a share link, the script asks the BioStudies API for the current file
+location of the private record; that location can change, the share link
+does not.  Without either, the script asks the API for the study's public
+location, then falls back to
 ``https://ftp.ebi.ac.uk/pub/databases/biostudies/S-BIAD/097/S-BIAD4097/Files``.
 
-The record is private until its release date.  Reviewers use the private
-download location given in the reviewer instructions; pass it with
-``--base-url`` (or ``ECDNA_BIA_BASE_URL``).  That URL contains an access key:
-never commit it or paste it into a public issue.  The script never prints it
-in full.
+The record is private until its release date.  Reviewers pass the share link
+from the reviewer instructions with ``--base-url`` (or ``ECDNA_BIA_BASE_URL``).
+It contains an access key: never commit it or paste it into a public issue.
+The script never prints it in full.
 
 Only the Python standard library is used.
 """
@@ -102,12 +105,50 @@ def remote_size(url: str, timeout: float = 30.0) -> Optional[int]:
         return None
 
 
+def share_link_key(url: str) -> Optional[str]:
+    """Return the access key if ``url`` is a BioStudies study page with ?key=."""
+    parts = urllib.parse.urlsplit(url)
+    if "/studies/" not in parts.path:
+        return None
+    keys = urllib.parse.parse_qs(parts.query).get("key")
+    return keys[0] if keys and keys[0] else None
+
+
+def files_url_from_share_link(key: str) -> str:
+    """Ask the BioStudies API where the private record's files are now."""
+    url = f"{INFO_API}?key={urllib.parse.quote(key)}"
+    try:
+        info = json.loads(http_get(url, timeout=30).decode("utf-8"))
+    except urllib.error.HTTPError as exc:
+        raise SystemExit(f"The BioStudies API refused the share link (HTTP {exc.code}). "
+                         "Check that the whole link was copied.")
+    except (urllib.error.URLError, OSError, ValueError) as exc:
+        raise SystemExit(f"Could not ask the BioStudies API about the share link: "
+                         f"{exc.__class__.__name__}")
+    link = info.get("httpLink") if isinstance(info, dict) else None
+    if not link or not str(link).startswith(("http://", "https://")):
+        raise SystemExit("The BioStudies API did not return a file location for this share link.")
+    link = str(link).rstrip("/")
+    return link if link.endswith("/Files") else link + "/Files"
+
+
+def _given_location(value: str, origin: str) -> str:
+    value = value.strip()
+    if not value.startswith(("http://", "https://")):
+        raise SystemExit(f"{origin} is not a web address (it must start with https://). "
+                         "Use the share link or the study's Files folder.")
+    key = share_link_key(value)
+    if key:
+        return files_url_from_share_link(key)
+    return value.rstrip("/")
+
+
 def resolve_base_url(explicit: Optional[str]) -> str:
     if explicit:
-        return explicit.rstrip("/")
+        return _given_location(explicit, "--base-url")
     env = os.environ.get("ECDNA_BIA_BASE_URL")
     if env:
-        return env.rstrip("/")
+        return _given_location(env, "ECDNA_BIA_BASE_URL")
     try:
         info = json.loads(http_get(INFO_API, timeout=20).decode("utf-8"))
         link = info.get("httpLink") or info.get("ftpHttp_link")
@@ -324,7 +365,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     ap.add_argument("--out", type=Path, required=True,
                     help="local folder; files keep their archive paths below it")
     ap.add_argument("--base-url", default=None,
-                    help="URL of the study's Files folder (reviewers: the private location)")
+                    help="study share link (reviewers) or URL of the study's Files folder")
     ap.add_argument("--all", action="store_true", help="every image set (ignores --split/--subset)")
     ap.add_argument("--split", default="test", choices=["train", "val", "test", "any"],
                     help="benchmark split to take (default: test)")
@@ -363,7 +404,8 @@ def main(argv: Optional[List[str]] = None) -> int:
     base = resolve_base_url(args.base_url)
     if "?" in base or "#" in base:
         print(f"--base-url looks like a web-page link ({mask_url(base)}).\n"
-              "Use the file location instead: the URL of the study's Files folder, which ends in /Files.",
+              "Use the study's share link (.../studies/S-BIAD4097?key=...) or the URL of "
+              "the study's Files folder, which ends in /Files.",
               file=sys.stderr)
         return 2
     print(f"source : {mask_url(base)}")
