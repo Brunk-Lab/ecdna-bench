@@ -240,6 +240,8 @@ panel together with a `source_*.csv` of the plotted values to
 | `03_models_comparison.ipynb` | ecCount and the six-method comparison |
 | `04_matching_and_sensitivity.ipynb` | the matching framework and its sensitivity |
 | `05_finalisation.ipynb` | statistics, heatmaps and the qualitative gallery |
+| `06_test_split_figures.ipynb` | lab record: test-split figures |
+| `07_biology_demonstration.ipynb` | lab record: biological demonstration |
 
 Set the output folder in the first cell before re-running a notebook, so that the
 released files are not overwritten. See [`docs/REPRODUCTION.md`](docs/REPRODUCTION.md)
@@ -298,7 +300,7 @@ ecdna-bench/
 │   └── utils/
 ├── scripts/            downloads, run preparation, checks, leave-one-cell-line-out training, lab setup
 ├── slurm/              job files for a SLURM cluster
-├── notebooks/          figure notebooks 01–05; tutorials/
+├── notebooks/          figure notebooks 01–05, lab records 06–07; tutorials/
 ├── release/            frozen results, figure source data, split files, manifests
 ├── docs/               tutorials, reproduction guide, architecture, baseline provenance
 └── tests/              pytest suite (synthetic data only)

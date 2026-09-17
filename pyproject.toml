@@ -118,10 +118,10 @@ eval = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/brunklab/ecdna-bench"
-Repository = "https://github.com/brunklab/ecdna-bench"
-Issues = "https://github.com/brunklab/ecdna-bench/issues"
-Dataset = "https://www.ebi.ac.uk/biostudies/studies/{{ACCESSION}}"
+Homepage = "https://github.com/Brunk-Lab/ecdna-bench"
+Repository = "https://github.com/Brunk-Lab/ecdna-bench"
+Issues = "https://github.com/Brunk-Lab/ecdna-bench/issues"
+Dataset = "https://www.ebi.ac.uk/biostudies/studies/S-BIAD4097"
 
 # ==============================================================================
 # Setuptools configuration — src-layout, package discovery

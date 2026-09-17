@@ -214,15 +214,21 @@ The last line should read `VERDICT: all selected files are present`. If the
 download stops, run the same command again: files already complete are skipped.
 
 **Reviewers** (while the record is private): add
-`--base-url "<download location from the reviewer instructions>"`. That location
-has the form
-`https://ftp.ebi.ac.uk/pub/databases/biostudies/.private/NN/<key>/S-BIAD/097/S-BIAD4097/Files`.
-The key is a password: do not paste it into issues, notebooks or shared
-scripts. The script never prints it. You can also put it in an environment
-variable once per terminal:
+`--base-url "<share link from the reviewer instructions>"`. The share link has
+the form
+`https://www.ebi.ac.uk/biostudies/bioimages/studies/S-BIAD4097?key=<key>`; the
+script asks the BioStudies API for the current location of the private files.
+The address of the private `Files` folder
+(`https://ftp.ebi.ac.uk/pub/databases/biostudies/.private/NN/<key>/S-BIAD/097/S-BIAD4097/Files`)
+also works, but it can change while the record is private; the share link does
+not. The key is a password: do not paste it into issues, notebooks or shared
+scripts. The script never prints it. To keep it out of your shell history, read
+it into an environment variable once per terminal (paste the link at the
+prompt; nothing is shown):
 
 ```bash
-export ECDNA_BIA_BASE_URL="<download location from the reviewer instructions>"
+printf "share link: "; stty -echo; read -r ECDNA_BIA_BASE_URL; stty echo; echo
+export ECDNA_BIA_BASE_URL
 ```
 
 What the options mean:
