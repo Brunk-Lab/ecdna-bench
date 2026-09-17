@@ -209,8 +209,17 @@ object-level F1 of 0.913 on the 1,145 benchmark images and 0.896 on the 345
 validation and test images (manuscript, Supplementary Methods §11). Predicted
 ROIs were not used for any benchmark comparison.
 
-<!-- ROI-CLI: replace this comment with the command once ecdna_bench.roi is merged, e.g.
-python -m ecdna_bench.cli.roi --config <run_config.yaml> -->
+Predict ROI masks for your own image sets (`<unique_id>.tif` or `.png` in both
+folders; one 0/255 PNG per image set is written):
+
+```bash
+python -m ecdna_bench.cli.roi predict --rgb <rgb folder> --dapi <dapi folder> \
+    --checkpoint roi_model_best_checkpoint.pth --output <output folder>
+```
+
+The code is in `src/ecdna_bench/roi/`. `python -m ecdna_bench.cli.roi train --help`
+lists the training options; training needs `albumentations==2.0.8`, the version
+used for the released model.
 
 ---
 
