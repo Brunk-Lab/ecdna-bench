@@ -269,9 +269,10 @@ python -m ecdna_bench.cli.benchmark --config runs/bia_test/run_config.yaml \
 `--skip-harmonize` is deliberate: the masks were already converted in step 3.2,
 Label Engine's raw output with the benchmark's own rule.
 
-Scoring needs about 9 GB of memory per worker: four workers peaked at 35 GB on
-the 175 test images. Raise `--n-workers` only if the computer has that much
-memory; `prepare_local_run.py bia --n-workers N` writes the matching command and
+Scoring needs about 10 GB of memory per worker: on the 175 test images one
+worker peaked at 10 GB and took about 80 minutes, four workers peaked at 35 GB.
+Raise `--n-workers` only if the computer has that much memory;
+`prepare_local_run.py bia --n-workers N` writes the matching command and
 configuration.
 
 ### 3.4 Compare with the paper
@@ -598,7 +599,7 @@ partial download; for a complete run, download the missing sections.
 environment active, then reload the Jupyter page.
 
 **Out of memory while scoring.** Lower `--n-workers`; each worker needs about
-9 GB.
+10 GB.
 
 ---
 

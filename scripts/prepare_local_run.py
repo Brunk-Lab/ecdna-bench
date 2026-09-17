@@ -209,7 +209,7 @@ def write_run_config(base_config: Path, out_dir: Path, paths: Dict[str, str],
     cfg.setdefault("paths", {}).update(paths)
     if device:
         cfg.setdefault("eccount", {}).setdefault("train", {})["device"] = device
-    # scoring memory: about 9 GB per worker; the CLI default (8) needs ~70 GB
+    # scoring memory: about 10 GB per worker; the CLI default (8) needs ~80 GB
     cfg.setdefault("benchmark", {})["n_workers"] = n_workers
     check_config_dir(out_dir)
     dest = out_dir / "run_config.yaml"
@@ -383,7 +383,7 @@ def cmd_bia(args) -> int:
         "# score the prepared predictions (writes <out-dir>/results/).",
         "# --skip-harmonize: the masks written here are already binary 0/255 PNGs;",
         "# harmonizing them again would treat them as raw tool output.",
-        f"# memory: about 9 GB per scoring worker; --n-workers {args.n_workers} is also the",
+        f"# memory: about 10 GB per scoring worker; --n-workers {args.n_workers} is also the",
         "# default in run_config.yaml. Raise it only if the computer has the memory.",
         f"python -m ecdna_bench.cli.benchmark --config {cfg_path} --models {' '.join(k for k in bench_keys)} "
         f"--skip-harmonize --output-dir {out / 'results'} --n-workers {args.n_workers}",
@@ -530,7 +530,7 @@ def main(argv: Optional[List[str]] = None) -> int:
                    help="fail if any selected row lacks its files")
     b.add_argument("--n-workers", type=int, default=1,
                    help="scoring workers for run_config.yaml and NEXT_STEPS.txt; "
-                        "each needs about 9 GB of memory (default 1)")
+                        "each needs about 10 GB of memory (default 1)")
     b.set_defaults(func=cmd_bia)
 
     i = sub.add_parser("images", help="run ecCount on your own images")

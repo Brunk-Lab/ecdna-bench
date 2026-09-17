@@ -927,7 +927,7 @@ The key is `eccount_mask`.
 Code that sizes its worker pool from the machine's processor count can start far
 more workers than SLURM allocated and run out of memory. Set `N_WORKERS` (or
 `--n-workers`) to the number of CPUs requested. Each scoring worker needs about
-9 GB, so request `--mem` accordingly.
+10 GB, so request `--mem` accordingly.
 
 ### I have broken my `~/.bashrc`
 
