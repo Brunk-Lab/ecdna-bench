@@ -69,6 +69,12 @@ jupyter nbconvert --to notebook --execute notebooks/03_models_comparison.ipynb \
 | `03_models_comparison.ipynb` | `fig4_qualitative_six_models`; `fig5_*` (ecCount training and post-processing); `fig6_*` (comparison) | `or_matching/*.csv`, `train_history.csv` |
 | `04_matching_and_sensitivity.ipynb` | `fig2_matching_example`; `figS_*` sensitivity and OR versus AND | `source_fig2_*.csv`, `sensitivity_sweep.csv` |
 | `05_finalisation.ipynb` | `fig3_anchor_classical_overlay`, `fig3_classical_wilcoxon_delta`, `fig4_segmentation_test_bars`, `fig6_global_performance_bars`, `fig6_f1_by_cell_line_heatmap`, `fig6_count_agreement_top3`, `figS_*` heatmap, count disclosure, pixel-level Dice and gallery | `or_matching/*.csv`, `source_fig3_*wilcoxon*.csv`, `source_figS_*.csv` |
+| `06_test_split_figures.ipynb` | test-split figures (file list in `release/figures/notebook06/`) | `or_matching/per_image_metrics.csv`, `sensitivity_sweep.csv`, the tables of notebook 07 |
+| `07_biology_demonstration.ipynb` | `fig7*`: drug-treatment demonstration; `fig8*`: predicted-ROI validation | `or_matching/per_image_metrics.csv`, drug-treatment material and predicted ROIs on the Brunk Lab cluster |
+
+Notebooks 06 and 07 are lab records: they read folders that exist only on the
+Brunk Lab cluster, and 07 must run before 06. Their outputs are released
+unchanged in `release/figures/notebook06/` and `release/figures/notebook07/`.
 
 The file prefixes are generation-level names. The final figure and Extended
 Data panel numbers are those of the manuscript, where panels were assembled

@@ -118,8 +118,10 @@ def load_checkpoint(
     if not ckpt_path.is_file():
         raise FileNotFoundError(
             f"ecCount checkpoint not found: {ckpt_path}\n"
-            f"Run train_eccount first, then set paths.eccount_checkpoint "
-            f"to the resulting best_model.pt."
+            f"Either place the released weights (eccount_best.pt, an asset of "
+            f"the GitHub release) at this path, or set paths.eccount_checkpoint "
+            f"in configs/paths.local.yaml to the best_model.pt written by "
+            f"train_eccount. Do not rename a trained model to eccount_best.pt."
         )
 
     ckpt = torch.load(str(ckpt_path), map_location=device)

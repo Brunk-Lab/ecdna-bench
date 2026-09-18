@@ -196,7 +196,7 @@ find "$OUT_DIR" -maxdepth 1 -name '*.png' | wc -l
 
 echo ""
 echo "First few masks:"
-find "$OUT_DIR" -maxdepth 1 -name '*.png' | head
+find "$OUT_DIR" -maxdepth 1 -name '*.png' | head || true
 
 echo ""
 echo "Check for errors in run log:"

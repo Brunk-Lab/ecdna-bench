@@ -449,7 +449,8 @@ the kernel; your folder is kept), `--yes` (no questions).
 
 | Area | Path | Use it for |
 |---|---|---|
-| Home | `/nas/longleaf/home/<ONYEN>` (also `/users/<o>/<n>/<ONYEN>`) | Settings and small files only (about 50 GB) |
+| Home | `/nas/longleaf/home/<ONYEN>` | Settings and small files only (about 50 GB) |
+| Users space | `/users/<o>/<n>/<ONYEN>` | A separate personal space, **not** the same folder as home |
 | Scratch | `/work/users/<o>/<n>/<ONYEN>` | Temporary files. **Deleted automatically.** |
 | Lab project | `/proj/brunk_ecdna_cv_project` | Everything real: data, environments, results |
 | Your folder | `/proj/brunk_ecdna_cv_project/<ONYEN>` | Your copy of the code and all your outputs |
@@ -627,6 +628,18 @@ tail -f $ECDNA_MYDIR/runs/eccount_training/train_history.csv
 `train_history.csv` gets one row per epoch. The published run trained for 70
 epochs; its best validation loss, 0.6421, was at epoch 49.
 
+Training writes `best_model.pt` into `$ECDNA_MYDIR/runs/eccount_training/`.
+Inference does not pick it up by itself: it reads `eccount_checkpoint`, which
+points at the released `eccount_best.pt`. To run inference with your own model,
+add under `paths:` in `configs/paths.local.yaml`:
+
+```yaml
+  eccount_checkpoint: /proj/brunk_ecdna_cv_project/<ONYEN>/runs/eccount_training/best_model.pt
+```
+
+Never copy or rename a trained model to `eccount_best.pt`: that name is
+reserved for the released weights, and the checksum checks rely on it.
+
 **Model keys** for `--models`: `eccount_peaks`, `eccount_mask` (the threshold
 mask), `label_engine`, `mia`, `classical`, `classical_before_opt`, `ecseg`.
 
@@ -665,6 +678,13 @@ notebook from a clean start.
 | `03` | Figures 5 and 6: ecCount, and the six-method comparison |
 | `04` | Supplementary: sensitivity analysis, OR versus AND |
 | `05` | Statistical tests, heatmaps and the qualitative gallery |
+| `06` | Test-split figures; reads the tables written by notebook 07 |
+| `07` | Drug-treatment demonstration (`fig7*`) and predicted-ROI validation (`fig8*`) |
+
+Notebooks 06 and 07 are lab records: they read folders that exist only under
+`/proj/brunk_ecdna_cv_project/Poorya/`, run on the `ecdna-bench (canonical)`
+kernel, and must run in the order 07, then 06. Their released outputs are in
+`release/figures/notebook06/` and `release/figures/notebook07/`.
 
 Each figure panel comes with a `source_*.csv` holding exactly the numbers drawn.
 
@@ -683,20 +703,27 @@ change.
 
 ## 5.4 The tutorial notebooks
 
-`notebooks/tutorials/` has four step-by-step notebooks: images and the gold
-standard; running ecCount; scoring against the gold standard; retraining. They
-read the data in the BioImage Archive layout. On Longleaf, add this to the top
-of the first code cell before running a notebook:
+`notebooks/tutorials/` has three short notebooks, written for readers outside
+UNC: `01_get_the_sample.ipynb` downloads 12 test image sets from the archive
+and shows the image, ROI and gold standard; `02_count_with_eccount.ipynb` runs
+the released ecCount on them on a CPU; `03_score_and_compare.ipynb` scores the
+six deposited prediction sets. They need only the installed package and the
+internet, and write into `tutorial_data/` next to the notebook (ignored by git).
 
-```python
-import os
-os.environ["ECDNA_DATA_ROOT"] = "/proj/brunk_ecdna_cv_project/Poorya/ecDNA_Data/bia_view"
-os.environ["ECCOUNT_WEIGHTS"] = "/proj/brunk_ecdna_cv_project/Poorya/ecdna-bench/release/model_checkpoints/eccount_best.pt"
+On Longleaf, open them with the `ecdna-bench (canonical)` kernel. While the
+archive record is private, notebook 1 asks for the reviewer share link in a
+hidden prompt; never paste the link into a cell or a file. Notebook 2 downloads
+the weights from the GitHub release; to skip the download, copy the lab's copy
+in first, from the `notebooks/tutorials/` folder of your copy:
+
+```bash
+mkdir -p tutorial_data
+cp /proj/brunk_ecdna_cv_project/Poorya/ecdna-bench/release/model_checkpoints/eccount_best.pt tutorial_data/
 ```
 
-`bia_view` is a read-only view of the lab's copy of the resource arranged like
-the archive (`images/`, `predictions/`). The notebooks never write into it;
-their outputs go to `runs/` in your copy.
+Saving a tutorial in Jupyter writes its outputs into the tracked file;
+`git checkout notebooks/tutorials` undoes that. Details: `TUTORIAL_EXTERNAL.md`,
+section 7.
 
 ---
 
@@ -1018,6 +1045,7 @@ Method names, spelled exactly this way everywhere:
 | Every published metric | Cluster jobs | **`ecdna-bench`** |
 | Trained model, training history | Cluster job | **`ecdna-bench`** |
 | Figure files, notebooks 01–05 | Jupyter | `ecDNA_Hybrid` |
+| Figure files, notebooks 06–07 | Jupyter | **`ecdna-bench`** |
 
 Measured difference between the two environments (30 August 2026):
 
@@ -1057,7 +1085,7 @@ ecdna-bench/
 │   └── evaluation/             objects, matching, metrics, statistics
 ├── slurm/                      cluster job files
 ├── scripts/                    helper tools (setup, LOCO, downloads, checks)
-├── notebooks/                  01–05 figure notebooks; tutorials/
+├── notebooks/                  01–05 figure notebooks, 06–07 lab records; tutorials/
 ├── release/
 │   ├── frozen_results/         or_matching/ (published) and and_matching/
 │   ├── figures/notebookNN/     figure files and their source numbers

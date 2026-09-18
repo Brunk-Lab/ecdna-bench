@@ -536,7 +536,8 @@ folder) and `ECCOUNT_DEVICE` (default `cpu`).
 outputs into the tracked file; `git checkout notebooks/tutorials` undoes that.
 Retraining ecCount is covered in section 6.
 
-The figure notebooks in `notebooks/` (01 to 05) regenerate the paper's figures
+The figure notebooks 01 to 05 in `notebooks/` regenerate the paper's figures
+(06 and 07 are lab records that need files from the Brunk Lab cluster)
 and their source tables. They read the archive through `ECDNA_DATA_ROOT` (set
 above) and need the full archive, not only the test split. Before the first run:
 

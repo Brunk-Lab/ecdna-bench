@@ -8,7 +8,8 @@ need to change for another cluster.
 ## Before you submit
 
 **Submit from the repository root, not from inside `slurm/`.** The scripts
-resolve the project root from `$SLURM_SUBMIT_DIR`, and the log paths in the
+resolve the project root from `$SLURM_SUBMIT_DIR` (set by SLURM itself on any
+cluster), and the log paths in the
 `#SBATCH --output` / `--error` directives are relative to it:
 
 ```bash
@@ -17,9 +18,10 @@ mkdir -p logs
 sbatch slurm/submit_benchmark.sh
 ```
 
-**Tell the scripts which Python to use.** They do not call `conda activate`,
-because activating inside a batch job interacts badly with the module system's
-PATH. Instead they invoke an interpreter directly. Set it once:
+**Tell the scripts which Python to use.** They call an interpreter directly
+instead of running `conda activate`, so they do not depend on how your shell
+is set up. (Activating inside a batch script also works if the script first
+sources `~/.bashrc`; the scripts simply do not need it.) Set it once:
 
 ```bash
 export ECDNA_PYTHON=/path/to/envs/ecdna-bench/bin/python
@@ -52,11 +54,29 @@ N_WORKERS=8 SEED=1234 sbatch slurm/submit_optimize_classical.sh
 | `submit_optimize_classical.sh` | `general` | 3-stage Bayesian optimization; job array, one task per cell line |
 | `submit_optimize_classical_h2170_recovery.sh` | `general` | NCI-H2170 re-run |
 | `submit_classical_optimized.sh` | `general` | Classical inference, frozen post-optimization parameters |
-| `submit_eccount_train.sh` | `a100-gpu,l40-gpu` | ecCount training, ~12 h, needs `--qos=gpu_access` |
+| `submit_eccount_train.sh` | `a100-gpu,l40-gpu` | ecCount training, about 1.5 h (70 epochs × ~80 s; the job requests more), needs `--qos=gpu_access` |
 | `submit_eccount_infer.sh` | `a100-gpu,l40-gpu` | ecCount inference → threshold + peaks masks |
 | `submit_benchmark.sh` | `general` | Cross-model benchmark evaluation |
 | `submit_benchmark_classical_before_after.sh` | `general` | Before/after BO comparison |
 | `submit_sensitivity.sh` | `general` | `d_max × IoU_min × policy` sweep |
+| `submit_eccount_loco.sh` | `a100-gpu,l40-gpu` | Leave-one-cell-line-out: train, predict and score; job array, one task per held-out line (`scripts/train_eccount_loco.py`) |
+| `submit_benchmark_river_roi.sh` | `general` | Lab record: scoring with the ROI model's predicted ROIs instead of the manual ones |
+| `submit_bia_upload.sh` | `datamover` | Lab record: the upload of the deposition to the BioImage Archive |
+
+## Running inference with a model you trained
+
+Training writes `best_model.pt` into `paths.eccount_out_dir`. Inference does
+not pick it up by itself: it reads `paths.eccount_checkpoint`, which by default
+points at the released weights, `release/model_checkpoints/eccount_best.pt`.
+To use your own model, set that key in `configs/paths.local.yaml`:
+
+```yaml
+paths:
+  eccount_checkpoint: /path/to/eccount_training/best_model.pt
+```
+
+Do not rename or copy a trained model to `eccount_best.pt`. That name is
+reserved for the released weights, and the checksum checks rely on it.
 
 ## Checking partitions
 
