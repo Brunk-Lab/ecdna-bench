@@ -505,35 +505,36 @@ Point Route C or D at it with `--checkpoint runs/retrain/eccount_training/best_m
 
 ## 7. The tutorial notebooks
 
-`notebooks/tutorials/` contains four notebooks that explain the resource and
-the methods step by step:
+`notebooks/tutorials/` contains three short notebooks. They need only the
+installed package and an internet connection: they do not read the repository
+folders, and they keep their files in `tutorial_data/` next to the notebook.
+Together they take about ten minutes on four CPU cores and download about
+250 MB.
 
 | Notebook | Content |
 |---|---|
-| `01_images_and_gold_standard.ipynb` | One image set: RGB, DAPI, ROI and gold standard; how points become objects; your own point annotations |
-| `02_run_eccount.ipynb` | ecCount on one image, step by step; then a folder of your own images |
-| `03_score_against_gold_standard.ipynb` | Object extraction, matching, TP/FP/FN/ignored; OR versus AND; pooled versus per-image F1; scoring a new method |
-| `04_retrain_eccount.ipynb` | The Gaussian training target; a leave-one-cell-line-out split; a short training run |
+| `01_get_the_sample.ipynb` | Downloads 12 held-out test image sets from the archive (per cell line: the lowest and highest gold-standard count and one from the middle; for NCI-H2170 the paper's example image); shows the RGB image, ROI and gold standard; counts objects as the benchmark does |
+| `02_count_with_eccount.ipynb` | Downloads the released weights, checks their SHA-256, and runs ecCount on the 12 images on the CPU; compares its counts with the gold standard and with the deposited ecCount predictions |
+| `03_score_and_compare.ipynb` | Scores ecCount and the deposited predictions of the other benchmarked methods on the 12 images with the benchmark's matching rules. The results are illustrative, not the paper's values |
 
-Start Jupyter from the repository folder with the environment active:
+Run them in order. Start Jupyter from the tutorials folder with the environment
+active, and use its default Python 3 kernel:
 
 ```bash
-python -m ipykernel install --user --name ecdna-bench-cpu --display-name "ecdna-bench (CPU)"
+cd notebooks/tutorials
 jupyter lab
 ```
 
-and choose that kernel in each notebook. Without data, every notebook runs on a
-small synthetic image so that you can check the installation. For real data, set
-the data folder before starting Jupyter:
+While the archive record is private, notebook 1 asks for the reviewer share
+link in a hidden prompt and never stores it. You can instead set
+`ECDNA_BIA_BASE_URL` before starting Jupyter, read without echo as described for
+reviewers above. Other settings the notebooks read: `ECCOUNT_WEIGHTS` (an
+already downloaded `eccount_best.pt`), `ECDNA_TUTORIAL_DATA` (a different data
+folder) and `ECCOUNT_DEVICE` (default `cpu`).
 
-```bash
-export ECDNA_DATA_ROOT=~/ecdna_data
-jupyter lab
-```
-
-Other settings the notebooks read: `ECCOUNT_WEIGHTS` (checkpoint path, if not in
-`release/model_checkpoints/`), `ECDNA_RESULTS` (a results folder for notebook 3),
-`MY_IMAGES` and `MY_ROIS` (your folders, notebook 2).
+`tutorial_data/` is ignored by git. Saving a notebook in Jupyter writes its
+outputs into the tracked file; `git checkout notebooks/tutorials` undoes that.
+Retraining ecCount is covered in section 6.
 
 The figure notebooks in `notebooks/` (01 to 05) regenerate the paper's figures
 and their source tables. They read the archive through `ECDNA_DATA_ROOT` (set

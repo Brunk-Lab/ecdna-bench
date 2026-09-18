@@ -254,7 +254,7 @@ GPU model its illustrative counts can differ slightly. Notebooks 06 and 07 read
 folders that exist only on the Brunk Lab cluster and are kept as a record of how
 those figures were made. For a first run outside UNC, start with the tutorial
 notebooks in [`notebooks/tutorials/`](notebooks/tutorials/), which need only the
-archive files.
+installed package and an internet connection.
 
 **Full pipeline.** Each stage is a command-line module; on a SLURM cluster the
 job files in `slurm/` run the same commands.

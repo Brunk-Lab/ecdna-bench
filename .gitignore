@@ -107,3 +107,4 @@ audit_findings.json
 outputs/audit_report.md
 outputs/audit_findings.json
 !release/loco/**/*.png
+notebooks/tutorials/tutorial_data/
